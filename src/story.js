@@ -60,6 +60,13 @@ TN.DIALOGS = {
     ['alex', 'Nivel 1-1: la selva. La primera zona que rehicimos, antes de que cerrara el estudio.'],
     ['alex', 'Desde entonces sigo aquí sola. Si nadie termina este remaster, Terra Nova se pierde.'],
   ],
+  w1_2: [
+    ['alex', 'Encontré el origen del bug: una pared de 1989 con la colisión rota. Por ahí te escapaste.'],
+    ['alex', 'Y hay más como esa en todo el cartucho. Voy a tener que arreglarlas una por una.'],
+  ],
+  w1_2_walls: [
+    ['alex', '¡Eh! ¡Esa pared la iba a arreglar mañana!'],
+  ],
   w1_1_bats: [
     ['alex', 'Rediseñé a los murciélagos para que no hicieran daño. Ahora son... ¿plataformas? Bueno, vale.'],
   ],

@@ -207,6 +207,55 @@ level('selva', 'MUNDO 1-1', 'La selva',
 
 
 # ---------------------------------------------------------------------------
+# Mundo 1-2: Ruinas del río. Agua (sólida en 8 bits, buceo en 16) y paredes rotas.
+# ---------------------------------------------------------------------------
+
+def w12_start(g, o):
+    g.put(o + 2, 11, 'P')
+    g.dialog(o + 4, 'w1_2')
+    g.stairs(o + 6, [1, 2, 3])
+    g.fill(o + 9, o + 10, 9, 11, '#')
+    g.fill(o + 11, o + 22, 9, 12, '~')                # estanque
+    g.fill(o + 16, o + 17, 0, 10, 'B')                # muro: se pasa buceando por debajo
+    g.put(o + 19, 12, '*')
+    g.fill(o + 23, o + 24, 9, 11, '#')
+    g.stairs(o + 25, [3, 2, 1])
+
+
+def w12_ruins(g, o):
+    g.put(o + 1, 11, 'C')
+    g.fill(o + 6, o + 7, 0, 11, 'W')                  # pared rota: 8 bits
+    g.dialog(o + 6, 'w1_2_walls')
+    g.fill(o + 11, o + 11, 0, 11, 'N')                # muro de 8 bits: 16 bits
+    g.fill(o + 15, o + 19, 8, 8, 'W')                 # repisa rota: en 8 bits se sube desde abajo
+    g.put(o + 17, 7, '*')
+
+
+def w12_river(g, o):
+    g.put(o + 1, 11, 'C')
+    g.stairs(o + 4, [1, 2, 3, 4])
+    g.fill(o + 8, o + 8, 8, 11, '#')
+    g.fill(o + 9, o + 24, 8, 12, '~')                 # río
+    g.fill(o + 13, o + 14, 0, 9, 'B')
+    g.fill(o + 18, o + 19, 12, 12, 'x')               # espinas bajo el agua
+    g.fill(o + 21, o + 22, 0, 9, 'B')
+    g.put(o + 17, 10, '*')
+    g.fill(o + 25, o + 26, 8, 11, '#')
+    g.stairs(o + 27, [3, 2, 1])
+
+
+def w12_end(g, o):
+    g.put(o + 1, 11, 'C')
+    g.fill(o + 6, o + 7, 0, 11, 'W')
+    g.put(o + 14, 11, 'F')
+
+
+level('rio', 'MUNDO 1-2', 'Ruinas del rio',
+      [(30, w12_start), (26, w12_ruins), (34, w12_river), (20, w12_end)],
+      start_mode='snes')
+
+
+# ---------------------------------------------------------------------------
 
 def main():
     out = ['// Generado por tools/build_levels.py. No editar a mano: editar el script y volver a generarlo.',

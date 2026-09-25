@@ -48,6 +48,9 @@ TN.FONT = {
   '/': '11248gg',
   '%': 'pq248bj',
   ' ': '0000000',
+  '>': 'g84248g',
+  '(': '2488842',
+  ')': '8422248',
 };
 
 // Dibuja texto en mayúsculas. Los acentos se quitan (salvo la Ñ); en 16 bits

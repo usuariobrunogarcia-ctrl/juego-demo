@@ -16,8 +16,8 @@ TN.Game = class {
     this.backgrounds = TN.buildBackgrounds();
     this.entitySprites = TN.buildEntitySprites();
     this.frameCount = 0;
-    this.loadLevel(Math.min(this.save.data.unlocked, TN.LEVELS.length - 1));
-    this.state = 'title';
+    this.loadLevel(0);
+    this.openTitle();
 
     this.accumulator = 0;
     this.lastTime = null;
@@ -46,9 +46,7 @@ TN.Game = class {
   update() {
     if (this.input.wasPressed('mute')) this.sound.toggleMute();
     if (this.state === 'title') {
-      this.frameCount++;
-      if (this.input.wasPressed('switch')) this.trySwitch();
-      if (this.input.wasPressed('jump')) this.enterLevel(this.levelIndex);
+      this.updateTitle();
       return;
     }
     if (this.state === 'card') {
@@ -160,8 +158,7 @@ TN.Game = class {
     if (this.levelIndex + 1 < TN.LEVELS.length) {
       this.enterLevel(this.levelIndex + 1);
     } else {
-      this.loadLevel(0);
-      this.state = 'title';
+      this.openTitle();
     }
   }
 
@@ -260,6 +257,10 @@ TN.Game = class {
   render() {
     const ctx = this.ctx;
     const camX = Math.round(this.camX);
+    if (this.state === 'title') {
+      this.drawTitle();
+      return;
+    }
     if (this.state === 'card') {
       this.drawCard();
       return;
@@ -284,10 +285,6 @@ TN.Game = class {
 
     this.drawFlag(camX);
     this.drawEntities(camX);
-    if (this.state === 'title') {
-      this.drawTitle();
-      return;
-    }
     this.drawPlayer(camX);
     if (this.mode === 'snes') this.drawWater(camX);
     this.drawHud();
@@ -455,27 +452,6 @@ TN.Game = class {
       ctx.fillStyle = e.active ? '#C89818' : '#484858';
       ctx.fillRect(x + 6, y + 6, 7, 1);
     }
-  }
-
-  drawTitle() {
-    const ctx = this.ctx;
-    const C = this.theme;
-    const shadow = this.mode === 'snes' ? '#283060' : C.black;
-    ctx.fillStyle = C.black;
-    ctx.globalAlpha = this.mode === 'snes' ? 0.55 : 1;
-    ctx.fillRect(16, 36, TN.WIDTH - 32, 124);
-    ctx.globalAlpha = 1;
-    TN.drawText(ctx, 'TERRA NOVA', TN.WIDTH / 2, 48, this.mode === 'snes' ? '#F8D848' : '#FCA044', { align: 'center', scale: 3, shadow });
-    TN.drawText(ctx, this.mode === 'nes' ? '1989' : 'DX', TN.WIDTH / 2, 76, C.white, { align: 'center', scale: 2, shadow: this.textShadow });
-
-    // El explorador, ampliado, en la versión elegida.
-    const frame = this.sprites[this.mode].idle.right;
-    ctx.drawImage(frame, TN.WIDTH / 2 - 16, 96, 32, 32);
-
-    if ((this.frameCount >> 5) % 2 === 0) {
-      TN.drawText(ctx, 'Pulsa saltar para empezar', TN.WIDTH / 2, 136, C.white, { align: 'center', shadow: this.textShadow });
-    }
-    TN.drawText(ctx, 'X: cambiar 8/16 bits', TN.WIDTH / 2, 148, '#A0A0A0', { align: 'center' });
   }
 
   drawPlayer(camX) {

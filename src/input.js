@@ -1,19 +1,22 @@
 // Teclado. Traduce teclas físicas a acciones del juego.
 TN.KEYMAP = {
-  ArrowLeft: 'left',
-  KeyA: 'left',
-  ArrowRight: 'right',
-  KeyD: 'right',
-  ArrowUp: 'jump',
-  KeyW: 'jump',
-  KeyZ: 'jump',
-  Space: 'jump',
-  KeyX: 'switch',
-  KeyK: 'switch',
-  ShiftLeft: 'run',
-  ShiftRight: 'run',
-  KeyC: 'run',
-  KeyM: 'mute',
+  ArrowLeft: ['left'],
+  KeyA: ['left'],
+  ArrowRight: ['right'],
+  KeyD: ['right'],
+  ArrowUp: ['jump', 'up'],
+  KeyW: ['jump', 'up'],
+  ArrowDown: ['down'],
+  KeyS: ['down'],
+  KeyZ: ['jump', 'confirm'],
+  Space: ['jump', 'confirm'],
+  Enter: ['confirm'],
+  KeyX: ['switch'],
+  KeyK: ['switch'],
+  ShiftLeft: ['run'],
+  ShiftRight: ['run'],
+  KeyC: ['run'],
+  KeyM: ['mute'],
 };
 
 TN.Input = class {
@@ -22,15 +25,17 @@ TN.Input = class {
     this.pressed = new Set();
 
     addEventListener('keydown', (e) => {
-      const action = TN.KEYMAP[e.code];
-      if (!action) return;
+      const actions = TN.KEYMAP[e.code];
+      if (!actions) return;
       e.preventDefault();
-      if (!e.repeat) this.pressed.add(action);
-      this.held.add(action);
+      for (const action of actions) {
+        if (!e.repeat) this.pressed.add(action);
+        this.held.add(action);
+      }
     });
     addEventListener('keyup', (e) => {
-      const action = TN.KEYMAP[e.code];
-      if (action) this.held.delete(action);
+      const actions = TN.KEYMAP[e.code];
+      if (actions) actions.forEach((action) => this.held.delete(action));
     });
     addEventListener('blur', () => this.held.clear());
   }

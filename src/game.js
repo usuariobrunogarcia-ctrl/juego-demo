@@ -111,6 +111,7 @@ TN.Game = class {
 
     this.canSwitch = this.isSafeToSwitch();
     this.updateCamera();
+    this.updateFlash();
     if (this.level.def.breakOnClip && player.clipping) this.startBreak();
     if (this.state === 'play') this.checkDialogTriggers();
   }
@@ -166,6 +167,10 @@ TN.Game = class {
     this.patches = new Set();
     this.patchBanner = 0;
     this.resetRemarks();
+    this.snesFlash = 0;
+    this.flashDone = false;
+    // Tiles que no encajan: en 8 bits se dibujan con el arte de 16 bits.
+    this.oddTiles = new Set((this.level.def.oddTiles || []).map(([tx, ty]) => `${tx},${ty}`));
     this.updateCamera();
   }
 
@@ -188,6 +193,19 @@ TN.Game = class {
   savePieces() {
     const found = this.mapPieces.map((m, i) => (m.collected ? i : -1)).filter((i) => i >= 0);
     this.save.addPieces(this.level.def.id, found);
+  }
+
+  // Un fotograma suelto de 16 bits (con su música) al pasar por la columna snesFlash.
+  updateFlash() {
+    const at = this.level.def.snesFlash;
+    if (at === undefined) return;
+    if (!this.flashDone && this.player.x >= at * TN.TILE) {
+      this.flashDone = true;
+      this.snesFlash = TN.SNES_FLASH_FRAMES;
+      this.sound.setMode('snes');
+    } else if (this.snesFlash > 0 && --this.snesFlash === 0) {
+      this.sound.setMode(this.mode);
+    }
   }
 
   // Acciones del guion que cambian las reglas del juego.
@@ -310,6 +328,18 @@ TN.Game = class {
   // ---------- Dibujado ----------
 
   render() {
+    // Anticipo del prólogo: durante unos fotogramas se cuela la versión de 16 bits.
+    if (this.snesFlash > 0 && this.state === 'play') {
+      const real = this.mode;
+      this.mode = 'snes';
+      this.renderScene();
+      this.mode = real;
+      return;
+    }
+    this.renderScene();
+  }
+
+  renderScene() {
     const ctx = this.ctx;
     const camX = Math.round(this.camX);
     if (this.state === 'ending') {
@@ -516,7 +546,7 @@ TN.Game = class {
     const onlyTile = this.mode === 'nes' ? 'N' : 'S';
     const ghostTile = this.mode === 'nes' ? 'S' : 'N';
 
-    const images = this.tileImages;
+    const images = this.oddTiles.has(`${tx},${ty}`) ? this.tiles.snes : this.tileImages;
     if (tile === '#') {
       const top = !this.level.isSolid(tx, ty - 1, this.mode);
       ctx.drawImage(top ? images.groundTop : images.ground, x, y);

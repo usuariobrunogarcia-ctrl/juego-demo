@@ -125,7 +125,9 @@ def p_end(g, o):
 
 
 level('prologo', 'MUNDO 1-1', '', [(40, p_start), (40, p_middle), (40, p_end)],
-      start_mode='nes', switch=False, breakOnClip=True)
+      start_mode='nes', switch=False, breakOnClip=True,
+      snesFlash=93,                # anticipo: un fotograma suelto de 16 bits...
+      oddTiles=[[99, 12]])         # ...y un tile de suelo dibujado en 16 bits
 
 
 # ---------------------------------------------------------------------------

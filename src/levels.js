@@ -8,6 +8,8 @@ TN.LEVELS = [
     switchUnlocked: false,
     theme: "jungle",
     breakOnClip: true,
+    snesFlash: 93,
+    oddTiles: [[99, 12]],
     hints: [{"tx": 4, "ty": 8, "keys": ["←", "→"], "learn": "move"}, {"tx": 8, "ty": 7, "keys": ["Z"], "learn": "jump"}, {"tx": 102, "ty": 9, "keys": ["→"], "learn": "clip"}],
     dialogs: [],
     labels: [],

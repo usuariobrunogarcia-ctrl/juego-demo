@@ -272,7 +272,7 @@ Objetivo: que el Mundo 1 encaje con el arco de 6 mundos, que todos los fragmento
 | F3-2 | **Voces del cartucho:** carteles TODO de Alex en los niveles del Mundo 1 (solo 16 bits) y una primera nota de M. escondida en el 1-4 (solo 8 bits) como anticipo | ✅ Hecha |
 | F3-3 | **Comentarios de Alex que no frenan el juego:** una línea corta en una franja, sin pausar, que reacciona a lo que hace el jugador (morir varias veces en el mismo sitio, encontrar un fragmento difícil, atravesar una pared rota) | ✅ Hecha |
 | F3-4 | **Fragmentos de mapa:** comprobar con `tools/test` que los 15 fragmentos (3 por nivel) se pueden conseguir y que después se puede seguir; moverlos o ajustar el nivel si no. Cada fragmento debe pedir una mecánica concreta | ✅ Hecha |
-| F3-5 | **Anticipo en el prólogo:** un fotograma suelto en 16 bits cerca del final y un tile que no encaja, antes de la ruptura | Pendiente |
+| F3-5 | **Anticipo en el prólogo:** un fotograma suelto en 16 bits cerca del final y un tile que no encaja, antes de la ruptura | ✅ Hecha |
 | F3-6 | **Música nueva** (ver abajo) | Pendiente |
 
 #### Guion del Mundo 1, versión 2 (borrador)

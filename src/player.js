@@ -18,6 +18,7 @@ TN.Player = class {
     this.facing = 1;
     this.shake = 0;
     this.clipping = false;
+    this.swimming = false;
     this.animDistance = 0;
   }
 
@@ -25,6 +26,12 @@ TN.Player = class {
     const P = TN.PHYSICS[mode];
     const dir = (input.isDown('right') ? 1 : 0) - (input.isDown('left') ? 1 : 0);
     if (dir !== 0) this.facing = dir;
+
+    this.swimming = mode === 'snes' && level.overlapsTile(this.x, this.y + this.h / 2, this.w, this.h / 2, '~');
+    if (this.swimming) {
+      this.swim(input, level, mode, dir);
+      return;
+    }
 
     if (mode === 'nes') {
       // En 8 bits la velocidad es instantánea en el suelo y, una vez en el aire,
@@ -61,9 +68,25 @@ TN.Player = class {
     this.animDistance = this.onGround ? this.animDistance + Math.abs(this.vx) : 0;
   }
 
+  swim(input, level, mode, dir) {
+    const W = TN.WATER;
+    this.vx = approach(this.vx, dir * W.speed, W.accel);
+    if (input.wasPressed('jump')) {
+      const headOut = !level.overlapsTile(this.x, this.y - 4, this.w, 4, '~');
+      this.vy = headOut ? -W.exitSpeed : -W.strokeSpeed;
+    }
+    this.vy = Math.min(this.vy + W.gravity, W.maxFall);
+    this.clipping = false;
+    this.moveX(level, mode);
+    this.moveY(level, mode);
+    if (this.shake > 0) this.shake--;
+    this.animDistance += Math.abs(this.vx) + Math.abs(this.vy);
+  }
+
   // Nombre del fotograma que toca dibujar en el modo dado.
   frameName(mode) {
     const sprite = TN.SPRITES[mode];
+    if (this.swimming) return sprite.walkCycle[Math.floor(this.animDistance / 8) % sprite.walkCycle.length];
     if (!this.onGround) return 'jump';
     if (Math.abs(this.vx) < 0.05) return 'idle';
     const cycle = sprite.walkCycle;

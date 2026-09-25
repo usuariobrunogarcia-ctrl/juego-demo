@@ -202,6 +202,7 @@ TN.Game = class {
     this.drawFlag(camX);
     this.drawEntities(camX);
     this.drawPlayer(camX);
+    if (this.mode === 'snes') this.drawWater(camX);
     this.drawHud();
 
     if (this.state === 'win') {
@@ -220,6 +221,34 @@ TN.Game = class {
       this.drawStrip(bg.jungle, camX * TN.PARALLAX_NEAR);
     }
     this.drawBranches(camX);
+  }
+
+  // Transparencia por "color math" de la SNES: el agua tiñe lo que hay detrás.
+  drawWater(camX) {
+    const ctx = this.ctx;
+    const T = TN.TILE;
+    const firstCol = Math.floor(camX / T);
+    for (let ty = 0; ty < this.level.height; ty++) {
+      for (let tx = firstCol; tx <= firstCol + TN.WIDTH / T; tx++) {
+        if (this.level.tileAt(tx, ty) !== '~') continue;
+        const x = tx * T - camX;
+        const y = ty * T;
+        ctx.globalAlpha = 0.5;
+        ctx.fillStyle = '#2070D0';
+        ctx.fillRect(x, y, T, T);
+        if (this.level.tileAt(tx, ty - 1) === '.') {
+          const wave = (this.frameCount >> 3) % 4;
+          ctx.globalAlpha = 0.8;
+          ctx.fillStyle = '#B8E8F8';
+          for (let i = 0; i < T; i++) {
+            if ((i + tx * T + wave) % 8 < 5) ctx.fillRect(x + i, y, 1, 1);
+          }
+          ctx.fillStyle = '#58A8E8';
+          ctx.fillRect(x, y + 1, T, 1);
+        }
+        ctx.globalAlpha = 1;
+      }
+    }
   }
 
   drawBranches(camX) {
@@ -277,6 +306,11 @@ TN.Game = class {
       ctx.drawImage(top ? images.groundTop : images.ground, x, y);
     } else if (tile === 'B') {
       ctx.drawImage(images.brick, x, y);
+    } else if (tile === '~') {
+      // En 16 bits el agua se dibuja encima de todo, translúcida (drawWater).
+      if (this.mode === 'nes') {
+        ctx.drawImage(this.level.tileAt(tx, ty - 1) === '.' ? images.waterTop : images.water, x, y);
+      }
     } else if (tile === 'W') {
       ctx.drawImage(images.glitchWall, x, y);
     } else if (tile === onlyTile) {

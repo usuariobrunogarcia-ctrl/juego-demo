@@ -55,5 +55,15 @@ TN.PHYSICS = {
   },
 };
 
+// Buceo (solo 16 bits).
+TN.WATER = {
+  gravity: 0.08,
+  maxFall: 1,
+  speed: 1,
+  accel: 0.06,
+  strokeSpeed: 2.2, // impulso de cada brazada (botón de salto)
+  exitSpeed: 4.2, // salto para salir cuando la cabeza ya está fuera
+};
+
 // Fotogramas que tiembla el explorador si intenta cambiar donde no es seguro.
 TN.SWITCH_ERROR_FRAMES = 14;

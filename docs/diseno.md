@@ -17,11 +17,25 @@ El cambio no es solo visual: cada versión tiene sus propias reglas. En 8 bits h
 
 ## 2. Historia
 
-**Terra Nova** fue un juego de NES de 1989 sobre un explorador que recorría y cartografiaba tierras desconocidas. Años después, un estudio empezó a rehacerlo para SNES como **Terra Nova DX**, pero el proyecto quedó **inacabado**.
+**Terra Nova** fue un juego de NES de 1989 sobre un explorador que recorría y cartografiaba tierras desconocidas. Años después, un estudio empezó a rehacerlo para SNES como **Terra Nova DX**, pero el estudio cerró y el remaster quedó **inacabado**. Solo una persona siguió trabajando en él: **Alex** (nombre provisional), la última desarrolladora del proyecto.
 
-El juego ocurre dentro de esa build a medio hacer. Las dos versiones conviven en el mismo cartucho y el explorador puede saltar de una a otra. Allí donde ambas versiones coinciden, el cambio es posible.
+### El arco
 
-Notas y mensajes de depuración que dejó el equipo del estudio, escondidos por los niveles, van contando por qué el remaster nunca se terminó.
+1. **El engaño.** El juego arranca como *Terra Nova (1989)*: título de NES, primer nivel en 8 bits puros y **sin botón de cambio**. Parece un plataformas retro normal.
+2. **La ruptura.** Al final del primer nivel, la bandera queda detrás de una pared con la colisión rota. Al atravesarla, el explorador sale del nivel por donde no debería poder ir: la pantalla se corrompe y cae dentro de la **build del remaster**, en una sala de pruebas llena de texturas provisionales.
+3. **La intrusión.** Alex descubre al explorador y lo trata como a un **bug**: quiere arreglarlo. Ahí el explorador descubre que puede saltar entre las dos versiones (se desbloquea el botón de cambio).
+4. **La tensión.** Alex va parcheando glitches mientras el explorador avanza, pero el explorador los necesita para progresar. Al final del Mundo 1, un parche le cierra el paso y tiene que encontrar otro camino.
+5. **El giro (mundos siguientes).** Alex se da cuenta de que las imperfecciones del original eran lo que lo hacía especial.
+6. **El final.** El remaster sale con las dos versiones conviviendo, y el botón de cambio es su función estrella.
+
+El tema de fondo es la **nostalgia frente a la modernización**: lo imperfecto también tiene valor.
+
+### Cómo habla Alex
+
+- Con cuadros de diálogo. Se avanza con el botón de salto.
+- En 16 bits aparece su retrato y el texto se ve limpio. En 8 bits no hay retrato y el texto sale con la fuente de la NES y **algunas letras corruptas**.
+- **Alex nunca da tutoriales**: solo habla de la historia. A jugar se aprende sin palabras (ver sección 8b).
+- Diálogos cortos, de 1 a 3 cuadros por aparición.
 
 ## 3. Personajes
 
@@ -135,18 +149,37 @@ Inspirados en glitches reales de juegos de NES. Cada uno funciona con reglas fij
 - El mapa se dibuja en el estilo de la versión activa: tosco y con pocos colores en 8 bits, detallado en 16 bits.
 - En el nivel actual hay 6 fragmentos, cada uno ligado a una mecánica: cambiar en el aire, el parpadeo, atravesar paredes, bucear, subir por los murciélagos y saltar desde una rama. El contador (MAPA x/6) está en el HUD y en el mensaje final.
 
-### Mundos
+### Estructura de la aventura
 
-Cada mundo presenta un glitch y un gimmick nuevos y los combina con los anteriores.
+El juego avanza de nivel en nivel. Antes de cada uno aparece una tarjeta con su número y nombre, al estilo de la NES. El progreso (nivel alcanzado, fragmentos y acciones aprendidas) se guarda en el navegador.
+
+| Nivel | Nombre | Qué pasa | Mecánicas nuevas |
+|---|---|---|---|
+| **Prólogo** | *Terra Nova (1989) – 1-1* | Solo 8 bits, sin cambio. Al final, la pared rota lleva fuera del nivel y el juego "se rompe" | Moverse, saltar, fosos, espinas, puntos de control, fragmentos, atravesar paredes |
+| **Tutorial** | *Build 0.3 – Sala de pruebas* | Texturas provisionales y cuadrícula de depuración. Alex te descubre. Se desbloquea el cambio | Físicas de 16 bits (correr, salto variable), cambio de versión, bloques exclusivos, regla de cambio seguro |
+| **1-1** | *La selva* | Primer nivel "real" del remaster | Cambiar en el aire, murciélagos, parpadeo de sprites |
+| **1-2** | *Ruinas del río* | Ruinas inundadas | Agua (sólida / buceo), paredes rotas combinadas con el cambio |
+| **1-3** | *Las copas* | Por encima de la selva | Ramas en la capa de fondo, escaleras de murciélagos |
+| **1-4** | *El parche* | Alex parchea el parpadeo en pleno nivel: las espinas dejan de parpadear en 8 bits y hay que buscar otra ruta. Final del Mundo 1 | Repaso de todo |
+
+Cada nivel del Mundo 1 tiene **3 fragmentos de mapa**.
+
+### Mundos siguientes
 
 | # | Mundo | Glitch principal | Gimmick principal |
 |---|---|---|---|
-| 1 | **Selva** | Parpadeo de sprites | Parallax jugable (lianas en la capa del fondo) |
-| 2 | **Cuevas** | Atravesar paredes | Iluminación |
-| 3 | **Costa y cascadas** | Agua sólida | Transparencias y buceo |
+| 2 | **Cuevas** | Oscuridad total o luz total | Iluminación (cono de luz) |
+| 3 | **Costa y cascadas** | Basura en el borde del scroll | Transparencias y corrientes |
 | 4 | **Desierto y ruinas** | Ralentización | Ondulación por calor |
 | 5 | **Glaciar y montaña** | Salir por arriba de la pantalla | Mode 7 |
 | 6 | **El estudio / la build rota** | Todos | Todos |
+
+## 8b. Enseñar sin palabras
+
+- **El diseño enseña:** cada mecánica aparece primero en un lugar seguro, donde fallar no cuesta nada, y solo después en serio.
+- **Íconos de tecla, nunca texto:** la primera vez que aparece algo nuevo, flota junto al obstáculo una tecla dibujada en píxeles (por ejemplo, [X]). Desaparece para siempre en cuanto el jugador hace esa acción.
+- **Pista si te trabás:** si el jugador recibe daño 3 veces desde el último punto de control, los íconos de esa zona vuelven a aparecer.
+- **Sin texto de controles** fuera del juego: la pantalla solo muestra el juego, con escalado entero centrado en la ventana.
 
 ### Estructura de enseñanza de cada mecánica
 
@@ -171,6 +204,7 @@ Objetivo: comprobar que cambiar de modo es divertido.
 ## 10. Pendiente de decidir
 
 - Nombre del explorador y nombre definitivo del juego.
+- Nombre definitivo de Alex y del estudio ficticio (provisional: *Brújula Soft*).
 - Habilidades extra de 16 bits (deslizarse por paredes, agarrarse a bordes).
 - Sistema de vidas (por ahora, al recibir daño se reaparece en el último punto de control sin límite).
 
@@ -195,3 +229,17 @@ El juego se construye por etapas. Cada una termina con algo jugable que se puede
 | 6b | **Fragmentos de mapa** y HUD | ✅ Hecha |
 | 7 | **Sonido:** música con dos arreglos sincronizados y efectos (Web Audio) | ✅ Hecha |
 | 8 | **Nivel de la Selva completo:** secciones que enseñan cada mecánica y un repaso final que las combina, pantalla de título y parpadeo al reaparecer | ✅ Hecha |
+
+### Fase 2: prólogo, tutorial y Mundo 1
+
+| Paso | Contenido | Estado |
+|---|---|---|
+| F2-1 | **Plan** de la historia, el prólogo, el tutorial y el Mundo 1 | ✅ Hecha |
+| F2-2 | **Pantalla y niveles:** escalado entero a la ventana sin texto de controles; varios niveles con tarjeta de presentación; guardado del progreso | Pendiente |
+| F2-3 | **Pantalla de título** nueva: la de 1989 al empezar y la de DX, con glitches, tras el prólogo | Pendiente |
+| F2-4 | **Íconos de tecla** para enseñar sin palabras | Pendiente |
+| F2-5 | **Diálogos** de Alex (retrato en 16 bits, texto corrupto en 8 bits) | Pendiente |
+| F2-6 | **Prólogo** en 8 bits y la **ruptura** del juego | Pendiente |
+| F2-7 | **Tutorial** en la sala de pruebas | Pendiente |
+| F2-8 | **Niveles 1-1, 1-2 y 1-3** | Pendiente |
+| F2-9 | **Nivel 1-4 "El parche"** y final del Mundo 1 | Pendiente |

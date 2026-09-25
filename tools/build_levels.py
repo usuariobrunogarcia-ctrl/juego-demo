@@ -86,7 +86,7 @@ def p_start(g, o):
 
 
 def p_middle(g, o):
-    g.fill(o + 5, o + 7, 11, 11, 'x')
+    g.fill(o + 5, o + 6, 11, 11, 'x')
     g.put(o + 14, 9, 'b')
     g.fill(o + 20, o + 22, 12, 13, '.')
     g.put(o + 26, 11, 'C')

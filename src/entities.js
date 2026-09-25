@@ -197,7 +197,7 @@ TN.Thorns = class {
     this.w = 16;
     this.h = 16;
     this.sprite = 'thorns';
-    this.hitbox = { x: 2, y: 5, w: 12, h: 11 };
+    this.hitbox = { x: 3, y: 7, w: 10, h: 9 };
     this.dangerous = true;
   }
 

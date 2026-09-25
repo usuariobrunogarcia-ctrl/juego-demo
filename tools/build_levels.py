@@ -60,13 +60,52 @@ def build(sections):
 LEVELS = []
 
 
-def level(id, code, name, sections, start_mode='nes', switch=True, theme='jungle'):
+def level(id, code, name, sections, start_mode='nes', switch=True, theme='jungle', **extra):
     g = build(sections)
     LEVELS.append({
         'id': id, 'code': code, 'name': name, 'startMode': start_mode,
-        'switchUnlocked': switch, 'theme': theme, 'rows': g.rows(),
+        'switchUnlocked': switch, 'theme': theme, **extra, 'rows': g.rows(),
         'hints': g.hints, 'dialogs': g.dialogs,
     })
+
+
+# ---------------------------------------------------------------------------
+# Prólogo: el 1-1 original de Terra Nova (1989). Solo 8 bits y sin cambio.
+# Al meterse en la pared rota del final, el juego "se rompe" (breakOnClip).
+# ---------------------------------------------------------------------------
+
+def p_start(g, o):
+    g.put(o + 2, 11, 'P')
+    g.hint(o + 4, 8, ['←', '→'], 'move')
+    g.stairs(o + 10, [2, 2])
+    g.hint(o + 8, 7, ['Z'], 'jump')
+    g.fill(o + 16, o + 18, 12, 13, '.')
+    g.fill(o + 22, o + 25, 8, 8, 'B'); g.put(o + 23, 7, '*')
+    g.put(o + 30, 11, 'x')
+    g.put(o + 35, 11, 'C')
+
+
+def p_middle(g, o):
+    g.fill(o + 5, o + 7, 11, 11, 'x')
+    g.put(o + 14, 9, 'b')
+    g.fill(o + 20, o + 22, 12, 13, '.')
+    g.put(o + 26, 11, 'C')
+    g.stairs(o + 30, [1, 2, 3, 3, 2, 1])
+    g.put(o + 32, 5, '*')
+
+
+def p_end(g, o):
+    g.put(o + 1, 11, 'C')
+    g.fill(o + 6, o + 10, 11, 11, 'x')      # 5 espinas: parpadean siempre (primer glitch)
+    g.put(o + 8, 9, '*')
+    g.put(o + 15, 11, 'C')
+    g.fill(o + 24, o + 25, 0, 11, 'W')      # la pared rota que lleva a la ruptura
+    g.hint(o + 22, 9, ['→'], 'clip')
+    g.put(o + 30, 11, 'F')
+
+
+level('prologo', 'MUNDO 1-1', '', [(40, p_start), (40, p_middle), (40, p_end)],
+      start_mode='nes', switch=False, breakOnClip=True)
 
 
 # ---------------------------------------------------------------------------
@@ -141,7 +180,7 @@ def s_end(g, o):
     g.put(o + 28, 11, 'F')
 
 
-level('selva', '1-1', 'La selva', [
+level('selva', 'MUNDO 1-1', 'La selva', [
     (62, s_switch), (62, s_flicker), (30, s_clip), (22, s_branch),
     (30, s_water), (26, s_bats), (44, s_combo), (34, s_end),
 ])

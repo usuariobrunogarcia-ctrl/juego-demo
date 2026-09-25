@@ -54,6 +54,10 @@ TN.Game = class {
       this.updateDialog();
       return;
     }
+    if (this.state === 'break') {
+      this.updateBreak();
+      return;
+    }
     if (this.state === 'card') {
       this.frameCount++;
       this.stateTimer--;
@@ -93,6 +97,7 @@ TN.Game = class {
 
     this.canSwitch = this.isSafeToSwitch();
     this.updateCamera();
+    if (this.level.def.breakOnClip && player.clipping) this.startBreak();
     if (this.state === 'play') this.checkDialogTriggers();
   }
 
@@ -303,6 +308,7 @@ TN.Game = class {
     this.drawHud();
 
     if (this.state === 'dialog') this.drawDialog();
+    if (this.state === 'break') this.drawBreak();
     if (this.state === 'win') {
       this.drawBanner('¡NIVEL COMPLETADO!', `Mapa ${this.mapCount} - Pulsa saltar`);
     }

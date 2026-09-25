@@ -239,7 +239,7 @@ El juego se construye por etapas. Cada una termina con algo jugable que se puede
 | F2-3 | **Pantalla de título** nueva: la de 1989 al empezar y la de DX, con glitches, tras el prólogo | ✅ Hecha |
 | F2-4 | **Íconos de tecla** para enseñar sin palabras | ✅ Hecha |
 | F2-5 | **Diálogos** de Alex (retrato en 16 bits, texto corrupto en 8 bits) | ✅ Hecha |
-| F2-6 | **Prólogo** en 8 bits y la **ruptura** del juego | Pendiente |
+| F2-6 | **Prólogo** en 8 bits y la **ruptura** del juego | ✅ Hecha |
 | F2-7 | **Tutorial** en la sala de pruebas | Pendiente |
 | F2-8 | **Niveles 1-1, 1-2 y 1-3** | Pendiente |
 | F2-9 | **Nivel 1-4 "El parche"** y final del Mundo 1 | Pendiente |

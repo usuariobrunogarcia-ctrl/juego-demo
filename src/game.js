@@ -211,6 +211,8 @@ TN.Game = class {
       ctx.drawImage(top ? images.groundTop : images.ground, x, y);
     } else if (tile === 'B') {
       ctx.drawImage(images.brick, x, y);
+    } else if (tile === 'W') {
+      ctx.drawImage(images.glitchWall, x, y);
     } else if (tile === onlyTile) {
       ctx.drawImage(images.block, x, y);
     } else if (tile === ghostTile) {
@@ -270,7 +272,8 @@ TN.Game = class {
 
   drawPlayer(camX) {
     const p = this.player;
-    const shakeOffset = p.shake > 0 ? (p.shake % 4 < 2 ? -1 : 1) : 0;
+    let shakeOffset = p.shake > 0 ? (p.shake % 4 < 2 ? -1 : 1) : 0;
+    if (p.clipping) shakeOffset = (this.frameCount >> 1) % 3 - 1;
     // El sprite mide 16x16 y la caja de colisión 12x14: se centra y se apoya en los pies.
     const x = Math.round(p.x) - camX - 2 + shakeOffset;
     const y = Math.round(p.y) - 2;

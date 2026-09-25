@@ -17,6 +17,7 @@ TN.Player = class {
     this.onGround = false;
     this.facing = 1;
     this.shake = 0;
+    this.clipping = false;
     this.animDistance = 0;
   }
 
@@ -49,6 +50,9 @@ TN.Player = class {
     }
     this.vy = Math.min(this.vy + P.gravity, P.maxFall);
 
+    // Glitch de 8 bits: dentro de una pared rota el explorador avanza a trompicones.
+    this.clipping = mode === 'nes' && level.overlapsTile(this.x, this.y, this.w, this.h, 'W');
+
     this.moveX(level, mode);
     this.moveY(level, mode);
 
@@ -69,7 +73,7 @@ TN.Player = class {
   // Movimiento separado por ejes: primero X, luego Y.
   moveX(level, mode) {
     const T = TN.TILE;
-    this.x += this.vx;
+    this.x += this.clipping ? this.vx * 0.5 : this.vx;
     if (!level.overlapsSolid(this.x, this.y, this.w, this.h, mode)) return;
     if (this.vx > 0) {
       this.x = Math.floor((this.x + this.w - 0.001) / T) * T - this.w;
@@ -81,9 +85,18 @@ TN.Player = class {
 
   moveY(level, mode) {
     const T = TN.TILE;
+    const prevBottom = this.y + this.h;
     this.y += this.vy;
     this.onGround = false;
-    if (!level.overlapsSolid(this.x, this.y, this.w, this.h, mode)) return;
+    if (!level.overlapsSolid(this.x, this.y, this.w, this.h, mode)) {
+      const top = this.vy > 0 ? level.oneWayTop(this.x, this.w, prevBottom, this.y + this.h, mode) : null;
+      if (top !== null) {
+        this.y = top - this.h;
+        this.vy = 0;
+        this.onGround = true;
+      }
+      return;
+    }
     if (this.vy > 0) {
       this.y = Math.floor((this.y + this.h - 0.001) / T) * T - this.h;
       this.onGround = true;

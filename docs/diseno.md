@@ -104,7 +104,7 @@ Inspirados en glitches reales de juegos de NES. Cada uno funciona con reglas fij
 | Glitch | Efecto jugable |
 |---|---|
 | **Parpadeo de sprites** | Como en la NES, caben 8 sprites de hardware por línea y un objeto de 16 px ocupa 2 (el explorador también). Si una línea se satura, sus objetos parpadean y mientras parpadean no hacen daño: 3 espinas en fila son peligrosas; 4 parpadean cuando te pones a su altura; 5 o más parpadean siempre |
-| **Atravesar paredes** (wall clip) | En ciertas esquinas el jugador se mete en un bloque y sale por el otro lado |
+| **Atravesar paredes** (wall clip) | Las paredes con gráficos corruptos tienen la colisión rota: en 8 bits se atraviesan caminando (despacio y temblando) y solo son sólidas por arriba. En 16 bits están arregladas y son sólidas. Dentro de una no se puede cambiar de modo |
 | **Ralentización** | Con muchos objetos en pantalla todo va más lento: "tiempo bala" para pasar zonas de precisión |
 | **Salir por arriba de la pantalla** | El techo no tiene colisión: se puede caminar por encima del nivel |
 | **Errores de paleta** | Bloques falsos y reales se ven idénticos; enemigos camuflados |
@@ -185,7 +185,7 @@ El juego se construye por etapas. Cada una termina con algo jugable que se puede
 | 3b | **Tiles** del suelo, ladrillos y bloques exclusivos en los dos estilos | ✅ Hecha |
 | 3c | **Fondo con parallax** en 16 bits y **fuente de píxeles** para los textos | ✅ Hecha |
 | 4a | **Parpadeo de sprites**, espinas y puntos de control | ✅ Hecha |
-| 4b | **Atravesar paredes** | Pendiente |
+| 4b | **Atravesar paredes** | ✅ Hecha |
 | 5a | **Parallax jugable:** ramas en la capa del fondo | Pendiente |
 | 5b | **Agua:** sólida en 8 bits, transparente y para bucear en 16 bits | Pendiente |
 | 6a | **Murciélagos** en ambos modos | Pendiente |

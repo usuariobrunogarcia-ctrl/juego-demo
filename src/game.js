@@ -55,11 +55,16 @@ TN.Game = class {
     this.frameCount++;
     const player = this.player;
     if (this.input.wasPressed('switch')) this.trySwitch();
-    this.carryOnBranch();
+    for (const e of this.entities) e.update(this);
+    for (const b of this.branches) {
+      b.prevX = b.x;
+      b.prevY = b.y;
+      b.place(this.camX);
+    }
+    this.carryOnPlatform();
     const prevBottom = player.y + player.h;
     player.update(this.input, this.level, this.mode);
-    this.landOnBranches(prevBottom);
-    for (const e of this.entities) e.update(this);
+    this.landOnPlatforms(prevBottom);
 
     if (player.y > this.level.pixelHeight + 32) {
       this.hurt();
@@ -75,29 +80,36 @@ TN.Game = class {
     this.updateCamera();
   }
 
-  // Si el explorador estaba sobre una rama, se mueve con ella.
-  carryOnBranch() {
-    const b = this.riding;
-    if (!b) return;
-    const oldX = b.x;
-    b.place(this.camX);
-    const p = this.player;
-    const dx = b.x - oldX;
-    if (dx !== 0 && !this.level.overlapsSolid(p.x + dx, p.y, p.w, p.h, this.mode)) p.x += dx;
+  // Plataformas móviles: ramas de la capa de fondo y murciélagos (solo en 16 bits).
+  get platforms() {
+    return this.mode === 'snes' ? [...this.branches, ...this.bats] : [];
   }
 
-  landOnBranches(prevBottom) {
+  // Si el explorador estaba sobre una plataforma, se mueve con ella.
+  carryOnPlatform() {
+    const pl = this.riding;
+    if (!pl || this.mode !== 'snes') return;
+    const p = this.player;
+    const dx = pl.x - pl.prevX;
+    const dy = pl.y - pl.prevY;
+    if (dx !== 0 && !this.level.overlapsSolid(p.x + dx, p.y, p.w, p.h, this.mode)) p.x += dx;
+    if (dy !== 0 && !this.level.overlapsSolid(p.x, p.y + dy, p.w, p.h, this.mode)) p.y += dy;
+  }
+
+  landOnPlatforms(prevBottom) {
     const p = this.player;
     this.riding = null;
-    if (this.mode !== 'snes' || p.vy < 0) return;
-    for (const b of this.branches) {
-      b.place(this.camX);
+    if (p.vy < 0) return;
+    for (const pl of this.platforms) {
+      const top = pl.top;
       const bottom = p.y + p.h;
-      if (prevBottom <= b.y + 0.01 && bottom >= b.y && p.x + p.w > b.x && p.x < b.x + b.w) {
-        p.y = b.y - p.h;
+      // Si la plataforma subió este fotograma, se compara con dónde estaba antes.
+      const prevTop = top - (pl.y - pl.prevY);
+      if (prevBottom <= Math.max(top, prevTop) + 0.01 && bottom >= top && p.x + p.w > pl.x && p.x < pl.x + pl.w) {
+        p.y = top - p.h;
         p.vy = 0;
         p.onGround = true;
-        this.riding = b;
+        this.riding = pl;
         return;
       }
     }
@@ -108,6 +120,7 @@ TN.Game = class {
     this.branches = this.level.branches.map((b) => new TN.Branch(b, this.level));
     this.riding = null;
     this.hazards = this.entities.filter((e) => e.sprite);
+    this.bats = this.entities.filter((e) => e instanceof TN.Bat);
     this.checkpoint = this.level.spawn;
     this.flickering = new Set();
   }
@@ -125,7 +138,7 @@ TN.Game = class {
       }
     }
     for (const e of this.hazards) {
-      if (this.flickering.has(e)) continue;
+      if (this.flickering.has(e) || e.harmless(this.mode)) continue;
       const hb = e.hitbox;
       if (p.x < e.x + hb.x + hb.w && p.x + p.w > e.x + hb.x &&
           p.y < e.y + hb.y + hb.h && p.y + p.h > e.y + hb.y) {
@@ -254,7 +267,6 @@ TN.Game = class {
   drawBranches(camX) {
     const ctx = this.ctx;
     for (const b of this.branches) {
-      b.place(camX);
       const x = Math.round(b.x) - camX;
       const y = Math.round(b.y);
       if (x + b.w < 0 || x >= TN.WIDTH) continue;

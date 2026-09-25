@@ -23,6 +23,48 @@ TN.ENTITY_SPRITES = {
       '.dddddddddddddd.',
     ],
     },
+    batUp: {
+      palette: { k: '#000000', p: '#6844FC', e: '#FCFCFC' },
+      rows: [
+        '................',
+        '................',
+        'k..............k',
+        'kk............kk',
+        'kpk....kk....kpk',
+        'kppk..kkkk..kppk',
+        'kpppkkekkekkpppk',
+        '.kpppkkkkkkpppk.',
+        '..kppkkkkkkppk..',
+        '...kk.kkkk.kk...',
+        '......k..k......',
+        '................',
+        '................',
+        '................',
+        '................',
+        '................',
+      ],
+    },
+    batDown: {
+      palette: { k: '#000000', p: '#6844FC', e: '#FCFCFC' },
+      rows: [
+        '................',
+        '................',
+        '................',
+        '................',
+        '.......kk.......',
+        '......kkkk......',
+        '..kkkkekkekkkk..',
+        '.kpppkkkkkkpppk.',
+        'kpppk.kkkk.kpppk',
+        'kppk...kk...kppk',
+        'kpk..........kpk',
+        'kk............kk',
+        'k..............k',
+        '................',
+        '................',
+        '................',
+      ],
+    },
   },
   snes: {
     thorns: {
@@ -45,6 +87,48 @@ TN.ENTITY_SPRITES = {
       '..GggdGgggGggg..',
       '.oooooooooooooo.',
     ],
+    },
+    batUp: {
+      palette: { o: '#201830', b: '#584878', m: '#8870B0', l: '#B8A0D8', e: '#F8D848' },
+      rows: [
+        '................',
+        '................',
+        'o..............o',
+        'oo............oo',
+        'olo....oo....olo',
+        'omlo..obbo..olmo',
+        'ommlooebbeoolmmo',
+        '.ommlbbbbbblmmo.',
+        '..ommbbbbbbmmo..',
+        '...oo.obbo.oo...',
+        '......o..o......',
+        '................',
+        '................',
+        '................',
+        '................',
+        '................',
+      ],
+    },
+    batDown: {
+      palette: { o: '#201830', b: '#584878', m: '#8870B0', l: '#B8A0D8', e: '#F8D848' },
+      rows: [
+        '................',
+        '................',
+        '................',
+        '................',
+        '.......oo.......',
+        '......obbo......',
+        '..ooooebbeoooo..',
+        '.olllbbbbbblllo.',
+        'olmmo.obbo.ommlo',
+        'ommo...oo...ommo',
+        'omo..........omo',
+        'oo............oo',
+        'o..............o',
+        '................',
+        '................',
+        '................',
+      ],
     },
   },
 };
@@ -72,6 +156,10 @@ TN.Thorns = class {
     this.h = 16;
     this.sprite = 'thorns';
     this.hitbox = { x: 2, y: 5, w: 12, h: 11 };
+  }
+
+  harmless() {
+    return false;
   }
 
   update() {}
@@ -109,13 +197,55 @@ TN.Branch = class {
     this.x = this.baseX;
   }
 
+  get top() {
+    return this.y;
+  }
+
   place(camX) {
     this.x = this.baseX + (camX - this.anchorCam) * (1 - TN.PARALLAX_NEAR);
   }
 };
 
+// Murciélago: vuela de lado a lado siguiendo su rutina. En 8 bits hace daño al
+// tocarlo; en 16 bits fue rediseñado y se puede usar como plataforma móvil.
+TN.Bat = class {
+  constructor(tx, ty) {
+    this.baseX = tx * TN.TILE;
+    this.baseY = ty * TN.TILE;
+    this.x = this.baseX;
+    this.y = this.baseY;
+    this.w = 16;
+    this.h = 16;
+    this.phase = tx * 0.7;
+    this.hitbox = { x: 1, y: 5, w: 14, h: 6 };
+    this.time = 0;
+    this.update();
+  }
+
+  get sprite() {
+    return (this.time >> 3) % 2 ? 'batDown' : 'batUp';
+  }
+
+  get top() {
+    return this.y + 5;
+  }
+
+  harmless(mode) {
+    return mode === 'snes';
+  }
+
+  update() {
+    this.prevX = this.x;
+    this.prevY = this.y;
+    this.time++;
+    this.x = this.baseX + Math.round(20 * Math.sin(this.time / 40 + this.phase));
+    this.y = this.baseY + Math.round(3 * Math.sin(this.time / 12 + this.phase));
+  }
+};
+
 TN.createEntity = function (spec) {
   if (spec.type === 'x') return new TN.Thorns(spec.tx, spec.ty);
+  if (spec.type === 'b') return new TN.Bat(spec.tx, spec.ty);
   if (spec.type === 'C') return new TN.Checkpoint(spec.tx, spec.ty);
   throw new Error(`Objeto desconocido: ${spec.type}`);
 };

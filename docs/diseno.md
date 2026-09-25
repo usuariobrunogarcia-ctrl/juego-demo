@@ -41,7 +41,7 @@ No son monstruos ni criaturas malvadas. Son animales y trampas de ruinas que **r
 
 | Enemigo | En 8 bits | En 16 bits |
 |---|---|---|
-| **Murciélagos** en bandada | Parpadean al ser muchos y se pueden atravesar | Vuelan en formación: escalera móvil |
+| **Murciélagos** | Vuelan de lado a lado; hacen daño al tocarlos y cuentan para el parpadeo | Plataformas móviles inofensivas: te llevan al subirte |
 | **Cangrejos** que van y vienen | Hacen daño y en los bordes se meten en la pared | Caparazón grande sobre el que subirse |
 | **Rocas rodantes** | Desaparecen al salir de pantalla y reaparecen (respawn) | Física real: plataforma o ariete para romper paredes |
 | **Pájaros** | Vuelan en línea recta y salen por arriba de la pantalla | Planean en círculos y elevan al jugador |
@@ -188,7 +188,7 @@ El juego se construye por etapas. Cada una termina con algo jugable que se puede
 | 4b | **Atravesar paredes** | ✅ Hecha |
 | 5a | **Parallax jugable:** ramas en la capa del fondo | ✅ Hecha |
 | 5b | **Agua:** sólida en 8 bits, transparente y para bucear en 16 bits | ✅ Hecha |
-| 6a | **Murciélagos** en ambos modos | Pendiente |
+| 6a | **Murciélagos** en ambos modos | ✅ Hecha |
 | 6b | **Fragmentos de mapa** y HUD | Pendiente |
 | 7 | **Sonido:** música con dos arreglos sincronizados y efectos (Web Audio) | Pendiente |
 | 8 | **Nivel de la Selva completo:** diseño final del nivel del MVP y pulido | Pendiente |

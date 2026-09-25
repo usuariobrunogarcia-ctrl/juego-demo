@@ -10,19 +10,14 @@ TN.Game = class {
 
     this.input = new TN.Input();
     this.sound = new TN.Sound();
-    this.level = new TN.Level(TN.LEVEL_1);
-    this.player = new TN.Player(this.level);
+    this.save = new TN.Save();
     this.sprites = TN.buildSprites();
     this.tiles = TN.buildTiles();
     this.backgrounds = TN.buildBackgrounds();
     this.entitySprites = TN.buildEntitySprites();
-    this.resetEntities();
     this.frameCount = 0;
-    this.camX = 0;
+    this.loadLevel(Math.min(this.save.data.unlocked, TN.LEVELS.length - 1));
     this.state = 'title';
-    this.respawnBlink = 0;
-    this.mode = 'nes';
-    this.canSwitch = true;
 
     this.accumulator = 0;
     this.lastTime = null;
@@ -53,11 +48,18 @@ TN.Game = class {
     if (this.state === 'title') {
       this.frameCount++;
       if (this.input.wasPressed('switch')) this.trySwitch();
-      if (this.input.wasPressed('jump')) this.state = 'play';
+      if (this.input.wasPressed('jump')) this.enterLevel(this.levelIndex);
+      return;
+    }
+    if (this.state === 'card') {
+      this.frameCount++;
+      this.stateTimer--;
+      if (this.stateTimer <= 0 || (this.stateTimer < 100 && this.input.wasPressed('jump'))) this.state = 'play';
       return;
     }
     if (this.state === 'win') {
-      if (this.input.wasPressed('jump')) this.restart();
+      this.stateTimer--;
+      if (this.stateTimer <= 0 && this.input.wasPressed('jump')) this.nextLevel();
       return;
     }
     if (this.respawnBlink > 0) this.respawnBlink--;
@@ -83,10 +85,7 @@ TN.Game = class {
     this.checkEntities();
 
     const flagX = this.level.flag.x * TN.TILE;
-    if (player.x + player.w > flagX + 6 && player.x < flagX + 10) {
-      this.state = 'win';
-      this.sound.sfx('win');
-    }
+    if (player.x + player.w > flagX + 6 && player.x < flagX + 10) this.completeLevel();
 
     this.canSwitch = this.isSafeToSwitch();
     this.updateCamera();
@@ -124,6 +123,45 @@ TN.Game = class {
         this.riding = pl;
         return;
       }
+    }
+  }
+
+  // ---------- Niveles ----------
+
+  loadLevel(index) {
+    this.levelIndex = index;
+    this.level = new TN.Level(TN.LEVELS[index]);
+    this.player = new TN.Player(this.level);
+    this.resetEntities();
+    this.mode = this.level.def.startMode;
+    this.sound.setMode(this.mode);
+    this.canSwitch = true;
+    this.respawnBlink = 0;
+    this.updateCamera();
+  }
+
+  // Tarjeta de presentación del nivel, y después a jugar.
+  enterLevel(index) {
+    this.loadLevel(index);
+    this.state = 'card';
+    this.stateTimer = 150;
+  }
+
+  completeLevel() {
+    this.state = 'win';
+    this.stateTimer = 40;
+    this.sound.sfx('win');
+    const found = this.mapPieces.map((m, i) => (m.collected ? i : -1)).filter((i) => i >= 0);
+    this.save.addPieces(this.level.def.id, found);
+    this.save.unlock(this.levelIndex + 1);
+  }
+
+  nextLevel() {
+    if (this.levelIndex + 1 < TN.LEVELS.length) {
+      this.enterLevel(this.levelIndex + 1);
+    } else {
+      this.loadLevel(0);
+      this.state = 'title';
     }
   }
 
@@ -195,6 +233,8 @@ TN.Game = class {
   }
 
   trySwitch() {
+    // Antes de la ruptura del juego, el botón de cambio no existe.
+    if (!this.level.def.switchUnlocked) return;
     if (this.isSafeToSwitch()) {
       this.mode = this.otherMode;
       this.sound.setMode(this.mode);
@@ -203,15 +243,6 @@ TN.Game = class {
       this.player.shake = TN.SWITCH_ERROR_FRAMES;
       this.sound.sfx('error');
     }
-  }
-
-  restart() {
-    this.resetEntities();
-    this.player.respawn(this.checkpoint);
-    this.mode = 'nes';
-    this.sound.setMode('nes');
-    this.state = 'play';
-    this.updateCamera();
   }
 
   get theme() {
@@ -229,6 +260,10 @@ TN.Game = class {
   render() {
     const ctx = this.ctx;
     const camX = Math.round(this.camX);
+    if (this.state === 'card') {
+      this.drawCard();
+      return;
+    }
 
     const sky = this.theme.sky;
     const band = Math.ceil(TN.HEIGHT / sky.length);
@@ -310,6 +345,7 @@ TN.Game = class {
       const y = Math.round(b.y);
       if (x + b.w < 0 || x >= TN.WIDTH) continue;
       if (this.mode === 'nes') {
+        if (!this.level.def.switchUnlocked) continue;
         // En NES no hay segunda capa: solo se ve el contorno de dónde estaría.
         ctx.globalAlpha = 0.45;
         ctx.fillStyle = '#FCFCFC';
@@ -366,7 +402,7 @@ TN.Game = class {
       ctx.drawImage(images.glitchWall, x, y);
     } else if (tile === onlyTile) {
       ctx.drawImage(images.block, x, y);
-    } else if (tile === ghostTile) {
+    } else if (tile === ghostTile && this.level.def.switchUnlocked) {
       // Bloque de la otra versión: solo un contorno punteado, sin colisión.
       ctx.globalAlpha = 0.45;
       ctx.fillStyle = C.ghost;
@@ -454,11 +490,33 @@ TN.Game = class {
     this.ctx.drawImage(p.facing > 0 ? frame.right : frame.left, x, y);
   }
 
+  // Tarjeta negra con el número y el nombre del nivel, como en la NES.
+  drawCard() {
+    const ctx = this.ctx;
+    const C = this.theme;
+    const def = this.level.def;
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, TN.WIDTH, TN.HEIGHT);
+    const options = { align: 'center', shadow: this.textShadow };
+    TN.drawText(ctx, def.code, TN.WIDTH / 2, 76, C.white, { ...options, scale: 2 });
+    TN.drawText(ctx, def.name, TN.WIDTH / 2, 100, C.white, options);
+    const frame = this.sprites[this.mode].idle.right;
+    ctx.drawImage(frame, TN.WIDTH / 2 - 8, 120);
+    const known = (this.save.data.pieces[def.id] || []).length;
+    if (this.mapPieces.length) {
+      TN.drawText(ctx, `MAPA ${known}/${this.mapPieces.length}`, TN.WIDTH / 2, 148, '#A0A0A0', { align: 'center' });
+    }
+  }
+
   // Marcador: modo actual y cartucho que indica si se puede cambiar.
   drawHud() {
     const ctx = this.ctx;
     const C = this.theme;
     const error = this.player.shake > 0;
+    if (!this.level.def.switchUnlocked) {
+      this.drawMapCounter();
+      return;
+    }
 
     ctx.fillStyle = C.black;
     ctx.fillRect(4, 4, 62, 16);
@@ -479,8 +537,13 @@ TN.Game = class {
     }
 
     TN.drawText(ctx, TN.MODE_LABEL[this.mode], 22, 8, C.white, { shadow: this.textShadow });
+    this.drawMapCounter();
+  }
 
-    // Fragmentos de mapa recogidos.
+  // Fragmentos de mapa recogidos.
+  drawMapCounter() {
+    const ctx = this.ctx;
+    const C = this.theme;
     ctx.fillStyle = C.black;
     ctx.fillRect(TN.WIDTH - 70, 4, 66, 16);
     TN.drawText(ctx, `MAPA ${this.mapCount}`, TN.WIDTH - 65, 8, C.white, { shadow: this.textShadow });

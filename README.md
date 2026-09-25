@@ -22,7 +22,9 @@ Abre `index.html` en el navegador. No hace falta instalar nada.
 | Cambiar entre 8 y 16 bits | X o K |
 | Correr (solo 16 bits) | Shift o C |
 | Activar o silenciar el sonido | M |
+| Pantalla completa | F |
 
 ## Documentación
 
 - [Documento de diseño y plan de etapas](docs/diseno.md)
+- Los niveles se generan con `python3 tools/build_levels.py`, que escribe `src/levels.js`.

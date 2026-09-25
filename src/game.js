@@ -414,15 +414,45 @@ TN.Game = class {
     for (let y = 0; y < TN.HEIGHT; y += 16) ctx.fillRect(0, y, TN.WIDTH, 1);
   }
 
+  // Carteles: los de depuración y los TODO de Alex solo existen en 16 bits;
+  // las notas de M., escondidas en la ROM de 1989, solo en 8 bits.
   drawLabels(camX) {
-    if (!this.isDebugRoom || this.mode !== 'snes') return;
     const ctx = this.ctx;
+    const nes = this.mode === 'nes';
     for (const l of this.level.def.labels) {
+      if ((l.kind === 'note') !== nes) continue;
+      const lines = l.text.split('\n');
+      const w = Math.max(...lines.map((t) => t.length)) * 6;
+      const h = lines.length * 9;
       const x = l.tx * TN.TILE - camX;
-      if (x > TN.WIDTH || x + l.text.length * 6 < 0) continue;
-      ctx.fillStyle = '#000000';
-      ctx.fillRect(x - 2, l.ty * TN.TILE - 2, l.text.length * 6 + 3, 11);
-      TN.drawText(ctx, l.text, x, l.ty * TN.TILE, '#F8D848');
+      const y = l.ty * TN.TILE;
+      if (x - 4 > TN.WIDTH || x + w + 4 < 0) continue;
+      if (l.kind === 'todo') {
+        // Nota adhesiva pegada con cinta.
+        ctx.fillStyle = '#806020';
+        ctx.fillRect(x - 3, y - 2, w + 5, h + 4);
+        ctx.fillStyle = '#F8E070';
+        ctx.fillRect(x - 3, y - 3, w + 4, h + 4);
+        ctx.fillStyle = '#E0C050';
+        ctx.fillRect(x - 3, y + h, w + 4, 1);
+        ctx.globalAlpha = 0.6;
+        ctx.fillStyle = '#F8F8F8';
+        ctx.fillRect(x + Math.round(w / 2) - 7, y - 5, 14, 4);
+        ctx.globalAlpha = 1;
+        lines.forEach((t, i) => TN.drawText(ctx, t, x, y + i * 9, '#503018'));
+      } else if (l.kind === 'note') {
+        // Texto crudo en la ROM: sin marco, con destellos de datos corruptos.
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(x - 3, y - 3, w + 5, h + 4);
+        const glitch = this.frameCount % 200 < 4;
+        lines.forEach((t, i) => {
+          TN.drawText(ctx, glitch ? TN.corruptText(t, i + this.frameCount) : t, x, y + i * 9, '#BCBCBC');
+        });
+      } else {
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(x - 2, y - 2, w + 3, h + 2);
+        lines.forEach((t, i) => TN.drawText(ctx, t, x, y + i * 9, '#F8D848'));
+      }
     }
   }
 

@@ -38,7 +38,7 @@ TN.LEVELS = [
     introDialog: "tuto_intro",
     hints: [{"tx": 8, "ty": 8, "keys": ["C"], "learn": "run"}, {"tx": 25, "ty": 8, "keys": ["X"], "learn": "switch"}],
     dialogs: [{"tx": 30, "id": "tuto_cambio"}, {"tx": 86, "id": "tuto_salida"}],
-    labels: [{"tx": 2, "ty": 4, "text": "SALA DE PRUEBAS 03"}, {"tx": 11, "ty": 7, "text": "TODO: FOSO"}, {"tx": 38, "ty": 5, "text": "TODO: BORRAR ASSETS 1989"}, {"tx": 46, "ty": 3, "text": "TEST: COLISIONES"}, {"tx": 65, "ty": 5, "text": "TEST: PLATAFORMAS"}, {"tx": 90, "ty": 6, "text": "SALIDA A 1-1"}],
+    labels: [{"tx": 2, "ty": 4, "text": "SALA DE PRUEBAS 03", "kind": "debug"}, {"tx": 11, "ty": 7, "text": "TODO: FOSO", "kind": "debug"}, {"tx": 38, "ty": 5, "text": "TODO: BORRAR ASSETS 1989", "kind": "debug"}, {"tx": 46, "ty": 3, "text": "TEST: COLISIONES", "kind": "debug"}, {"tx": 65, "ty": 5, "text": "TEST: PLATAFORMAS", "kind": "debug"}, {"tx": 90, "ty": 6, "text": "SALIDA A 1-1", "kind": "debug"}],
     rows: [
       '............................S.......N..........BBBBB.SS...........................................',
       '............................S.......N..........BBBBB.SS...........................................',
@@ -65,7 +65,7 @@ TN.LEVELS = [
     theme: "jungle",
     hints: [],
     dialogs: [{"tx": 5, "id": "w1_1"}, {"tx": 61, "id": "w1_1_bats"}],
-    labels: [],
+    labels: [{"tx": 7, "ty": 4, "text": "TODO: PULIR HOJAS", "kind": "todo"}, {"tx": 62, "ty": 3, "text": "MURCIELAGOS: SIN DAÑO. OK", "kind": "todo"}, {"tx": 86, "ty": 4, "text": "TODO: BORRAR ESPINAS 1989", "kind": "todo"}],
     rows: [
       '........................................................................................................................',
       '........................................................................................................................',
@@ -92,7 +92,7 @@ TN.LEVELS = [
     theme: "jungle",
     hints: [],
     dialogs: [{"tx": 4, "id": "w1_2"}, {"tx": 36, "id": "w1_2_walls"}],
-    labels: [],
+    labels: [{"tx": 31, "ty": 4, "text": "TODO: PARED ROTA (L. 212)", "kind": "todo"}, {"tx": 65, "ty": 3, "text": "TODO: SHADER DE AGUA", "kind": "todo"}],
     rows: [
       '................BB..................WW...N...........................BB......BB.................WW............',
       '................BB..................WW...N...........................BB......BB.................WW............',
@@ -119,7 +119,7 @@ TN.LEVELS = [
     theme: "jungle",
     hints: [],
     dialogs: [{"tx": 4, "id": "w1_3"}],
-    labels: [],
+    labels: [{"tx": 6, "ty": 4, "text": "TODO: QUITAR COLISION BG2", "kind": "todo"}, {"tx": 59, "ty": 3, "text": "NO DEJAR NADA ACTIVO", "kind": "todo"}],
     rows: [
       '........................................................................................................',
       '........................................................................................................',
@@ -147,7 +147,7 @@ TN.LEVELS = [
     worldEnd: 1,
     hints: [],
     dialogs: [{"tx": 4, "id": "w1_4"}, {"tx": 24, "id": "w1_4_patch", "event": "patchFlicker"}, {"tx": 102, "id": "w1_4_end"}],
-    labels: [],
+    labels: [{"tx": 6, "ty": 4, "text": "TODO: LIMITE 8 SPRITES", "kind": "todo"}, {"tx": 71, "ty": 1, "text": "SI ALGUIEN LEE\nESTO: EL MAPA NO\nTERMINA DONDE\nTERMINA EL JUEGO.\n\n      - M., 1989", "kind": "note"}, {"tx": 98, "ty": 4, "text": "TODO: GRABAR MUNDO 1", "kind": "todo"}],
     rows: [
       '..............................................................................WW..BB..................................',
       '..............................................................................WW..BB..................................',

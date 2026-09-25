@@ -40,7 +40,7 @@ Se editan en `tools/build_levels.py` y se generan con:
 python3 tools/build_levels.py
 ```
 
-Cada nivel se arma por secciones sobre una cuadrícula de 14 filas; la leyenda de caracteres está al principio de `src/level.js`. Helpers: `g.fill`, `g.put`, `g.stairs`, `g.hint` (ícono de tecla), `g.dialog` (diálogo al pasar por una columna, con `event` opcional), `g.label` (cartel de la sala de pruebas).
+Cada nivel se arma por secciones sobre una cuadrícula de 14 filas; la leyenda de caracteres está al principio de `src/level.js`. Helpers: `g.fill`, `g.put`, `g.stairs`, `g.hint` (ícono de tecla), `g.dialog` (diálogo al pasar por una columna, con `event` opcional), `g.label` (cartel de la sala de pruebas), `g.todo` (cartel TODO de Alex, solo 16 bits), `g.note` (nota de M., solo 8 bits; admite varias líneas con `\n`).
 
 Orden actual: prólogo (0), tutorial (1), 1-1 (2), 1-2 (3), 1-3 (4), 1-4 (5).
 

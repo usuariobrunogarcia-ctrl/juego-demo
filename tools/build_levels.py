@@ -47,9 +47,19 @@ class Grid:
             d['event'] = event
         self.dialogs.append(d)
 
-    def label(self, c, r, text):
-        """Cartel de depuración (solo se ve en la sala de pruebas, en 16 bits)."""
-        self.labels.append({'tx': c, 'ty': r, 'text': text})
+    def label(self, c, r, text, kind='debug'):
+        """Cartel en (c, r). kind: 'debug' (sala de pruebas) y 'todo' (carteles de Alex)
+        solo se ven en 16 bits; 'note' (notas de M. en la ROM) solo en 8 bits.
+        El texto puede tener varias líneas separadas por '\\n'."""
+        self.labels.append({'tx': c, 'ty': r, 'text': text, 'kind': kind})
+
+    def todo(self, c, r, text):
+        """Cartel TODO de Alex (solo 16 bits)."""
+        self.label(c, r, text, 'todo')
+
+    def note(self, c, r, text):
+        """Nota de M. escondida en la ROM de 1989 (solo 8 bits)."""
+        self.label(c, r, text, 'note')
 
     def rows(self):
         return [''.join(r) for r in self.g]
@@ -171,6 +181,7 @@ level('tutorial', 'BUILD 0.3', 'Sala de pruebas',
 def w11_start(g, o):
     g.put(o + 2, 11, 'P')
     g.dialog(o + 5, 'w1_1')
+    g.todo(o + 7, 4, 'TODO: PULIR HOJAS')
     g.fill(o + 12, o + 12, 8, 11, 'S')                 # muro de 16 bits: a 8 bits
     g.fill(o + 18, o + 23, 12, 13, '.'); g.fill(o + 18, o + 23, 12, 12, 'S')   # puente: a 16 bits
     g.fill(o + 30, o + 33, 11, 11, 'x')                # 4 espinas: parpadean a su altura en 8 bits
@@ -187,6 +198,7 @@ def w11_stones(g, o):
 def w11_bats(g, o):
     g.put(o + 1, 11, 'C')
     g.dialog(o + 3, 'w1_1_bats')
+    g.todo(o + 4, 3, 'MURCIELAGOS: SIN DAÑO. OK')
     g.put(o + 6, 9, 'b')                               # primer murciélago, sobre suelo seguro
     g.put(o + 9, 9, 'b'); g.put(o + 12, 7, 'b'); g.put(o + 15, 5, 'b')
     g.fill(o + 18, o + 19, 5, 11, 'B'); g.put(o + 19, 4, '*')
@@ -195,6 +207,7 @@ def w11_bats(g, o):
 def w11_flicker(g, o):
     g.put(o + 2, 11, 'C')
     g.fill(o + 8, o + 13, 11, 11, 'x')                 # 6 espinas
+    g.todo(o + 6, 4, 'TODO: BORRAR ESPINAS 1989')
     g.put(o + 10, 8, 'b')
 
 
@@ -230,6 +243,7 @@ def w12_ruins(g, o):
     g.put(o + 1, 11, 'C')
     g.fill(o + 6, o + 7, 0, 11, 'W')                  # pared rota: 8 bits
     g.dialog(o + 6, 'w1_2_walls')
+    g.todo(o + 1, 4, 'TODO: PARED ROTA (L. 212)')
     g.fill(o + 11, o + 11, 0, 11, 'N')                # muro de 8 bits: 16 bits
     g.fill(o + 15, o + 19, 8, 8, 'W')                 # repisa rota: en 8 bits se sube desde abajo
     g.put(o + 17, 7, '*')
@@ -240,6 +254,7 @@ def w12_river(g, o):
     g.stairs(o + 4, [1, 2, 3, 4])
     g.fill(o + 8, o + 8, 8, 11, '#')
     g.fill(o + 9, o + 24, 8, 12, '~')                 # río
+    g.todo(o + 9, 3, 'TODO: SHADER DE AGUA')
     g.fill(o + 13, o + 14, 0, 9, 'B')
     g.fill(o + 18, o + 19, 12, 12, 'x')               # espinas bajo el agua
     g.fill(o + 21, o + 22, 0, 9, 'B')
@@ -266,6 +281,7 @@ level('rio', 'MUNDO 1-2', 'Ruinas del rio',
 def w13_start(g, o):
     g.put(o + 2, 11, 'P')
     g.dialog(o + 4, 'w1_3')
+    g.todo(o + 6, 4, 'TODO: QUITAR COLISION BG2')
     g.fill(o + 8, o + 19, 12, 13, '.')                # foso de 12
     g.fill(o + 8, o + 12, 12, 12, 'v')                # rama
     g.put(o + 14, 9, '*')
@@ -282,6 +298,7 @@ def w13_canopy(g, o):
 def w13_double(g, o):
     g.put(o + 1, 11, 'C')
     g.fill(o + 5, o + 22, 12, 13, '.')                # foso de 18
+    g.todo(o + 3, 3, 'NO DEJAR NADA ACTIVO')
     g.fill(o + 5, o + 9, 12, 12, 'v')                 # rama...
     g.fill(o + 15, o + 16, 11, 11, 'S')               # ...y plataformas de 16 bits
     g.fill(o + 19, o + 20, 10, 10, 'S')
@@ -306,6 +323,7 @@ level('copas', 'MUNDO 1-3', 'Las copas',
 def w14_start(g, o):
     g.put(o + 2, 11, 'P')
     g.dialog(o + 4, 'w1_4')
+    g.todo(o + 6, 4, 'TODO: LIMITE 8 SPRITES')
     g.fill(o + 10, o + 15, 11, 11, 'x')               # 6 espinas: aún parpadean
     g.put(o + 12, 9, '*')
     g.put(o + 20, 11, 'C')
@@ -331,6 +349,7 @@ def w14_water(g, o):
     g.fill(o + 14, o + 15, 0, 12, 'W')                # pared rota dentro del agua: 8 bits
     g.fill(o + 18, o + 19, 0, 9, 'B')                 # muro: bucear en 16 bits
     g.put(o + 16, 12, '*')
+    g.note(o + 7, 1, 'SI ALGUIEN LEE\nESTO: EL MAPA NO\nTERMINA DONDE\nTERMINA EL JUEGO.\n\n      - M., 1989')   # primera nota de M.
     g.fill(o + 23, o + 24, 8, 11, '#')
     g.stairs(o + 25, [3, 2, 1])
 
@@ -338,6 +357,7 @@ def w14_water(g, o):
 def w14_end(g, o):
     g.put(o + 1, 11, 'C')
     g.dialog(o + 8, 'w1_4_end')
+    g.todo(o + 4, 4, 'TODO: GRABAR MUNDO 1')
     g.put(o + 16, 11, 'F')
 
 

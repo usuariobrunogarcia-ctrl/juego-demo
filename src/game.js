@@ -11,6 +11,7 @@ TN.Game = class {
     this.input = new TN.Input();
     this.level = new TN.Level(TN.LEVEL_1);
     this.player = new TN.Player(this.level);
+    this.sprites = TN.buildSprites();
     this.camX = 0;
     this.state = 'play';
     this.mode = 'nes';
@@ -195,29 +196,14 @@ TN.Game = class {
     ctx.fillRect(x + 9, baseY - 94, 12, 8);
   }
 
-  // Explorador provisional: el sprite definitivo llega en la etapa 3.
   drawPlayer(camX) {
-    const ctx = this.ctx;
-    const C = this.theme;
     const p = this.player;
     const shakeOffset = p.shake > 0 ? (p.shake % 4 < 2 ? -1 : 1) : 0;
-    const x = Math.round(p.x) - camX + shakeOffset;
-    const y = Math.round(p.y);
-
-    ctx.fillStyle = C.hat;
-    ctx.fillRect(x - 1, y + 2, 14, 2);
-    ctx.fillRect(x + 2, y, 8, 2);
-    ctx.fillStyle = C.skin;
-    ctx.fillRect(x + 2, y + 4, 8, 4);
-    ctx.fillStyle = C.black;
-    ctx.fillRect(p.facing > 0 ? x + 7 : x + 4, y + 5, 1, 2);
-    ctx.fillStyle = C.khaki;
-    ctx.fillRect(x + 1, y + 8, 10, 4);
-    ctx.fillStyle = C.khakiDark;
-    ctx.fillRect(x + 1, y + 11, 10, 1);
-    ctx.fillStyle = C.hat;
-    ctx.fillRect(x + 2, y + 12, 3, 2);
-    ctx.fillRect(x + 7, y + 12, 3, 2);
+    // El sprite mide 16x16 y la caja de colisión 12x14: se centra y se apoya en los pies.
+    const x = Math.round(p.x) - camX - 2 + shakeOffset;
+    const y = Math.round(p.y) - 2;
+    const frame = this.sprites[this.mode][p.frameName(this.mode)];
+    this.ctx.drawImage(p.facing > 0 ? frame.right : frame.left, x, y);
   }
 
   // Marcador: modo actual y cartucho que indica si se puede cambiar.

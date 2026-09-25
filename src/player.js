@@ -16,6 +16,7 @@ TN.Player = class {
     this.onGround = false;
     this.facing = 1;
     this.shake = 0;
+    this.animDistance = 0;
   }
 
   update(input, level, mode) {
@@ -51,6 +52,17 @@ TN.Player = class {
     this.moveY(level, mode);
 
     if (this.shake > 0) this.shake--;
+    // La animación de caminar avanza según la distancia recorrida.
+    this.animDistance = this.onGround ? this.animDistance + Math.abs(this.vx) : 0;
+  }
+
+  // Nombre del fotograma que toca dibujar en el modo dado.
+  frameName(mode) {
+    const sprite = TN.SPRITES[mode];
+    if (!this.onGround) return 'jump';
+    if (Math.abs(this.vx) < 0.05) return 'idle';
+    const cycle = sprite.walkCycle;
+    return cycle[Math.floor(this.animDistance / sprite.stepPixels) % cycle.length];
   }
 
   // Movimiento separado por ejes: primero X, luego Y.

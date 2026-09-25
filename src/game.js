@@ -119,7 +119,8 @@ TN.Game = class {
     this.entities = this.level.entities.map(TN.createEntity);
     this.branches = this.level.branches.map((b) => new TN.Branch(b, this.level));
     this.riding = null;
-    this.hazards = this.entities.filter((e) => e.sprite);
+    this.hazards = this.entities.filter((e) => e.dangerous);
+    this.mapPieces = this.entities.filter((e) => e instanceof TN.MapPiece);
     this.bats = this.entities.filter((e) => e instanceof TN.Bat);
     this.checkpoint = this.level.spawn;
     this.flickering = new Set();
@@ -128,7 +129,7 @@ TN.Game = class {
   checkEntities() {
     const p = this.player;
     this.flickering = this.mode === 'nes'
-      ? TN.findFlickering(this.hazards, p, this.camX)
+      ? TN.findFlickering(this.entities.filter((e) => e.sprite && !e.collected), p, this.camX)
       : new Set();
 
     for (const e of this.entities) {
@@ -137,15 +138,27 @@ TN.Game = class {
         this.checkpoint = { x: e.tx, y: e.ty };
       }
     }
+    for (const m of this.mapPieces) {
+      if (!m.collected && this.touches(m)) m.collected = true;
+    }
     for (const e of this.hazards) {
       if (this.flickering.has(e) || e.harmless(this.mode)) continue;
-      const hb = e.hitbox;
-      if (p.x < e.x + hb.x + hb.w && p.x + p.w > e.x + hb.x &&
-          p.y < e.y + hb.y + hb.h && p.y + p.h > e.y + hb.y) {
+      if (this.touches(e)) {
         this.hurt();
         return;
       }
     }
+  }
+
+  touches(e) {
+    const p = this.player;
+    const hb = e.hitbox;
+    return p.x < e.x + hb.x + hb.w && p.x + p.w > e.x + hb.x &&
+      p.y < e.y + hb.y + hb.h && p.y + p.h > e.y + hb.y;
+  }
+
+  get mapCount() {
+    return `${this.mapPieces.filter((m) => m.collected).length}/${this.mapPieces.length}`;
   }
 
   hurt() {
@@ -219,7 +232,7 @@ TN.Game = class {
     this.drawHud();
 
     if (this.state === 'win') {
-      this.drawBanner('¡NIVEL COMPLETADO!', 'Pulsa saltar para repetir');
+      this.drawBanner('¡NIVEL COMPLETADO!', `Mapa ${this.mapCount} - Pulsa saltar`);
     }
   }
 
@@ -357,7 +370,7 @@ TN.Game = class {
     const images = this.entitySprites[this.mode];
     this.entities.forEach((e, i) => {
       const x = Math.round(e.x) - camX;
-      if (x + e.w < 0 || x >= TN.WIDTH) return;
+      if (x + e.w < 0 || x >= TN.WIDTH || e.collected) return;
       if (e instanceof TN.Checkpoint) {
         this.drawCheckpoint(e, x);
         return;
@@ -418,6 +431,11 @@ TN.Game = class {
     }
 
     TN.drawText(ctx, TN.MODE_LABEL[this.mode], 22, 8, C.white, { shadow: this.textShadow });
+
+    // Fragmentos de mapa recogidos.
+    ctx.fillStyle = C.black;
+    ctx.fillRect(TN.WIDTH - 70, 4, 66, 16);
+    TN.drawText(ctx, `MAPA ${this.mapCount}`, TN.WIDTH - 65, 8, C.white, { shadow: this.textShadow });
   }
 
   drawBanner(title, subtitle) {

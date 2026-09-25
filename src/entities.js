@@ -65,6 +65,27 @@ TN.ENTITY_SPRITES = {
         '................',
       ],
     },
+    map: {
+      palette: { d: '#000000', l: '#FCE0A8', b: '#C84C0C' },
+      rows: [
+        '................',
+        '..dddddddddddd..',
+        '.dlllllllllllld.',
+        '.dlbbllllbbllld.',
+        '.dlllblllllblld.',
+        '.dllllbbbbbllld.',
+        '.dlblllllllllld.',
+        '.dllblllbbbllld.',
+        '.dlllllllllbbld.',
+        '.dllbblllllllld.',
+        '.dlllllblllllld.',
+        '.dlllllllllllld.',
+        '..dddddddddddd..',
+        '................',
+        '................',
+        '................',
+      ],
+    },
   },
   snes: {
     thorns: {
@@ -130,6 +151,27 @@ TN.ENTITY_SPRITES = {
         '................',
       ],
     },
+    map: {
+      palette: { o: '#503018', l: '#F8E8B8', L: '#E0C888', b: '#C84830', g: '#58A038' },
+      rows: [
+        '................',
+        '..oooooooooooo..',
+        '.ollllllllllLLo.',
+        '.olggllllbblLLo.',
+        '.olllglllllbLLo.',
+        '.ollllgbbbblLLo.',
+        '.olgllllllllLLo.',
+        '.ollglllbbblLLo.',
+        '.olllllllllbbLo.',
+        '.ollggllllllLLo.',
+        '.oLLLLLbLLLLLLo.',
+        '.oLLLLLLLLLLLLo.',
+        '..oooooooooooo..',
+        '................',
+        '................',
+        '................',
+      ],
+    },
   },
 };
 
@@ -156,6 +198,7 @@ TN.Thorns = class {
     this.h = 16;
     this.sprite = 'thorns';
     this.hitbox = { x: 2, y: 5, w: 12, h: 11 };
+    this.dangerous = true;
   }
 
   harmless() {
@@ -218,6 +261,7 @@ TN.Bat = class {
     this.h = 16;
     this.phase = tx * 0.7;
     this.hitbox = { x: 1, y: 5, w: 14, h: 6 };
+    this.dangerous = true;
     this.time = 0;
     this.update();
   }
@@ -243,7 +287,28 @@ TN.Bat = class {
   }
 };
 
+// Fragmento de mapa: coleccionable. Flota suavemente.
+TN.MapPiece = class {
+  constructor(tx, ty) {
+    this.baseY = ty * TN.TILE;
+    this.x = tx * TN.TILE;
+    this.y = this.baseY;
+    this.w = 16;
+    this.h = 16;
+    this.sprite = 'map';
+    this.hitbox = { x: 2, y: 2, w: 12, h: 11 };
+    this.collected = false;
+    this.time = 0;
+  }
+
+  update() {
+    this.time++;
+    this.y = this.baseY + Math.round(2 * Math.sin(this.time / 15));
+  }
+};
+
 TN.createEntity = function (spec) {
+  if (spec.type === '*') return new TN.MapPiece(spec.tx, spec.ty);
   if (spec.type === 'x') return new TN.Thorns(spec.tx, spec.ty);
   if (spec.type === 'b') return new TN.Bat(spec.tx, spec.ty);
   if (spec.type === 'C') return new TN.Checkpoint(spec.tx, spec.ty);

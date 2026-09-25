@@ -50,10 +50,10 @@ const CHROMIUM = fs.existsSync('/opt/pw-browsers/chromium') ? '/opt/pw-browsers/
       game.update(); inp.endStep();
       if (!inp.pressed.has('jump') && game.player.vy >= 0 && strokes === 0) inp.held.delete('jump');
     }
-    return { log, hurts, col: (game.player.x / 16).toFixed(1), state: game.state, map: game.mapCount, mode: game.mode };
+    return { log, hurts, col: (game.player.x / 16).toFixed(1), state: game.state, map: game.mapCount, pieces: game.mapPieces.filter((m) => m.collected).map((m) => m.x / 16), mode: game.mode };
   }, [idx, JSON.parse(planJson), +maxFrames]);
   console.log(res.log.join('\n'));
-  console.log('RESULTADO', res.state, 'col', res.col, 'daños', res.hurts, 'mapa', res.map, 'modo', res.mode);
+  console.log('RESULTADO', res.state, 'col', res.col, 'daños', res.hurts, 'mapa', res.map, JSON.stringify(res.pieces), 'modo', res.mode);
   if (errs.length) console.log('errors', errs);
   await b.close();
 })();

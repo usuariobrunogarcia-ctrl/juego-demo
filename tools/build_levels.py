@@ -99,6 +99,7 @@ def p_start(g, o):
     g.stairs(o + 10, [2, 2])
     g.hint(o + 8, 7, ['Z'], 'jump')
     g.fill(o + 16, o + 18, 12, 13, '.')
+    g.stairs(o + 20, [2])                   # escalón para subir a los ladrillos
     g.fill(o + 22, o + 25, 8, 8, 'B'); g.put(o + 23, 7, '*')
     g.put(o + 30, 11, 'x')
     g.put(o + 35, 11, 'C')
@@ -184,8 +185,8 @@ def w11_start(g, o):
     g.todo(o + 7, 4, 'TODO: PULIR HOJAS')
     g.fill(o + 12, o + 12, 8, 11, 'S')                 # muro de 16 bits: a 8 bits
     g.fill(o + 18, o + 23, 12, 13, '.'); g.fill(o + 18, o + 23, 12, 12, 'S')   # puente: a 16 bits
-    g.fill(o + 30, o + 33, 11, 11, 'x')                # 4 espinas: parpadean a su altura en 8 bits
-    g.put(o + 31, 9, '*')
+    g.fill(o + 30, o + 34, 11, 11, 'x')                # 4 espinas: parpadean a su altura en 8 bits...
+    g.put(o + 32, 11, '*')                             # ...y un fragmento entre ellas: hay que caminar por encima
 
 
 def w11_stones(g, o):
@@ -245,8 +246,10 @@ def w12_ruins(g, o):
     g.dialog(o + 6, 'w1_2_walls')
     g.todo(o + 1, 4, 'TODO: PARED ROTA (L. 212)')
     g.fill(o + 11, o + 11, 0, 11, 'N')                # muro de 8 bits: 16 bits
-    g.fill(o + 15, o + 19, 8, 8, 'W')                 # repisa rota: en 8 bits se sube desde abajo
-    g.put(o + 17, 7, '*')
+    g.fill(o + 15, o + 19, 9, 9, 'W')                 # repisa rota: en 8 bits se sube desde abajo
+    g.fill(o + 12, o + 14, 8, 8, 'B')                 # techos a los lados: no se sube desde el costado...
+    g.fill(o + 20, o + 22, 8, 8, 'S')                 # ...y en 8 bits se sale por la derecha
+    g.put(o + 17, 8, '*')
 
 
 def w12_river(g, o):
@@ -338,7 +341,7 @@ def w14_field(g, o):
             g.fill(c, c + 1, 10, 10, 'N')
         else:
             g.fill(c, c + 1, 9, 9, 'S')
-    g.put(o + 16, 5, '*')
+    g.put(o + 16, 6, '*')                             # fragmento: saltar alto entre las plataformas alternas
 
 
 def w14_water(g, o):

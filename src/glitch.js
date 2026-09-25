@@ -21,6 +21,7 @@ Object.assign(TN.Game.prototype, {
     this.sound.setMusic(false);
     // Guarda ya la ruptura: desde ahora el título es el de DX.
     this.save.data.broken = true;
+    this.savePieces();
     this.save.unlock(this.levelIndex + 1);
   },
 

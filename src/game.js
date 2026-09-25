@@ -180,9 +180,14 @@ TN.Game = class {
     this.state = 'win';
     this.stateTimer = 40;
     this.sound.sfx('win');
+    this.savePieces();
+    this.save.unlock(this.levelIndex + 1);
+  }
+
+  // Guarda los fragmentos de mapa recogidos en este nivel.
+  savePieces() {
     const found = this.mapPieces.map((m, i) => (m.collected ? i : -1)).filter((i) => i >= 0);
     this.save.addPieces(this.level.def.id, found);
-    this.save.unlock(this.levelIndex + 1);
   }
 
   // Acciones del guion que cambian las reglas del juego.

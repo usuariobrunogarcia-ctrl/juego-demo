@@ -54,6 +54,7 @@ NODE_PATH=$(npm root -g) node tools/test/smoke.js captura.png "código JS opcion
 NODE_PATH=$(npm root -g) node tools/test/bot.js <nivel> '<plan JSON>' [fotogramas]    # jugador automático
 NODE_PATH=$(npm root -g) node tools/test/hops.js <nivel> '<saltos JSON>'              # saltos entre murciélagos
 tools/test/regress.sh                                                                   # recorrido de todos los niveles
+tools/test/pieces.sh                                                                    # los 15 fragmentos de mapa
 ```
 
 - `bot.js` simula fotograma a fotograma manteniendo la derecha. El plan es una lista de acciones por columna: `{"at": col, "do": "jump" | "switch" | "hold:run" | "release:run" | "strokes:N"}`. El primer elemento puede ser `{"start": col, "mode": "nes"|"snes"}` para empezar a mitad del nivel.

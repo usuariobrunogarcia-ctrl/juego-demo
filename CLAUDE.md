@@ -2,7 +2,7 @@
 
 Plataformas 2D para navegador, homenaje a los juegos de los 80 y 90. Con un botón se cambia entre la versión **8 bits (NES)** y **16 bits (SNES)** del juego; cada una tiene sus propias reglas (glitches en 8 bits, gimmicks en 16 bits). La historia: el remaster inacabado de un juego de 1989 se está grabando encima del original, y Alex, la última desarrolladora, lo va parcheando.
 
-**Antes de trabajar, leer `docs/diseno.md`.** Tiene el diseño completo, el arco narrativo de 6 mundos (sección 2) y el plan por pasos (sección 11). **El siguiente trabajo es la Fase 3** (replanteo del Mundo 1, fragmentos de mapa y música).
+**Antes de trabajar, leer `docs/diseno.md`.** Tiene el diseño completo, el arco narrativo de 6 mundos (sección 2) y el plan por pasos (sección 11). La **Fase 3** (replanteo del Mundo 1, fragmentos de mapa y música) está terminada. El siguiente paso es planificar el Mundo 2 (Las cuevas) en `docs/diseno.md`.
 
 ## Cómo se trabaja en este proyecto
 

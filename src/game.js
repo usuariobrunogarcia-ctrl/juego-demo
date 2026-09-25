@@ -104,6 +104,7 @@ TN.Game = class {
       this.hurt();
     }
     this.checkEntities();
+    this.updateRemarks();
 
     const flagX = this.level.flag.x * TN.TILE;
     if (player.x + player.w > flagX + 6 && player.x < flagX + 10) this.completeLevel();
@@ -164,6 +165,7 @@ TN.Game = class {
     this.dialogsSeen = new Set();
     this.patches = new Set();
     this.patchBanner = 0;
+    this.resetRemarks();
     this.updateCamera();
   }
 
@@ -233,6 +235,8 @@ TN.Game = class {
       if (!m.collected && this.touches(m)) {
         m.collected = true;
         this.sound.sfx('collect');
+        if (this.mapPieces.every((n) => n.collected)) this.sayRemark('allPieces');
+        else this.sayRemark('piece');
       }
     }
     for (const e of this.hazards) {
@@ -258,6 +262,7 @@ TN.Game = class {
   hurt() {
     this.sound.sfx('hurt');
     this.hurtCount++;
+    if (this.hurtCount === TN.HINT_RETRY) this.sayRemark('stuck', false);
     this.player.respawn(this.checkpoint);
     this.respawnBlink = 40;
   }
@@ -340,6 +345,7 @@ TN.Game = class {
     this.drawHints(camX);
     this.drawHud();
     if (this.patchBanner > 0) this.drawPatchBanner();
+    if (this.remark && this.state === 'play') this.drawRemark();
 
     if (this.state === 'dialog') this.drawDialog();
     if (this.state === 'break') this.drawBreak();

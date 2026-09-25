@@ -30,6 +30,7 @@ Plataformas 2D para navegador, homenaje a los juegos de los 80 y 90. Con un bot�
 | `src/screens.js` | Título (1989 y DX), final del Mundo 1 |
 | `src/hints.js` | Íconos de tecla |
 | `src/story.js`, `src/dialog.js` | Guion, retrato de Alex y cuadros de diálogo |
+| `src/remarks.js` | Comentarios de Alex en una franja, sin pausar (frases en `TN.REMARKS`, en `story.js`) |
 | `src/glitch.js` | La ruptura del juego al final del prólogo |
 
 ## Niveles

@@ -90,3 +90,33 @@ TN.DIALOGS = {
     ['alex', 'Cuando termine, no quedará versión a la que volver. Tampoco para ti.'],
   ],
 };
+
+// Comentarios de Alex que no frenan el juego: una línea corta en una franja.
+// Cada situación tiene varias frases que se van alternando.
+TN.REMARKS = {
+  // Recibe daño 3 veces desde el último punto de control.
+  stuck: [
+    'Tres veces aquí. Qué constancia.',
+    'Sigue así. Me ahorras el parche.',
+    'Bug 0412: se atasca. Por fin.',
+    'Guardo el registro. Para reírme.',
+  ],
+  // Primer fragmento de mapa del nivel.
+  piece: [
+    '¿Eso no estaba borrado?',
+    'Ese fragmento no pasó mi QA.',
+    '¿Quién te enseñó ese atajo?',
+    'Anotado. Cerraré ese hueco.',
+  ],
+  // Todos los fragmentos del nivel.
+  allPieces: [
+    'Mapa completo. Nadie iba a verlo.',
+    'Todo el mapa. ¿Para qué?',
+  ],
+  // Sale de una pared con la colisión rota.
+  clip: [
+    'Otra pared rota. A la lista.',
+    'Deja de atravesar mis paredes.',
+    'Colisión de 1989. Claro.',
+  ],
+};

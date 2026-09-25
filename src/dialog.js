@@ -51,6 +51,7 @@ Object.assign(TN.Game.prototype, {
       }
     }
     this.dialog = { pages, page: 0, shown: 0, onDone, resume: this.state };
+    this.remark = null;
     this.state = 'dialog';
   },
 
@@ -82,6 +83,7 @@ Object.assign(TN.Game.prototype, {
     } else {
       this.state = d.resume === 'dialog' ? 'play' : d.resume;
       this.dialog = null;
+      this.dialogEndFrame = this.frameCount;
       if (d.onDone) d.onDone();
     }
   },

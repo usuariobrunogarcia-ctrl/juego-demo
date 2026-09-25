@@ -39,9 +39,13 @@ class Grid:
         """Ícono de tecla flotando en (c, r) hasta que el jugador aprenda 'learn'."""
         self.hints.append({'tx': c, 'ty': r, 'keys': keys, 'learn': learn})
 
-    def dialog(self, c, id):
-        """Diálogo que empieza cuando el jugador pasa por la columna c."""
-        self.dialogs.append({'tx': c, 'id': id})
+    def dialog(self, c, id, event=None):
+        """Diálogo que empieza cuando el jugador pasa por la columna c.
+        event: acción del juego que ocurre al terminar el diálogo (p. ej. 'patchFlicker')."""
+        d = {'tx': c, 'id': id}
+        if event:
+            d['event'] = event
+        self.dialogs.append(d)
 
     def label(self, c, r, text):
         """Cartel de depuración (solo se ve en la sala de pruebas, en 16 bits)."""
@@ -292,6 +296,54 @@ def w13_end(g, o):
 level('copas', 'MUNDO 1-3', 'Las copas',
       [(26, w13_start), (30, w13_canopy), (30, w13_double), (18, w13_end)],
       start_mode='snes')
+
+
+# ---------------------------------------------------------------------------
+# Mundo 1-4: El parche. Alex quita el límite de sprites a mitad del nivel:
+# las espinas dejan de parpadear en 8 bits y hay que buscar otra ruta.
+# ---------------------------------------------------------------------------
+
+def w14_start(g, o):
+    g.put(o + 2, 11, 'P')
+    g.dialog(o + 4, 'w1_4')
+    g.fill(o + 10, o + 15, 11, 11, 'x')               # 6 espinas: aún parpadean
+    g.put(o + 12, 9, '*')
+    g.put(o + 20, 11, 'C')
+    g.dialog(o + 24, 'w1_4_patch', event='patchFlicker')
+
+
+def w14_field(g, o):
+    g.put(o + 1, 11, 'C')
+    g.fill(o + 4, o + 29, 11, 11, 'x')                # campo de espinas (ya no parpadean)
+    for i, c in enumerate(range(o + 5, o + 29, 4)):   # plataformas alternas: 8 bits, 16 bits...
+        if i % 2 == 0:
+            g.fill(c, c + 1, 10, 10, 'N')
+        else:
+            g.fill(c, c + 1, 9, 9, 'S')
+    g.put(o + 16, 5, '*')
+
+
+def w14_water(g, o):
+    g.put(o + 1, 11, 'C')
+    g.stairs(o + 4, [1, 2, 3, 4])
+    g.fill(o + 8, o + 8, 8, 11, '#')
+    g.fill(o + 9, o + 22, 8, 12, '~')
+    g.fill(o + 14, o + 15, 0, 12, 'W')                # pared rota dentro del agua: 8 bits
+    g.fill(o + 18, o + 19, 0, 9, 'B')                 # muro: bucear en 16 bits
+    g.put(o + 16, 12, '*')
+    g.fill(o + 23, o + 24, 8, 11, '#')
+    g.stairs(o + 25, [3, 2, 1])
+
+
+def w14_end(g, o):
+    g.put(o + 1, 11, 'C')
+    g.dialog(o + 8, 'w1_4_end')
+    g.put(o + 16, 11, 'F')
+
+
+level('parche', 'MUNDO 1-4', 'El parche',
+      [(30, w14_start), (34, w14_field), (30, w14_water), (24, w14_end)],
+      start_mode='snes', worldEnd=1)
 
 
 # ---------------------------------------------------------------------------

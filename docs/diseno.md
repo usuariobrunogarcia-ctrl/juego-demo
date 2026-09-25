@@ -147,7 +147,7 @@ Inspirados en glitches reales de juegos de NES. Cada uno funciona con reglas fij
 - **Objetivo principal:** llegar a la salida de cada nivel.
 - **Objetivo secundario:** encontrar los **fragmentos de mapa** escondidos para cartografiar el nivel al 100 %. Muchos solo son accesibles con un glitch o un gimmick concreto.
 - El mapa se dibuja en el estilo de la versión activa: tosco y con pocos colores en 8 bits, detallado en 16 bits.
-- En el nivel actual hay 6 fragmentos, cada uno ligado a una mecánica: cambiar en el aire, el parpadeo, atravesar paredes, bucear, subir por los murciélagos y saltar desde una rama. El contador (MAPA x/6) está en el HUD y en el mensaje final.
+- Cada nivel tiene 3 fragmentos, casi siempre ligados a una mecánica (bucear, subir por murciélagos, atravesar repisas rotas...). El contador está en el HUD, en la tarjeta del nivel y en la pantalla de fin del Mundo 1.
 
 ### Estructura de la aventura
 
@@ -242,4 +242,4 @@ El juego se construye por etapas. Cada una termina con algo jugable que se puede
 | F2-6 | **Prólogo** en 8 bits y la **ruptura** del juego | ✅ Hecha |
 | F2-7 | **Tutorial** en la sala de pruebas | ✅ Hecha |
 | F2-8 | **Niveles 1-1, 1-2 y 1-3** | ✅ Hecha |
-| F2-9 | **Nivel 1-4 "El parche"** y final del Mundo 1 | Pendiente |
+| F2-9 | **Nivel 1-4 "El parche"** y final del Mundo 1 | ✅ Hecha |

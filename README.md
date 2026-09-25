@@ -4,12 +4,13 @@ Plataformas 2D para navegador en homenaje a los juegos de los 80 y 90. Con un bo
 
 ## Qué hay en el juego
 
-Un nivel de la Selva que enseña, sección a sección, cada mecánica y termina con un repaso que las combina:
+La aventura completa hasta el final del Mundo 1:
 
-- **Bloques exclusivos** de cada versión (el contorno punteado muestra los de la otra).
-- **Glitches de 8 bits:** parpadeo de sprites (los objetos de una línea saturada no hacen daño), paredes con la colisión rota que se atraviesan y agua sólida.
-- **Gimmicks de 16 bits:** ramas en la capa de parallax que te llevan, agua transparente para bucear y murciélagos que sirven de plataforma.
-- **6 fragmentos de mapa** escondidos, cada uno ligado a una mecánica.
+1. **Prólogo – Terra Nova (1989):** parece un juego de NES normal, sin botón de cambio. Al final, una pared rota rompe el juego.
+2. **Tutorial – Build 0.3:** la sala de pruebas del remaster a medio hacer. Alex, la última desarrolladora, te descubre, y se desbloquea el cambio entre 8 y 16 bits.
+3. **Mundo 1:** *La selva*, *Ruinas del río*, *Las copas* y *El parche*, donde Alex elimina el parpadeo de sprites en pleno nivel.
+
+Se enseña sin palabras (íconos de tecla la primera vez que aparece algo nuevo) y el progreso se guarda en el navegador.
 
 ## Cómo jugar
 

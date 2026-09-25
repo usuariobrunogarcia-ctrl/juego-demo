@@ -155,4 +155,51 @@ Object.assign(TN.Game.prototype, {
       }
     });
   },
+
+  // ---------- Final del Mundo 1 ----------
+
+  updateEnding() {
+    this.frameCount++;
+    this.stateTimer++;
+    if (this.stateTimer > 60 && this.input.wasPressed('confirm')) this.openTitle();
+  },
+
+  drawEnding() {
+    const ctx = this.ctx;
+    const theme = TN.THEMES.snes;
+    const band = Math.ceil(TN.HEIGHT / theme.sky.length);
+    theme.sky.forEach((color, i) => {
+      ctx.fillStyle = color;
+      ctx.fillRect(0, i * band, TN.WIDTH, band);
+    });
+    this.drawStrip(this.backgrounds.snes.hills, this.stateTimer * 0.1);
+    ctx.globalAlpha = 0.6;
+    ctx.fillStyle = '#101030';
+    ctx.fillRect(24, 20, TN.WIDTH - 48, 184);
+    ctx.globalAlpha = 1;
+    const shadow = '#000000';
+    TN.drawText(ctx, 'FIN DEL MUNDO 1', TN.WIDTH / 2, 30, '#F8D848', { align: 'center', scale: 2, shadow });
+
+    // Fragmentos de mapa encontrados en cada nivel.
+    let y = 62;
+    let found = 0;
+    let total = 0;
+    TN.LEVELS.forEach((def) => {
+      const pieces = def.rows.join('').split('*').length - 1;
+      if (!pieces) return;
+      const have = (this.save.data.pieces[def.id] || []).length;
+      found += have;
+      total += pieces;
+      const name = def.name ? `${def.code.replace('MUNDO ', '')} ${def.name}` : `${def.code.replace('MUNDO ', '')} (1989)`;
+      TN.drawText(ctx, name, 40, y, '#F8F8F8', { shadow });
+      TN.drawText(ctx, `${have}/${pieces}`, TN.WIDTH - 64, y, have === pieces ? '#78D050' : '#A0A0B0', { shadow });
+      y += 12;
+    });
+    TN.drawText(ctx, `MAPA TOTAL ${found}/${total}`, TN.WIDTH / 2, y + 8, '#F8D848', { align: 'center', shadow });
+
+    if (this.stateTimer > 60) {
+      TN.drawText(ctx, 'Continuara...', TN.WIDTH / 2, 170, '#F8F8F8', { align: 'center', shadow });
+      if ((this.stateTimer >> 4) % 2) TN.drawText(ctx, 'Pulsa saltar', TN.WIDTH / 2, 186, '#A0A0B0', { align: 'center' });
+    }
+  },
 });

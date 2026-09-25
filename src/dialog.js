@@ -59,7 +59,7 @@ Object.assign(TN.Game.prototype, {
     for (const d of this.level.def.dialogs) {
       if (this.dialogsSeen.has(d.id) || this.player.x < d.tx * TN.TILE) continue;
       this.dialogsSeen.add(d.id);
-      this.startDialog(d.id);
+      this.startDialog(d.id, d.event ? () => this.runEvent(d.event) : undefined);
       return;
     }
   },

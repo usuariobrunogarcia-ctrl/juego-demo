@@ -71,6 +71,18 @@ TN.DIALOGS = {
     ['alex', 'Las ramas del fondo no deberían tener colisión. Las dejé así para probar el parallax...'],
     ['alex', '...y tú las usas como si fueran un camino. Esto no está en ningún documento de diseño.'],
   ],
+  w1_4: [
+    ['alex', 'Nivel 1-4. Revisé el código de 1989: el parpadeo de los sprites es lo que te deja atravesar las espinas.'],
+    ['alex', 'La NES solo podía dibujar ocho sprites por línea. Yo no tengo ese límite. Voy a quitarlo.'],
+  ],
+  w1_4_patch: [
+    ['alex', 'Listo. Parche aplicado: se acabó el parpadeo. A ver cómo pasas ahora.'],
+  ],
+  w1_4_end: [
+    ['alex', '...Pasaste igual. Saltando entre las dos versiones como si fueran una sola.'],
+    ['alex', 'Llevo meses intentando que este remaster sea perfecto. Y lo único vivo que tiene eres tú, con tus bugs.'],
+    ['alex', 'Sigue. Quiero ver qué más escondía el juego original.'],
+  ],
   w1_1_bats: [
     ['alex', 'Rediseñé a los murciélagos para que no hicieran daño. Ahora son... ¿plataformas? Bueno, vale.'],
   ],

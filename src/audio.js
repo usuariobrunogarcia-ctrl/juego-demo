@@ -259,6 +259,9 @@ TN.Sound = class {
         this.tone(this.buses[this.mode], { wave: 'square', freq: 200 + Math.random() * 600, endFreq: 40, t, dur: 0.35, vol: 0.2 });
         break;
       }
+      case 'patch':
+        seq([96, 91, 84, 79, 72], 0.05, 0.12);
+        break;
       case 'blip':
         for (const out of outs) this.tone(out, { wave: nes ? 'pulse' : 'sine', freq: nes ? 880 : 660, t, dur: 0.03, vol: nes ? 0.08 : 0.12 });
         break;

@@ -59,6 +59,11 @@ TN.Game = class {
       this.updateBreak();
       return;
     }
+    if (this.state === 'ending') {
+      this.updateEnding();
+      return;
+    }
+    if (this.patchBanner > 0) this.patchBanner--;
     if (this.state === 'card') {
       this.frameCount++;
       this.stateTimer--;
@@ -157,6 +162,8 @@ TN.Game = class {
     this.respawnBlink = 0;
     this.hurtCount = 0;
     this.dialogsSeen = new Set();
+    this.patches = new Set();
+    this.patchBanner = 0;
     this.updateCamera();
   }
 
@@ -176,8 +183,21 @@ TN.Game = class {
     this.save.unlock(this.levelIndex + 1);
   }
 
+  // Acciones del guion que cambian las reglas del juego.
+  runEvent(event) {
+    if (event === 'patchFlicker') {
+      // Alex quita el límite de sprites: se acabó el parpadeo en 8 bits.
+      this.patches.add('flicker');
+      this.patchBanner = 200;
+      this.sound.sfx('patch');
+    }
+  }
+
   nextLevel() {
-    if (this.levelIndex + 1 < TN.LEVELS.length) {
+    if (this.level.def.worldEnd) {
+      this.state = 'ending';
+      this.stateTimer = 0;
+    } else if (this.levelIndex + 1 < TN.LEVELS.length) {
       this.enterLevel(this.levelIndex + 1);
     } else {
       this.openTitle();
@@ -197,7 +217,7 @@ TN.Game = class {
 
   checkEntities() {
     const p = this.player;
-    this.flickering = this.mode === 'nes'
+    this.flickering = this.mode === 'nes' && !this.patches.has('flicker')
       ? TN.findFlickering(this.entities.filter((e) => e.sprite && !e.collected), p, this.camX)
       : new Set();
 
@@ -282,6 +302,10 @@ TN.Game = class {
   render() {
     const ctx = this.ctx;
     const camX = Math.round(this.camX);
+    if (this.state === 'ending') {
+      this.drawEnding();
+      return;
+    }
     if (this.state === 'title') {
       this.drawTitle();
       return;
@@ -315,6 +339,7 @@ TN.Game = class {
     if (this.mode === 'snes') this.drawWater(camX);
     this.drawHints(camX);
     this.drawHud();
+    if (this.patchBanner > 0) this.drawPatchBanner();
 
     if (this.state === 'dialog') this.drawDialog();
     if (this.state === 'break') this.drawBreak();
@@ -530,6 +555,22 @@ TN.Game = class {
     const y = Math.round(p.y) - 2;
     const frame = this.sprites[this.mode][p.frameName(this.mode)];
     this.ctx.drawImage(p.facing > 0 ? frame.right : frame.left, x, y);
+  }
+
+  drawPatchBanner() {
+    const ctx = this.ctx;
+    const t = this.patchBanner;
+    if (t > 185) {
+      ctx.globalAlpha = (t - 185) / 15;
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, TN.WIDTH, TN.HEIGHT);
+      ctx.globalAlpha = 1;
+    }
+    if (t < 20 && (t >> 2) % 2) return;
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(16, 26, TN.WIDTH - 32, 24);
+    TN.drawText(ctx, 'PARCHE 0.3.1 APLICADO', TN.WIDTH / 2, 29, '#F8D848', { align: 'center' });
+    TN.drawText(ctx, 'LIMITE DE SPRITES: ELIMINADO', TN.WIDTH / 2, 40, '#F8F8F8', { align: 'center' });
   }
 
   // Tarjeta negra con el número y el nombre del nivel, como en la NES.

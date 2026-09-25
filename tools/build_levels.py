@@ -161,81 +161,49 @@ level('tutorial', 'BUILD 0.3', 'Sala de pruebas',
 
 
 # ---------------------------------------------------------------------------
-# Mundo 1-1: La selva (provisional: el nivel de demostración de la fase 1)
+# Mundo 1-1: La selva. Cambiar en el aire, murciélagos y parpadeo.
 # ---------------------------------------------------------------------------
 
-def s_switch(g, o):
+def w11_start(g, o):
     g.put(o + 2, 11, 'P')
-    g.dialog(o + 5, 'selva_intro')
-    g.fill(o + 14, o + 14, 8, 11, 'N')
-    g.hint(o + 12, 9, ['X'], 'switch')
-    g.fill(o + 22, o + 27, 12, 13, '.'); g.fill(o + 22, o + 27, 12, 12, 'S')
-    g.fill(o + 32, o + 32, 8, 11, 'S')
-    g.fill(o + 38, o + 46, 12, 13, '.'); g.fill(o + 39, o + 40, 10, 10, 'N'); g.fill(o + 42, o + 43, 10, 10, 'S')
-    g.put(o + 41, 8, '*')
-    g.fill(o + 52, o + 56, 0, 8, 'B'); g.fill(o + 52, o + 56, 9, 11, 'N'); g.fill(o + 58, o + 59, 0, 11, 'S')
+    g.dialog(o + 5, 'w1_1')
+    g.fill(o + 12, o + 12, 8, 11, 'S')                 # muro de 16 bits: a 8 bits
+    g.fill(o + 18, o + 23, 12, 13, '.'); g.fill(o + 18, o + 23, 12, 12, 'S')   # puente: a 16 bits
+    g.fill(o + 30, o + 33, 11, 11, 'x')                # 4 espinas: parpadean a su altura en 8 bits
+    g.put(o + 31, 9, '*')
 
 
-def s_flicker(g, o):
+def w11_stones(g, o):
     g.put(o + 1, 11, 'C')
-    g.fill(o + 5, o + 11, 11, 11, 'x'); g.put(o + 8, 9, '*')
-    g.put(o + 22, 11, 'C')
-    g.fill(o + 30, o + 32, 11, 11, 'x')
-    g.put(o + 44, 11, 'C')
-    g.fill(o + 52, o + 55, 11, 11, 'x')
+    g.fill(o + 6, o + 15, 12, 13, '.')
+    g.fill(o + 7, o + 8, 10, 10, 'N'); g.fill(o + 10, o + 12, 10, 10, 'S')
+    g.put(o + 9, 7, '*')
 
 
-def s_clip(g, o):
+def w11_bats(g, o):
     g.put(o + 1, 11, 'C')
-    g.fill(o + 6, o + 7, 0, 11, 'W')
-    g.fill(o + 14, o + 18, 9, 9, 'W')
-    g.fill(o + 22, o + 25, 0, 11, 'W'); g.put(o + 23, 11, '*')
+    g.dialog(o + 3, 'w1_1_bats')
+    g.put(o + 6, 9, 'b')                               # primer murciélago, sobre suelo seguro
+    g.put(o + 9, 9, 'b'); g.put(o + 12, 7, 'b'); g.put(o + 15, 5, 'b')
+    g.fill(o + 18, o + 19, 5, 11, 'B'); g.put(o + 19, 4, '*')
 
 
-def s_branch(g, o):
+def w11_flicker(g, o):
+    g.put(o + 2, 11, 'C')
+    g.fill(o + 8, o + 13, 11, 11, 'x')                 # 6 espinas
+    g.put(o + 10, 8, 'b')
+
+
+def w11_end(g, o):
     g.put(o + 1, 11, 'C')
-    g.fill(o + 5, o + 16, 12, 13, '.')
-    g.fill(o + 5, o + 9, 12, 12, 'v')
+    g.stairs(o + 6, [1, 2, 3, 3])
+    g.fill(o + 10, o + 12, 12, 13, '.')
+    g.put(o + 18, 11, 'F')
 
 
-def s_water(g, o):
-    g.put(o + 1, 11, 'C')
-    g.stairs(o + 4, [1, 2, 3, 4])
-    g.fill(o + 8, o + 8, 8, 11, '#')
-    g.fill(o + 9, o + 20, 8, 12, '~')
-    g.fill(o + 14, o + 15, 0, 10, 'B'); g.put(o + 15, 12, '*')
-    g.fill(o + 21, o + 22, 8, 11, '#')
-    g.stairs(o + 23, [3, 2, 1])
-
-
-def s_bats(g, o):
-    g.put(o + 1, 11, 'C')
-    g.put(o + 6, 9, 'b'); g.put(o + 9, 7, 'b'); g.put(o + 12, 5, 'b')
-    g.fill(o + 15, o + 16, 3, 11, 'B'); g.put(o + 16, 2, '*')
-
-
-def s_combo(g, o):
-    g.put(o + 1, 11, 'C')
-    g.fill(o + 4, o + 9, 12, 13, '.'); g.fill(o + 4, o + 9, 12, 12, 'S')
-    g.fill(o + 12, o + 13, 0, 11, 'W')
-    g.fill(o + 17, o + 21, 11, 11, 'x')
-    g.put(o + 25, 11, 'C')
-    g.fill(o + 28, o + 39, 12, 13, '.'); g.fill(o + 28, o + 32, 12, 12, 'v')
-    g.put(o + 34, 8, '*')
-
-
-def s_end(g, o):
-    g.put(o + 1, 11, 'C')
-    g.fill(o + 4, o + 5, 9, 9, 'B')
-    g.fill(o + 8, o + 10, 12, 13, '.')
-    g.stairs(o + 14, [1, 2, 3, 3])
-    g.put(o + 28, 11, 'F')
-
-
-level('selva', 'MUNDO 1-1', 'La selva', [
-    (62, s_switch), (62, s_flicker), (30, s_clip), (22, s_branch),
-    (30, s_water), (26, s_bats), (44, s_combo), (34, s_end),
-])
+level('selva', 'MUNDO 1-1', 'La selva',
+      [(38, w11_start), (20, w11_stones), (22, w11_bats), (18, w11_flicker), (22, w11_end)],
+      start_mode='snes')
 
 
 # ---------------------------------------------------------------------------

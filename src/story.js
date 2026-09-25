@@ -56,8 +56,11 @@ TN.DIALOGS = {
     ['alex', 'Está bien. No sé qué eres, pero no puedo borrarte sin romper todo el juego.'],
     ['alex', 'Esa salida lleva al nivel 1-1. Ve. Te voy a estar vigilando.'],
   ],
-  selva_intro: [
-    ['alex', 'Registro de pruebas, día 212. Sigo sola en el estudio.'],
-    ['alex', 'Si nadie termina este remaster, Terra Nova desaparece para siempre.'],
+  w1_1: [
+    ['alex', 'Nivel 1-1: la selva. La primera zona que rehicimos, antes de que cerrara el estudio.'],
+    ['alex', 'Desde entonces sigo aquí sola. Si nadie termina este remaster, Terra Nova se pierde.'],
+  ],
+  w1_1_bats: [
+    ['alex', 'Rediseñé a los murciélagos para que no hicieran daño. Ahora son... ¿plataformas? Bueno, vale.'],
   ],
 };

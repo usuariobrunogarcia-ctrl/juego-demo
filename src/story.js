@@ -67,6 +67,10 @@ TN.DIALOGS = {
   w1_2_walls: [
     ['alex', '¡Eh! ¡Esa pared la iba a arreglar mañana!'],
   ],
+  w1_3: [
+    ['alex', 'Las ramas del fondo no deberían tener colisión. Las dejé así para probar el parallax...'],
+    ['alex', '...y tú las usas como si fueran un camino. Esto no está en ningún documento de diseño.'],
+  ],
   w1_1_bats: [
     ['alex', 'Rediseñé a los murciélagos para que no hicieran daño. Ahora son... ¿plataformas? Bueno, vale.'],
   ],

@@ -256,6 +256,45 @@ level('rio', 'MUNDO 1-2', 'Ruinas del rio',
 
 
 # ---------------------------------------------------------------------------
+# Mundo 1-3: Las copas. Ramas de la capa de fondo y murciélagos.
+# ---------------------------------------------------------------------------
+
+def w13_start(g, o):
+    g.put(o + 2, 11, 'P')
+    g.dialog(o + 4, 'w1_3')
+    g.fill(o + 8, o + 19, 12, 13, '.')                # foso de 12
+    g.fill(o + 8, o + 12, 12, 12, 'v')                # rama
+    g.put(o + 14, 9, '*')
+
+
+def w13_canopy(g, o):
+    g.put(o + 1, 11, 'C')
+    g.put(o + 6, 9, 'b'); g.put(o + 9, 7, 'b'); g.put(o + 12, 5, 'b')
+    g.fill(o + 15, o + 27, 5, 5, 'B')                 # pasarela alta (16 bits, por los murciélagos)
+    g.fill(o + 16, o + 26, 11, 11, 'x')               # 11 espinas abajo (8 bits: parpadean)
+    g.put(o + 21, 4, '*')
+
+
+def w13_double(g, o):
+    g.put(o + 1, 11, 'C')
+    g.fill(o + 5, o + 22, 12, 13, '.')                # foso de 18
+    g.fill(o + 5, o + 9, 12, 12, 'v')                 # rama...
+    g.fill(o + 15, o + 16, 11, 11, 'S')               # ...y plataformas de 16 bits
+    g.fill(o + 19, o + 20, 10, 10, 'S')
+    g.put(o + 17, 7, '*')
+
+
+def w13_end(g, o):
+    g.put(o + 1, 11, 'C')
+    g.put(o + 12, 11, 'F')
+
+
+level('copas', 'MUNDO 1-3', 'Las copas',
+      [(26, w13_start), (30, w13_canopy), (30, w13_double), (18, w13_end)],
+      start_mode='snes')
+
+
+# ---------------------------------------------------------------------------
 
 def main():
     out = ['// Generado por tools/build_levels.py. No editar a mano: editar el script y volver a generarlo.',

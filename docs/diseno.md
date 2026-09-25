@@ -241,5 +241,5 @@ El juego se construye por etapas. Cada una termina con algo jugable que se puede
 | F2-5 | **Diálogos** de Alex (retrato en 16 bits, texto corrupto en 8 bits) | ✅ Hecha |
 | F2-6 | **Prólogo** en 8 bits y la **ruptura** del juego | ✅ Hecha |
 | F2-7 | **Tutorial** en la sala de pruebas | ✅ Hecha |
-| F2-8 | **Niveles 1-1, 1-2 y 1-3** | Pendiente |
+| F2-8 | **Niveles 1-1, 1-2 y 1-3** | ✅ Hecha |
 | F2-9 | **Nivel 1-4 "El parche"** y final del Mundo 1 | Pendiente |

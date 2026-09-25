@@ -268,12 +268,12 @@ Objetivo: que el Mundo 1 encaje con el arco de 6 mundos, que todos los fragmento
 
 | Paso | Contenido | Estado |
 |---|---|---|
-| F3-1 | **Guion del Mundo 1, versión 2** (ver abajo): reescribir `src/story.js` en español neutro. El tutorial ya no dice que Alex no puede borrarte; el 1-4 termina con la amenaza, no con el giro emocional | Pendiente |
-| F3-2 | **Voces del cartucho:** carteles TODO de Alex en los niveles del Mundo 1 (solo 16 bits) y una primera nota de M. escondida en el 1-4 (solo 8 bits) como anticipo | Pendiente |
-| F3-3 | **Comentarios de Alex que no frenan el juego:** una línea corta en una franja, sin pausar, que reacciona a lo que hace el jugador (morir varias veces en el mismo sitio, encontrar un fragmento difícil, atravesar una pared rota) | Pendiente |
-| F3-4 | **Fragmentos de mapa:** comprobar con `tools/test` que los 15 fragmentos (3 por nivel) se pueden conseguir y que después se puede seguir; moverlos o ajustar el nivel si no. Cada fragmento debe pedir una mecánica concreta | Pendiente |
-| F3-5 | **Anticipo en el prólogo:** un fotograma suelto en 16 bits cerca del final y un tile que no encaja, antes de la ruptura | Pendiente |
-| F3-6 | **Música nueva** (ver abajo) | Pendiente |
+| F3-1 | **Guion del Mundo 1, versión 2** (ver abajo): reescribir `src/story.js` en español neutro. El tutorial ya no dice que Alex no puede borrarte; el 1-4 termina con la amenaza, no con el giro emocional | ✅ Hecha |
+| F3-2 | **Voces del cartucho:** carteles TODO de Alex en los niveles del Mundo 1 (solo 16 bits) y una primera nota de M. escondida en el 1-4 (solo 8 bits) como anticipo | ✅ Hecha |
+| F3-3 | **Comentarios de Alex que no frenan el juego:** una línea corta en una franja, sin pausar, que reacciona a lo que hace el jugador (morir varias veces en el mismo sitio, encontrar un fragmento difícil, atravesar una pared rota) | ✅ Hecha |
+| F3-4 | **Fragmentos de mapa:** comprobar con `tools/test` que los 15 fragmentos (3 por nivel) se pueden conseguir y que después se puede seguir; moverlos o ajustar el nivel si no. Cada fragmento debe pedir una mecánica concreta | ✅ Hecha |
+| F3-5 | **Anticipo en el prólogo:** un fotograma suelto en 16 bits cerca del final y un tile que no encaja, antes de la ruptura | ✅ Hecha |
+| F3-6 | **Música nueva** (ver abajo) | ✅ Hecha |
 
 #### Guion del Mundo 1, versión 2 (borrador)
 
@@ -297,7 +297,15 @@ Alex en el Mundo 1: fría, técnica, burlona. Nunca da tutoriales.
 - 3 por nivel del Mundo 1 (15 en total con el prólogo).
 - Cada uno pide una mecánica concreta: cambiar en el aire, bucear, atravesar una pared, subir por murciélagos, usar el parpadeo, una repisa rota...
 - Nunca pueden dejar al jugador atrapado: después de conseguirlo, siempre hay forma de seguir o de volver a un punto de control.
-- Se comprueban con el jugador automático (`tools/test/bot.js`) y con la búsqueda de saltos (`tools/test/hops.js`).
+- Se comprueban con `tools/test/pieces.sh`, que usa el jugador automático (`tools/test/bot.js`) y la búsqueda de saltos (`tools/test/hops.js`).
+
+| Nivel | Fragmentos y mecánica que piden |
+|---|---|
+| Prólogo | Subir a los ladrillos por el escalón · escalera · saltar entre 5 espinas que parpadean |
+| 1-1 | Caminar entre 4 espinas que parpadean · cambiar en el aire entre piedras · escalera de murciélagos |
+| 1-2 | Bucear bajo el muro · repisa rota: solo se sube atravesándola desde abajo en 8 bits · bucear en el río |
+| 1-3 | Pararse sobre la rama y saltar en vertical · murciélagos hasta la pasarela alta · rama y plataformas de 16 bits |
+| 1-4 | Saltar entre espinas antes del parche · saltar alto entre plataformas alternas · pared rota y buceo |
 
 #### Música nueva: plan
 
@@ -307,3 +315,5 @@ Problema: hoy hay una sola canción de 4 compases (unos 7 segundos) que se repit
 - **Seguir con dos arreglos sincronizados** (NES y SNES) de la misma canción. En 16 bits se suman contramelodía, acordes y eco.
 - **Temas por zona:** título de 1989, título DX, prólogo y selva (tema principal), sala de pruebas (mínimo y "roto"), un arreglo por nivel del Mundo 1 (el 1-2 más acuático, el 1-3 más aéreo, el 1-4 más tenso tras el parche), fin de mundo y la ruptura.
 - **Intensidad:** una capa que entra en momentos clave (por ejemplo, tras el parche del 1-4).
+
+**Hecho:** formato por patrones en `src/music.js` y motor en `src/audio.js`. Temas: título (el mismo suena como 1989 en 8 bits y como DX en 16), sala de pruebas (mínimo, con pasos que fallan), selva (prólogo y 1-1, 64 s), río (lento, flauta y burbujas, 73 s), copas (rápido, campanas, en do mayor, 65 s), parche (tenso, bajo en corcheas, 65 s, con capa de intensidad tras el parche), fin del Mundo 1 y ruptura. Se revisan con `tools/test/music.js`.

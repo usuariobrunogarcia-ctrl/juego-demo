@@ -24,6 +24,7 @@ Object.assign(TN.Game.prototype, {
     this.menuIndex = 0;
     this.titleTime = 0;
     this.sound.setMode(this.save.data.broken ? 'snes' : 'nes');
+    this.sound.playSong('titulo');
   },
 
   menuItems() {

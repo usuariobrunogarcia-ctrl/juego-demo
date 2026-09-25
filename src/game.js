@@ -104,12 +104,14 @@ TN.Game = class {
       this.hurt();
     }
     this.checkEntities();
+    this.updateRemarks();
 
     const flagX = this.level.flag.x * TN.TILE;
     if (player.x + player.w > flagX + 6 && player.x < flagX + 10) this.completeLevel();
 
     this.canSwitch = this.isSafeToSwitch();
     this.updateCamera();
+    this.updateFlash();
     if (this.level.def.breakOnClip && player.clipping) this.startBreak();
     if (this.state === 'play') this.checkDialogTriggers();
   }
@@ -158,12 +160,18 @@ TN.Game = class {
     this.resetEntities();
     this.mode = this.level.def.startMode;
     this.sound.setMode(this.mode);
+    this.sound.playSong(this.level.def.music);
     this.canSwitch = true;
     this.respawnBlink = 0;
     this.hurtCount = 0;
     this.dialogsSeen = new Set();
     this.patches = new Set();
     this.patchBanner = 0;
+    this.resetRemarks();
+    this.snesFlash = 0;
+    this.flashDone = false;
+    // Tiles que no encajan: en 8 bits se dibujan con el arte de 16 bits.
+    this.oddTiles = new Set((this.level.def.oddTiles || []).map(([tx, ty]) => `${tx},${ty}`));
     this.updateCamera();
   }
 
@@ -178,9 +186,27 @@ TN.Game = class {
     this.state = 'win';
     this.stateTimer = 40;
     this.sound.sfx('win');
+    this.savePieces();
+    this.save.unlock(this.levelIndex + 1);
+  }
+
+  // Guarda los fragmentos de mapa recogidos en este nivel.
+  savePieces() {
     const found = this.mapPieces.map((m, i) => (m.collected ? i : -1)).filter((i) => i >= 0);
     this.save.addPieces(this.level.def.id, found);
-    this.save.unlock(this.levelIndex + 1);
+  }
+
+  // Un fotograma suelto de 16 bits (con su música) al pasar por la columna snesFlash.
+  updateFlash() {
+    const at = this.level.def.snesFlash;
+    if (at === undefined) return;
+    if (!this.flashDone && this.player.x >= at * TN.TILE) {
+      this.flashDone = true;
+      this.snesFlash = TN.SNES_FLASH_FRAMES;
+      this.sound.setMode('snes');
+    } else if (this.snesFlash > 0 && --this.snesFlash === 0) {
+      this.sound.setMode(this.mode);
+    }
   }
 
   // Acciones del guion que cambian las reglas del juego.
@@ -190,12 +216,14 @@ TN.Game = class {
       this.patches.add('flicker');
       this.patchBanner = 200;
       this.sound.sfx('patch');
+      this.sound.setIntensity(1);
     }
   }
 
   nextLevel() {
     if (this.level.def.worldEnd) {
       this.state = 'ending';
+      this.sound.playSong('fin');
       this.stateTimer = 0;
     } else if (this.levelIndex + 1 < TN.LEVELS.length) {
       this.enterLevel(this.levelIndex + 1);
@@ -233,6 +261,8 @@ TN.Game = class {
       if (!m.collected && this.touches(m)) {
         m.collected = true;
         this.sound.sfx('collect');
+        if (this.mapPieces.every((n) => n.collected)) this.sayRemark('allPieces');
+        else this.sayRemark('piece');
       }
     }
     for (const e of this.hazards) {
@@ -258,6 +288,7 @@ TN.Game = class {
   hurt() {
     this.sound.sfx('hurt');
     this.hurtCount++;
+    if (this.hurtCount === TN.HINT_RETRY) this.sayRemark('stuck', false);
     this.player.respawn(this.checkpoint);
     this.respawnBlink = 40;
   }
@@ -300,6 +331,18 @@ TN.Game = class {
   // ---------- Dibujado ----------
 
   render() {
+    // Anticipo del prólogo: durante unos fotogramas se cuela la versión de 16 bits.
+    if (this.snesFlash > 0 && this.state === 'play') {
+      const real = this.mode;
+      this.mode = 'snes';
+      this.renderScene();
+      this.mode = real;
+      return;
+    }
+    this.renderScene();
+  }
+
+  renderScene() {
     const ctx = this.ctx;
     const camX = Math.round(this.camX);
     if (this.state === 'ending') {
@@ -340,6 +383,7 @@ TN.Game = class {
     this.drawHints(camX);
     this.drawHud();
     if (this.patchBanner > 0) this.drawPatchBanner();
+    if (this.remark && this.state === 'play') this.drawRemark();
 
     if (this.state === 'dialog') this.drawDialog();
     if (this.state === 'break') this.drawBreak();
@@ -414,15 +458,45 @@ TN.Game = class {
     for (let y = 0; y < TN.HEIGHT; y += 16) ctx.fillRect(0, y, TN.WIDTH, 1);
   }
 
+  // Carteles: los de depuración y los TODO de Alex solo existen en 16 bits;
+  // las notas de M., escondidas en la ROM de 1989, solo en 8 bits.
   drawLabels(camX) {
-    if (!this.isDebugRoom || this.mode !== 'snes') return;
     const ctx = this.ctx;
+    const nes = this.mode === 'nes';
     for (const l of this.level.def.labels) {
+      if ((l.kind === 'note') !== nes) continue;
+      const lines = l.text.split('\n');
+      const w = Math.max(...lines.map((t) => t.length)) * 6;
+      const h = lines.length * 9;
       const x = l.tx * TN.TILE - camX;
-      if (x > TN.WIDTH || x + l.text.length * 6 < 0) continue;
-      ctx.fillStyle = '#000000';
-      ctx.fillRect(x - 2, l.ty * TN.TILE - 2, l.text.length * 6 + 3, 11);
-      TN.drawText(ctx, l.text, x, l.ty * TN.TILE, '#F8D848');
+      const y = l.ty * TN.TILE;
+      if (x - 4 > TN.WIDTH || x + w + 4 < 0) continue;
+      if (l.kind === 'todo') {
+        // Nota adhesiva pegada con cinta.
+        ctx.fillStyle = '#806020';
+        ctx.fillRect(x - 3, y - 2, w + 5, h + 4);
+        ctx.fillStyle = '#F8E070';
+        ctx.fillRect(x - 3, y - 3, w + 4, h + 4);
+        ctx.fillStyle = '#E0C050';
+        ctx.fillRect(x - 3, y + h, w + 4, 1);
+        ctx.globalAlpha = 0.6;
+        ctx.fillStyle = '#F8F8F8';
+        ctx.fillRect(x + Math.round(w / 2) - 7, y - 5, 14, 4);
+        ctx.globalAlpha = 1;
+        lines.forEach((t, i) => TN.drawText(ctx, t, x, y + i * 9, '#503018'));
+      } else if (l.kind === 'note') {
+        // Texto crudo en la ROM: sin marco, con destellos de datos corruptos.
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(x - 3, y - 3, w + 5, h + 4);
+        const glitch = this.frameCount % 200 < 4;
+        lines.forEach((t, i) => {
+          TN.drawText(ctx, glitch ? TN.corruptText(t, i + this.frameCount) : t, x, y + i * 9, '#BCBCBC');
+        });
+      } else {
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(x - 2, y - 2, w + 3, h + 2);
+        lines.forEach((t, i) => TN.drawText(ctx, t, x, y + i * 9, '#F8D848'));
+      }
     }
   }
 
@@ -475,7 +549,7 @@ TN.Game = class {
     const onlyTile = this.mode === 'nes' ? 'N' : 'S';
     const ghostTile = this.mode === 'nes' ? 'S' : 'N';
 
-    const images = this.tileImages;
+    const images = this.oddTiles.has(`${tx},${ty}`) ? this.tiles.snes : this.tileImages;
     if (tile === '#') {
       const top = !this.level.isSolid(tx, ty - 1, this.mode);
       ctx.drawImage(top ? images.groundTop : images.ground, x, y);

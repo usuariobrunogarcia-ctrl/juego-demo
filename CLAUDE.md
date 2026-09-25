@@ -2,7 +2,7 @@
 
 Plataformas 2D para navegador, homenaje a los juegos de los 80 y 90. Con un botón se cambia entre la versión **8 bits (NES)** y **16 bits (SNES)** del juego; cada una tiene sus propias reglas (glitches en 8 bits, gimmicks en 16 bits). La historia: el remaster inacabado de un juego de 1989 se está grabando encima del original, y Alex, la última desarrolladora, lo va parcheando.
 
-**Antes de trabajar, leer `docs/diseno.md`.** Tiene el diseño completo, el arco narrativo de 6 mundos (sección 2) y el plan por pasos (sección 11). **El siguiente trabajo es la Fase 3** (replanteo del Mundo 1, fragmentos de mapa y música).
+**Antes de trabajar, leer `docs/diseno.md`.** Tiene el diseño completo, el arco narrativo de 6 mundos (sección 2) y el plan por pasos (sección 11). La **Fase 3** (replanteo del Mundo 1, fragmentos de mapa y música) está terminada. El siguiente paso es planificar el Mundo 2 (Las cuevas) en `docs/diseno.md`.
 
 ## Cómo se trabaja en este proyecto
 
@@ -24,12 +24,14 @@ Plataformas 2D para navegador, homenaje a los juegos de los 80 y 90. Con un bot�
 | `src/save.js` | Progreso en `localStorage` (nivel alcanzado, fragmentos, acciones aprendidas, ruptura) |
 | `src/sprites.js`, `src/tiles.js`, `src/entities.js` | Arte en texto (cada carácter es un píxel) y objetos: espinas, murciélagos, fragmentos, puntos de control, ramas, parpadeo de sprites |
 | `src/backgrounds.js`, `src/font.js` | Fondos con parallax y fuente 5×7 |
-| `src/audio.js` | Música y efectos con Web Audio (dos arreglos sincronizados) |
+| `src/music.js` | Canciones por patrones (notación al principio del archivo); cada nivel elige la suya con `music=` en el generador |
+| `src/audio.js` | Sintetizador: arreglo NES y SNES de cada canción, sincronizados; capa de intensidad; efectos |
 | `src/player.js` | Físicas del explorador en cada modo, buceo |
 | `src/game.js` | Bucle, estados, niveles, colisiones con objetos, dibujado |
 | `src/screens.js` | Título (1989 y DX), final del Mundo 1 |
 | `src/hints.js` | Íconos de tecla |
 | `src/story.js`, `src/dialog.js` | Guion, retrato de Alex y cuadros de diálogo |
+| `src/remarks.js` | Comentarios de Alex en una franja, sin pausar (frases en `TN.REMARKS`, en `story.js`) |
 | `src/glitch.js` | La ruptura del juego al final del prólogo |
 
 ## Niveles
@@ -40,7 +42,7 @@ Se editan en `tools/build_levels.py` y se generan con:
 python3 tools/build_levels.py
 ```
 
-Cada nivel se arma por secciones sobre una cuadrícula de 14 filas; la leyenda de caracteres está al principio de `src/level.js`. Helpers: `g.fill`, `g.put`, `g.stairs`, `g.hint` (ícono de tecla), `g.dialog` (diálogo al pasar por una columna, con `event` opcional), `g.label` (cartel de la sala de pruebas).
+Cada nivel se arma por secciones sobre una cuadrícula de 14 filas; la leyenda de caracteres está al principio de `src/level.js`. Helpers: `g.fill`, `g.put`, `g.stairs`, `g.hint` (ícono de tecla), `g.dialog` (diálogo al pasar por una columna, con `event` opcional), `g.label` (cartel de la sala de pruebas), `g.todo` (cartel TODO de Alex, solo 16 bits), `g.note` (nota de M., solo 8 bits; admite varias líneas con `\n`).
 
 Orden actual: prólogo (0), tutorial (1), 1-1 (2), 1-2 (3), 1-3 (4), 1-4 (5).
 
@@ -53,6 +55,8 @@ NODE_PATH=$(npm root -g) node tools/test/smoke.js captura.png "código JS opcion
 NODE_PATH=$(npm root -g) node tools/test/bot.js <nivel> '<plan JSON>' [fotogramas]    # jugador automático
 NODE_PATH=$(npm root -g) node tools/test/hops.js <nivel> '<saltos JSON>'              # saltos entre murciélagos
 tools/test/regress.sh                                                                   # recorrido de todos los niveles
+tools/test/pieces.sh                                                                    # los 15 fragmentos de mapa
+NODE_PATH=$(npm root -g) node tools/test/music.js [canción] [nes|snes] [s] [x.wav]         # renderiza canciones sin tiempo real
 ```
 
 - `bot.js` simula fotograma a fotograma manteniendo la derecha. El plan es una lista de acciones por columna: `{"at": col, "do": "jump" | "switch" | "hold:run" | "release:run" | "strokes:N"}`. El primer elemento puede ser `{"start": col, "mode": "nes"|"snes"}` para empezar a mitad del nivel.

@@ -3,7 +3,7 @@
 DIR="$(cd "$(dirname "$0")" && pwd)"
 B="node $DIR/bot.js"
 run() { echo -n "$1: "; NODE_PATH=$(npm root -g) $B $2 "$3" ${4:-3000} 2>&1 | grep -o "RESULTADO.*\|demasiados daños: [^|]*|[^|]*|[^|]*" | tail -1; }
-run "prólogo" 0 '[{"at":8.3,"do":"jump"},{"at":14.6,"do":"jump"},{"at":27.8,"do":"jump"},{"at":43.6,"do":"jump"},{"at":58.6,"do":"jump"},{"at":68.7,"do":"jump"},{"at":69.7,"do":"jump"},{"at":70.7,"do":"jump"}]'
+run "prólogo" 0 '[{"at":8.3,"do":"jump"},{"at":14.6,"do":"jump"},{"at":18.6,"do":"jump"},{"at":20.0,"do":"jump"},{"at":27.8,"do":"jump"},{"at":43.6,"do":"jump"},{"at":58.6,"do":"jump"},{"at":68.7,"do":"jump"},{"at":69.7,"do":"jump"},{"at":70.7,"do":"jump"}]'
 run "tutorial" 1 '[{"at":7,"do":"hold:run"},{"at":9.6,"do":"jump"},{"at":17,"do":"release:run"},{"at":26.5,"do":"switch"},{"at":34.5,"do":"switch"},{"at":52.2,"do":"switch"},{"at":62,"do":"switch"},{"at":63.9,"do":"jump"},{"at":67.45,"do":"jump"},{"at":68.2,"do":"switch"},{"at":71.3,"do":"jump"}]'
 run "1-1 a" 2 '[{"at":10,"do":"switch"},{"at":15,"do":"switch"},{"at":27,"do":"switch"},{"at":42.9,"do":"jump"},{"at":46.4,"do":"jump"},{"at":47.3,"do":"switch"},{"at":50.2,"do":"jump"}]'
 run "1-1 b" 2 '[{"start":80,"mode":"nes"},{"at":98,"do":"switch"},{"at":103.0,"do":"jump"},{"at":104.4,"do":"jump"},{"at":105.4,"do":"jump"},{"at":107.3,"do":"jump"}]'

@@ -73,5 +73,8 @@ TN.WATER = {
 TN.COYOTE_FRAMES = 6;
 TN.JUMP_BUFFER_FRAMES = 6;
 
+// Fotogramas que dura el anticipo de 16 bits en el prólogo.
+TN.SNES_FLASH_FRAMES = 4;
+
 // Fotogramas que tiembla el explorador si intenta cambiar donde no es seguro.
 TN.SWITCH_ERROR_FRAMES = 14;

@@ -23,6 +23,7 @@ TN.Player = class {
   }
 
   update(input, level, mode) {
+    this.event = null; // 'jump' o 'stroke', para los efectos de sonido
     const P = TN.PHYSICS[mode];
     const dir = (input.isDown('right') ? 1 : 0) - (input.isDown('left') ? 1 : 0);
     if (dir !== 0) this.facing = dir;
@@ -50,6 +51,7 @@ TN.Player = class {
 
     if (this.onGround && input.wasPressed('jump')) {
       this.vy = -P.jumpSpeed;
+      this.event = 'jump';
     }
     // Salto variable (solo 16 bits): soltar el botón corta la subida.
     if (mode === 'snes' && this.vy < P.jumpCut && !input.isDown('jump')) {
@@ -74,6 +76,7 @@ TN.Player = class {
     if (input.wasPressed('jump')) {
       const headOut = !level.overlapsTile(this.x, this.y - 4, this.w, 4, '~');
       this.vy = headOut ? -W.exitSpeed : -W.strokeSpeed;
+      this.event = 'stroke';
     }
     this.vy = Math.min(this.vy + W.gravity, W.maxFall);
     this.clipping = false;

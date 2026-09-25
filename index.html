@@ -32,7 +32,7 @@
 </head>
 <body>
   <canvas id="screen"></canvas>
-  <p>Mover: ← → o A D &nbsp;·&nbsp; Saltar: Z, Espacio, ↑ o W &nbsp;·&nbsp; Cambiar 8/16 bits: X o K &nbsp;·&nbsp; Correr (16 bits): Shift o C</p>
+  <p>Mover: ← → o A D &nbsp;·&nbsp; Saltar: Z, Espacio, ↑ o W &nbsp;·&nbsp; Cambiar 8/16 bits: X o K &nbsp;·&nbsp; Correr (16 bits): Shift o C &nbsp;·&nbsp; Sonido: M</p>
 
   <script src="src/config.js"></script>
   <script src="src/input.js"></script>
@@ -42,6 +42,7 @@
   <script src="src/font.js"></script>
   <script src="src/backgrounds.js"></script>
   <script src="src/entities.js"></script>
+  <script src="src/audio.js"></script>
   <script src="src/player.js"></script>
   <script src="src/game.js"></script>
   <script>
@@ -61,6 +62,10 @@
 
     const game = new TN.Game(canvas);
     game.start();
+
+    // El sonido arranca con la primera tecla o clic (norma de los navegadores).
+    addEventListener('keydown', () => game.sound.start());
+    addEventListener('pointerdown', () => game.sound.start());
   </script>
 </body>
 </html>

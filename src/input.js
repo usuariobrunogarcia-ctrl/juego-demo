@@ -13,6 +13,7 @@ TN.KEYMAP = {
   ShiftLeft: 'run',
   ShiftRight: 'run',
   KeyC: 'run',
+  KeyM: 'mute',
 };
 
 TN.Input = class {

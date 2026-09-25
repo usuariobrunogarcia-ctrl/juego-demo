@@ -9,6 +9,7 @@ TN.Game = class {
     this.ctx.imageSmoothingEnabled = false;
 
     this.input = new TN.Input();
+    this.sound = new TN.Sound();
     this.level = new TN.Level(TN.LEVEL_1);
     this.player = new TN.Player(this.level);
     this.sprites = TN.buildSprites();
@@ -47,6 +48,7 @@ TN.Game = class {
   }
 
   update() {
+    if (this.input.wasPressed('mute')) this.sound.toggleMute();
     if (this.state === 'win') {
       if (this.input.wasPressed('jump')) this.restart();
       return;
@@ -64,6 +66,7 @@ TN.Game = class {
     this.carryOnPlatform();
     const prevBottom = player.y + player.h;
     player.update(this.input, this.level, this.mode);
+    if (player.event) this.sound.sfx(player.event);
     this.landOnPlatforms(prevBottom);
 
     if (player.y > this.level.pixelHeight + 32) {
@@ -74,6 +77,7 @@ TN.Game = class {
     const flagX = this.level.flag.x * TN.TILE;
     if (player.x + player.w > flagX + 6 && player.x < flagX + 10) {
       this.state = 'win';
+      this.sound.sfx('win');
     }
 
     this.canSwitch = this.isSafeToSwitch();
@@ -136,10 +140,14 @@ TN.Game = class {
       if (e instanceof TN.Checkpoint && !e.active && p.x > e.x) {
         e.active = true;
         this.checkpoint = { x: e.tx, y: e.ty };
+        this.sound.sfx('checkpoint');
       }
     }
     for (const m of this.mapPieces) {
-      if (!m.collected && this.touches(m)) m.collected = true;
+      if (!m.collected && this.touches(m)) {
+        m.collected = true;
+        this.sound.sfx('collect');
+      }
     }
     for (const e of this.hazards) {
       if (this.flickering.has(e) || e.harmless(this.mode)) continue;
@@ -162,6 +170,7 @@ TN.Game = class {
   }
 
   hurt() {
+    this.sound.sfx('hurt');
     this.player.respawn(this.checkpoint);
   }
 
@@ -179,8 +188,11 @@ TN.Game = class {
   trySwitch() {
     if (this.isSafeToSwitch()) {
       this.mode = this.otherMode;
+      this.sound.setMode(this.mode);
+      this.sound.sfx('switch');
     } else {
       this.player.shake = TN.SWITCH_ERROR_FRAMES;
+      this.sound.sfx('error');
     }
   }
 
@@ -188,6 +200,7 @@ TN.Game = class {
     this.resetEntities();
     this.player.respawn(this.checkpoint);
     this.mode = 'nes';
+    this.sound.setMode('nes');
     this.state = 'play';
     this.updateCamera();
   }

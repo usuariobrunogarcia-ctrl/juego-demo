@@ -74,6 +74,8 @@ Técnica emergente: coger carrerilla en 16 bits y cambiar a 8 bits en el aire pa
 
 Cada canción existe en dos arreglos, uno chiptune (NES) y otro con samples (SNES), **sincronizados**, para que al cambiar la música continúe sin cortes en el otro estilo.
 
+Implementación: todo se sintetiza con Web Audio. En 8 bits hay dos pulsos, un triángulo (bajo y bombo) y ruido (caja y charles), como el chip de la NES. En 16 bits hay melodía con dos osciladores filtrados, acordes de fondo, bajo suave, percusión filtrada y eco (convolución), como el SPC700 de la SNES. Los dos arreglos suenan a la vez y el cambio de modo solo alterna el volumen de cada uno. Los efectos (salto, brazada, cambio, error, daño, fragmento, punto de control y meta) usan el timbre del modo activo. La tecla M silencia.
+
 ## 5. Referencia técnica: cómo se ven la NES y la SNES
 
 El arte, el sonido y los efectos de cada modo deben **respetar las limitaciones reales** de su consola. Esas limitaciones son a la vez la estética y la fuente de las mecánicas.
@@ -191,5 +193,5 @@ El juego se construye por etapas. Cada una termina con algo jugable que se puede
 | 5b | **Agua:** sólida en 8 bits, transparente y para bucear en 16 bits | ✅ Hecha |
 | 6a | **Murciélagos** en ambos modos | ✅ Hecha |
 | 6b | **Fragmentos de mapa** y HUD | ✅ Hecha |
-| 7 | **Sonido:** música con dos arreglos sincronizados y efectos (Web Audio) | Pendiente |
+| 7 | **Sonido:** música con dos arreglos sincronizados y efectos (Web Audio) | ✅ Hecha |
 | 8 | **Nivel de la Selva completo:** diseño final del nivel del MVP y pulido | Pendiente |

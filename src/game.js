@@ -14,6 +14,9 @@ TN.Game = class {
     this.sprites = TN.buildSprites();
     this.tiles = TN.buildTiles();
     this.backgrounds = TN.buildBackgrounds();
+    this.entitySprites = TN.buildEntitySprites();
+    this.resetEntities();
+    this.frameCount = 0;
     this.camX = 0;
     this.state = 'play';
     this.mode = 'nes';
@@ -49,13 +52,16 @@ TN.Game = class {
       return;
     }
 
+    this.frameCount++;
     const player = this.player;
     if (this.input.wasPressed('switch')) this.trySwitch();
     player.update(this.input, this.level, this.mode);
+    for (const e of this.entities) e.update(this);
 
     if (player.y > this.level.pixelHeight + 32) {
-      player.respawn(this.level);
+      this.hurt();
     }
+    this.checkEntities();
 
     const flagX = this.level.flag.x * TN.TILE;
     if (player.x + player.w > flagX + 6 && player.x < flagX + 10) {
@@ -64,6 +70,40 @@ TN.Game = class {
 
     this.canSwitch = this.isSafeToSwitch();
     this.updateCamera();
+  }
+
+  resetEntities() {
+    this.entities = this.level.entities.map(TN.createEntity);
+    this.hazards = this.entities.filter((e) => e.sprite);
+    this.checkpoint = this.level.spawn;
+    this.flickering = new Set();
+  }
+
+  checkEntities() {
+    const p = this.player;
+    this.flickering = this.mode === 'nes'
+      ? TN.findFlickering(this.hazards, p, this.camX)
+      : new Set();
+
+    for (const e of this.entities) {
+      if (e instanceof TN.Checkpoint && !e.active && p.x > e.x) {
+        e.active = true;
+        this.checkpoint = { x: e.tx, y: e.ty };
+      }
+    }
+    for (const e of this.hazards) {
+      if (this.flickering.has(e)) continue;
+      const hb = e.hitbox;
+      if (p.x < e.x + hb.x + hb.w && p.x + p.w > e.x + hb.x &&
+          p.y < e.y + hb.y + hb.h && p.y + p.h > e.y + hb.y) {
+        this.hurt();
+        return;
+      }
+    }
+  }
+
+  hurt() {
+    this.player.respawn(this.checkpoint);
   }
 
   get otherMode() {
@@ -86,7 +126,8 @@ TN.Game = class {
   }
 
   restart() {
-    this.player.respawn(this.level);
+    this.resetEntities();
+    this.player.respawn(this.checkpoint);
     this.mode = 'nes';
     this.state = 'play';
     this.updateCamera();
@@ -126,6 +167,7 @@ TN.Game = class {
     }
 
     this.drawFlag(camX);
+    this.drawEntities(camX);
     this.drawPlayer(camX);
     this.drawHud();
 
@@ -194,6 +236,36 @@ TN.Game = class {
     ctx.fillRect(x + 7, baseY - 96, 2, 96);
     ctx.fillStyle = C.flag;
     ctx.fillRect(x + 9, baseY - 94, 12, 8);
+  }
+
+  drawEntities(camX) {
+    const ctx = this.ctx;
+    const images = this.entitySprites[this.mode];
+    this.entities.forEach((e, i) => {
+      const x = Math.round(e.x) - camX;
+      if (x + e.w < 0 || x >= TN.WIDTH) return;
+      if (e instanceof TN.Checkpoint) {
+        this.drawCheckpoint(e, x);
+        return;
+      }
+      // Los objetos de una línea saturada se turnan para aparecer.
+      if (this.flickering.has(e) && (this.frameCount + i) % 2 === 0) return;
+      ctx.drawImage(images[e.sprite], x, Math.round(e.y));
+    });
+  }
+
+  drawCheckpoint(e, x) {
+    const ctx = this.ctx;
+    const nes = this.mode === 'nes';
+    const y = e.y;
+    ctx.fillStyle = nes ? '#BCBCBC' : '#A8A8B8';
+    ctx.fillRect(x + 4, y + 2, 2, 14);
+    ctx.fillStyle = e.active ? (nes ? '#00A800' : '#F8D848') : (nes ? '#7C7C7C' : '#686878');
+    ctx.fillRect(x + 6, y + 2, 7, 5);
+    if (!nes) {
+      ctx.fillStyle = e.active ? '#C89818' : '#484858';
+      ctx.fillRect(x + 6, y + 6, 7, 1);
+    }
   }
 
   drawPlayer(camX) {

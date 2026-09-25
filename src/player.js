@@ -4,13 +4,14 @@ TN.Player = class {
   constructor(level) {
     this.w = 12;
     this.h = 14;
-    this.respawn(level);
+    this.respawn(level.spawn);
   }
 
-  respawn(level) {
+  // Coloca al explorador de pie sobre el tile indicado (en coordenadas de tile).
+  respawn(point) {
     const T = TN.TILE;
-    this.x = level.spawn.x * T + (T - this.w) / 2;
-    this.y = (level.spawn.y + 1) * T - this.h;
+    this.x = point.x * T + (T - this.w) / 2;
+    this.y = (point.y + 1) * T - this.h;
     this.vx = 0;
     this.vy = 0;
     this.onGround = false;

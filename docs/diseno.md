@@ -103,7 +103,7 @@ Inspirados en glitches reales de juegos de NES. Cada uno funciona con reglas fij
 
 | Glitch | Efecto jugable |
 |---|---|
-| **Parpadeo de sprites** | Con más de 8 objetos en una línea, algunos parpadean; mientras son invisibles no hacen daño |
+| **Parpadeo de sprites** | Como en la NES, caben 8 sprites de hardware por línea y un objeto de 16 px ocupa 2 (el explorador también). Si una línea se satura, sus objetos parpadean y mientras parpadean no hacen daño: 3 espinas en fila son peligrosas; 4 parpadean cuando te pones a su altura; 5 o más parpadean siempre |
 | **Atravesar paredes** (wall clip) | En ciertas esquinas el jugador se mete en un bloque y sale por el otro lado |
 | **Ralentización** | Con muchos objetos en pantalla todo va más lento: "tiempo bala" para pasar zonas de precisión |
 | **Salir por arriba de la pantalla** | El techo no tiene colisión: se puede caminar por encima del nivel |
@@ -184,8 +184,11 @@ El juego se construye por etapas. Cada una termina con algo jugable que se puede
 | 3a | **Sprite del explorador** en 8 bits (paleta NES de 3 colores) y 16 bits (contorno y sombreado), con animaciones de quieto, caminar y saltar | ✅ Hecha |
 | 3b | **Tiles** del suelo, ladrillos y bloques exclusivos en los dos estilos | ✅ Hecha |
 | 3c | **Fondo con parallax** en 16 bits y **fuente de píxeles** para los textos | ✅ Hecha |
-| 4 | **Glitches de 8 bits:** parpadeo de sprites y atravesar paredes | Pendiente |
-| 5 | **Gimmicks de 16 bits:** parallax jugable y agua transparente | Pendiente |
-| 6 | **Enemigos y objetivos:** murciélagos en ambos modos, fragmentos de mapa y HUD | Pendiente |
+| 4a | **Parpadeo de sprites**, espinas y puntos de control | ✅ Hecha |
+| 4b | **Atravesar paredes** | Pendiente |
+| 5a | **Parallax jugable:** ramas en la capa del fondo | Pendiente |
+| 5b | **Agua:** sólida en 8 bits, transparente y para bucear en 16 bits | Pendiente |
+| 6a | **Murciélagos** en ambos modos | Pendiente |
+| 6b | **Fragmentos de mapa** y HUD | Pendiente |
 | 7 | **Sonido:** música con dos arreglos sincronizados y efectos (Web Audio) | Pendiente |
 | 8 | **Nivel de la Selva completo:** diseño final del nivel del MVP y pulido | Pendiente |

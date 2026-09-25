@@ -13,6 +13,7 @@ TN.Game = class {
     this.save = new TN.Save();
     this.sprites = TN.buildSprites();
     this.tiles = TN.buildTiles();
+    this.debugTiles = TN.buildDebugTiles();
     this.backgrounds = TN.buildBackgrounds();
     this.entitySprites = TN.buildEntitySprites();
     this.portraits = TN.buildPortraits();
@@ -61,7 +62,14 @@ TN.Game = class {
     if (this.state === 'card') {
       this.frameCount++;
       this.stateTimer--;
-      if (this.stateTimer <= 0 || (this.stateTimer < 100 && this.input.wasPressed('jump'))) this.state = 'play';
+      if (this.stateTimer <= 0 || (this.stateTimer < 100 && this.input.wasPressed('jump'))) {
+        this.state = 'play';
+        const intro = this.level.def.introDialog;
+        if (intro && !this.dialogsSeen.has(intro)) {
+          this.dialogsSeen.add(intro);
+          this.startDialog(intro);
+        }
+      }
       return;
     }
     if (this.state === 'win') {
@@ -300,6 +308,7 @@ TN.Game = class {
       }
     }
 
+    this.drawLabels(camX);
     this.drawFlag(camX);
     this.drawEntities(camX);
     this.drawPlayer(camX);
@@ -314,7 +323,21 @@ TN.Game = class {
     }
   }
 
+  get isDebugRoom() {
+    return this.level.def.theme === 'debug';
+  }
+
+  // Imágenes de tiles del modo actual (en la sala de pruebas, las provisionales).
+  get tileImages() {
+    if (this.isDebugRoom && this.mode === 'snes') return { ...this.tiles.snes, ...this.debugTiles };
+    return this.tiles[this.mode];
+  }
+
   drawBackground(camX) {
+    if (this.isDebugRoom) {
+      this.drawDebugBackground(camX);
+      return;
+    }
     const bg = this.backgrounds[this.mode];
     if (this.mode === 'nes') {
       // Una sola capa: las nubes van pegadas al nivel.
@@ -352,6 +375,29 @@ TN.Game = class {
         }
         ctx.globalAlpha = 1;
       }
+    }
+  }
+
+  // Sala de pruebas: negro en 8 bits; cuadrícula de depuración en 16 bits.
+  drawDebugBackground(camX) {
+    const ctx = this.ctx;
+    ctx.fillStyle = this.mode === 'nes' ? '#000000' : '#1C2230';
+    ctx.fillRect(0, 0, TN.WIDTH, TN.HEIGHT);
+    if (this.mode === 'nes') return;
+    ctx.fillStyle = '#2C3850';
+    for (let x = -(camX % 16); x < TN.WIDTH; x += 16) ctx.fillRect(x, 0, 1, TN.HEIGHT);
+    for (let y = 0; y < TN.HEIGHT; y += 16) ctx.fillRect(0, y, TN.WIDTH, 1);
+  }
+
+  drawLabels(camX) {
+    if (!this.isDebugRoom || this.mode !== 'snes') return;
+    const ctx = this.ctx;
+    for (const l of this.level.def.labels) {
+      const x = l.tx * TN.TILE - camX;
+      if (x > TN.WIDTH || x + l.text.length * 6 < 0) continue;
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(x - 2, l.ty * TN.TILE - 2, l.text.length * 6 + 3, 11);
+      TN.drawText(ctx, l.text, x, l.ty * TN.TILE, '#F8D848');
     }
   }
 
@@ -404,7 +450,7 @@ TN.Game = class {
     const onlyTile = this.mode === 'nes' ? 'N' : 'S';
     const ghostTile = this.mode === 'nes' ? 'S' : 'N';
 
-    const images = this.tiles[this.mode];
+    const images = this.tileImages;
     if (tile === '#') {
       const top = !this.level.isSolid(tx, ty - 1, this.mode);
       ctx.drawImage(top ? images.groundTop : images.ground, x, y);
@@ -538,6 +584,7 @@ TN.Game = class {
 
   // Fragmentos de mapa recogidos.
   drawMapCounter() {
+    if (!this.mapPieces.length) return;
     const ctx = this.ctx;
     const C = this.theme;
     ctx.fillStyle = C.black;

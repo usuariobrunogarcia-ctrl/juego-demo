@@ -18,6 +18,7 @@ class Grid:
         self.g = [['.'] * width for _ in range(H)]
         self.hints = []
         self.dialogs = []
+        self.labels = []
         self.fill(0, width - 1, 12, 13, '#')
 
     def put(self, c, r, ch):
@@ -42,6 +43,10 @@ class Grid:
         """Diálogo que empieza cuando el jugador pasa por la columna c."""
         self.dialogs.append({'tx': c, 'id': id})
 
+    def label(self, c, r, text):
+        """Cartel de depuración (solo se ve en la sala de pruebas, en 16 bits)."""
+        self.labels.append({'tx': c, 'ty': r, 'text': text})
+
     def rows(self):
         return [''.join(r) for r in self.g]
 
@@ -65,7 +70,7 @@ def level(id, code, name, sections, start_mode='nes', switch=True, theme='jungle
     LEVELS.append({
         'id': id, 'code': code, 'name': name, 'startMode': start_mode,
         'switchUnlocked': switch, 'theme': theme, **extra, 'rows': g.rows(),
-        'hints': g.hints, 'dialogs': g.dialogs,
+        'hints': g.hints, 'dialogs': g.dialogs, 'labels': g.labels,
     })
 
 
@@ -106,6 +111,53 @@ def p_end(g, o):
 
 level('prologo', 'MUNDO 1-1', '', [(40, p_start), (40, p_middle), (40, p_end)],
       start_mode='nes', switch=False, breakOnClip=True)
+
+
+# ---------------------------------------------------------------------------
+# Tutorial: la sala de pruebas de la build del remaster. Empieza en 16 bits.
+# ---------------------------------------------------------------------------
+
+def t_run(g, o):
+    g.put(o + 3, 11, 'P')
+    g.label(o + 2, 4, 'SALA DE PRUEBAS 03')
+    g.hint(o + 8, 8, ['C'], 'run')
+    g.fill(o + 11, o + 15, 12, 13, '.')        # foso de 5: hay que correr
+    g.label(o + 11, 7, 'TODO: FOSO')
+
+
+def t_switch(g, o):
+    g.put(o + 1, 11, 'C')
+    g.fill(o + 8, o + 8, 0, 11, 'S')          # muro de 16 bits: cambiar a 8
+    g.hint(o + 5, 8, ['X'], 'switch')
+    g.dialog(o + 10, 'tuto_cambio')
+    g.fill(o + 16, o + 16, 0, 11, 'N')        # muro de 8 bits: volver a 16
+    g.label(o + 18, 5, 'TODO: BORRAR ASSETS 1989')
+
+
+def t_safe(g, o):
+    g.put(o + 1, 11, 'C')
+    g.fill(o + 5, o + 9, 0, 8, 'B'); g.fill(o + 5, o + 9, 9, 11, 'N')   # túnel solo de 16 bits
+    g.fill(o + 11, o + 12, 0, 11, 'S')                                # hay que salir para cambiar
+    g.label(o + 4, 3, 'TEST: COLISIONES')
+
+
+def t_air(g, o):
+    g.put(o + 1, 11, 'C')
+    g.fill(o + 5, o + 13, 12, 13, '.')
+    g.fill(o + 6, o + 7, 10, 10, 'S'); g.fill(o + 9, o + 10, 10, 10, 'N')
+    g.label(o + 5, 5, 'TEST: PLATAFORMAS')
+
+
+def t_exit(g, o):
+    g.put(o + 1, 11, 'C')
+    g.dialog(o + 8, 'tuto_salida')
+    g.label(o + 12, 6, 'SALIDA A 1-1')
+    g.put(o + 14, 11, 'F')
+
+
+level('tutorial', 'BUILD 0.3', 'Sala de pruebas',
+      [(20, t_run), (22, t_switch), (18, t_safe), (18, t_air), (20, t_exit)],
+      start_mode='snes', theme='debug', introDialog='tuto_intro')
 
 
 # ---------------------------------------------------------------------------

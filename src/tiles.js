@@ -273,3 +273,28 @@ TN.buildTiles = function () {
   }
   return images;
 };
+
+// Sala de pruebas (16 bits): texturas provisionales de "falta textura".
+TN.buildDebugTiles = function () {
+  const make = (top) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 16;
+    canvas.height = 16;
+    const ctx = canvas.getContext('2d');
+    for (let y = 0; y < 16; y += 8) {
+      for (let x = 0; x < 16; x += 8) {
+        ctx.fillStyle = (x + y) % 16 ? '#E040E0' : '#301030';
+        ctx.fillRect(x, y, 8, 8);
+      }
+    }
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 15, 16, 1);
+    ctx.fillRect(15, 0, 1, 16);
+    if (top) {
+      ctx.fillStyle = '#40F040';
+      ctx.fillRect(0, 0, 16, 2);
+    }
+    return canvas;
+  };
+  return { groundTop: make(true), ground: make(false) };
+};

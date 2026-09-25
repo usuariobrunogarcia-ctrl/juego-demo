@@ -34,6 +34,10 @@ TN.buildPortraits = function () {
   for (const [name, p] of Object.entries(TN.PORTRAITS)) {
     images[name] = TN.renderPixels(p.rows, p.palette, false, `retrato.${name}`, 24);
   }
+  // Silueta para cuando aún no se sabe quién habla.
+  const alex = TN.PORTRAITS.alex;
+  const dark = Object.fromEntries(Object.keys(alex.palette).map((k) => [k, '#283048']));
+  images.silhouette = TN.renderPixels(alex.rows, dark, false, 'retrato.silueta', 24);
   return images;
 };
 

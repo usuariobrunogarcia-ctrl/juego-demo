@@ -2,7 +2,7 @@
 
 TN.SPEAKERS = {
   alex: { name: 'Alex', portrait: 'alex' },
-  unknown: { name: '???', portrait: 'alex' },
+  unknown: { name: '???', portrait: 'silhouette' },
 };
 
 // Retrato de Alex (solo se ve en 16 bits): 24x24.
@@ -43,6 +43,19 @@ TN.PORTRAITS = {
 
 // Cada diálogo es una lista de páginas [hablante, texto].
 TN.DIALOGS = {
+  tuto_intro: [
+    ['unknown', '¿Eh? ¿Hay alguien en la sala de pruebas?'],
+    ['alex', 'Un sprite del juego original... dentro de la build nueva. Eso no debería ser posible.'],
+    ['alex', 'Quédate quieto. Voy a buscar de dónde saliste para arreglarlo.'],
+  ],
+  tuto_cambio: [
+    ['alex', '¿¡Te pasaste a la versión de 1989!? ¿Cómo hiciste eso?'],
+    ['alex', 'Las dos versiones comparten el cartucho... y tú te mueves entre ellas. Genial. Un bug nuevo.'],
+  ],
+  tuto_salida: [
+    ['alex', 'Está bien. No sé qué eres, pero no puedo borrarte sin romper todo el juego.'],
+    ['alex', 'Esa salida lleva al nivel 1-1. Ve. Te voy a estar vigilando.'],
+  ],
   selva_intro: [
     ['alex', 'Registro de pruebas, día 212. Sigo sola en el estudio.'],
     ['alex', 'Si nadie termina este remaster, Terra Nova desaparece para siempre.'],

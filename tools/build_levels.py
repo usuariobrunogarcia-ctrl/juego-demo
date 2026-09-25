@@ -79,11 +79,11 @@ def build(sections):
 LEVELS = []
 
 
-def level(id, code, name, sections, start_mode='nes', switch=True, theme='jungle', **extra):
+def level(id, code, name, sections, start_mode='nes', switch=True, theme='jungle', music='selva', **extra):
     g = build(sections)
     LEVELS.append({
         'id': id, 'code': code, 'name': name, 'startMode': start_mode,
-        'switchUnlocked': switch, 'theme': theme, **extra, 'rows': g.rows(),
+        'switchUnlocked': switch, 'theme': theme, 'music': music, **extra, 'rows': g.rows(),
         'hints': g.hints, 'dialogs': g.dialogs, 'labels': g.labels,
     })
 
@@ -174,7 +174,7 @@ def t_exit(g, o):
 
 level('tutorial', 'BUILD 0.3', 'Sala de pruebas',
       [(20, t_run), (22, t_switch), (18, t_safe), (18, t_air), (20, t_exit)],
-      start_mode='snes', theme='debug', introDialog='tuto_intro')
+      start_mode='snes', theme='debug', music='pruebas', introDialog='tuto_intro')
 
 
 # ---------------------------------------------------------------------------
@@ -276,7 +276,7 @@ def w12_end(g, o):
 
 level('rio', 'MUNDO 1-2', 'Ruinas del rio',
       [(30, w12_start), (26, w12_ruins), (34, w12_river), (20, w12_end)],
-      start_mode='snes')
+      start_mode='snes', music='rio')
 
 
 # ---------------------------------------------------------------------------
@@ -317,7 +317,7 @@ def w13_end(g, o):
 
 level('copas', 'MUNDO 1-3', 'Las copas',
       [(26, w13_start), (30, w13_canopy), (30, w13_double), (18, w13_end)],
-      start_mode='snes')
+      start_mode='snes', music='copas')
 
 
 # ---------------------------------------------------------------------------
@@ -368,7 +368,7 @@ def w14_end(g, o):
 
 level('parche', 'MUNDO 1-4', 'El parche',
       [(30, w14_start), (34, w14_field), (30, w14_water), (24, w14_end)],
-      start_mode='snes', worldEnd=1)
+      start_mode='snes', music='parche', worldEnd=1)
 
 
 # ---------------------------------------------------------------------------

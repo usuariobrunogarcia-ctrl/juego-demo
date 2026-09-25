@@ -24,7 +24,8 @@ Plataformas 2D para navegador, homenaje a los juegos de los 80 y 90. Con un bot�
 | `src/save.js` | Progreso en `localStorage` (nivel alcanzado, fragmentos, acciones aprendidas, ruptura) |
 | `src/sprites.js`, `src/tiles.js`, `src/entities.js` | Arte en texto (cada carácter es un píxel) y objetos: espinas, murciélagos, fragmentos, puntos de control, ramas, parpadeo de sprites |
 | `src/backgrounds.js`, `src/font.js` | Fondos con parallax y fuente 5×7 |
-| `src/audio.js` | Música y efectos con Web Audio (dos arreglos sincronizados) |
+| `src/music.js` | Canciones por patrones (notación al principio del archivo); cada nivel elige la suya con `music=` en el generador |
+| `src/audio.js` | Sintetizador: arreglo NES y SNES de cada canción, sincronizados; capa de intensidad; efectos |
 | `src/player.js` | Físicas del explorador en cada modo, buceo |
 | `src/game.js` | Bucle, estados, niveles, colisiones con objetos, dibujado |
 | `src/screens.js` | Título (1989 y DX), final del Mundo 1 |
@@ -55,6 +56,7 @@ NODE_PATH=$(npm root -g) node tools/test/bot.js <nivel> '<plan JSON>' [fotograma
 NODE_PATH=$(npm root -g) node tools/test/hops.js <nivel> '<saltos JSON>'              # saltos entre murciélagos
 tools/test/regress.sh                                                                   # recorrido de todos los niveles
 tools/test/pieces.sh                                                                    # los 15 fragmentos de mapa
+NODE_PATH=$(npm root -g) node tools/test/music.js [canción] [nes|snes] [s] [x.wav]         # renderiza canciones sin tiempo real
 ```
 
 - `bot.js` simula fotograma a fotograma manteniendo la derecha. El plan es una lista de acciones por columna: `{"at": col, "do": "jump" | "switch" | "hold:run" | "release:run" | "strokes:N"}`. El primer elemento puede ser `{"start": col, "mode": "nes"|"snes"}` para empezar a mitad del nivel.

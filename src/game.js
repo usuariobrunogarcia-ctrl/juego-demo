@@ -160,6 +160,7 @@ TN.Game = class {
     this.resetEntities();
     this.mode = this.level.def.startMode;
     this.sound.setMode(this.mode);
+    this.sound.playSong(this.level.def.music);
     this.canSwitch = true;
     this.respawnBlink = 0;
     this.hurtCount = 0;
@@ -215,12 +216,14 @@ TN.Game = class {
       this.patches.add('flicker');
       this.patchBanner = 200;
       this.sound.sfx('patch');
+      this.sound.setIntensity(1);
     }
   }
 
   nextLevel() {
     if (this.level.def.worldEnd) {
       this.state = 'ending';
+      this.sound.playSong('fin');
       this.stateTimer = 0;
     } else if (this.levelIndex + 1 < TN.LEVELS.length) {
       this.enterLevel(this.levelIndex + 1);

@@ -18,7 +18,7 @@ Object.assign(TN.Game.prototype, {
     this.state = 'break';
     this.stateTimer = 0;
     this.sound.sfx('crash');
-    this.sound.setMusic(false);
+    this.sound.playSong('ruptura');
     // Guarda ya la ruptura: desde ahora el título es el de DX.
     this.save.data.broken = true;
     this.savePieces();
@@ -30,7 +30,6 @@ Object.assign(TN.Game.prototype, {
     this.stateTimer++;
     if (this.stateTimer % 20 === 0 && this.stateTimer < 150) this.sound.sfx('crash');
     if (this.stateTimer >= TN.BREAK_FRAMES) {
-      this.sound.setMusic(true);
       this.enterLevel(this.levelIndex + 1);
     }
   },

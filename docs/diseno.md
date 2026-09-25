@@ -183,7 +183,7 @@ El juego se construye por etapas. Cada una termina con algo jugable que se puede
 | 2 | **Cambio de versión:** dos versiones del nivel, botón de cambio con la regla de posición libre, indicador y aviso de error, físicas distintas en cada modo | ✅ Hecha |
 | 3a | **Sprite del explorador** en 8 bits (paleta NES de 3 colores) y 16 bits (contorno y sombreado), con animaciones de quieto, caminar y saltar | ✅ Hecha |
 | 3b | **Tiles** del suelo, ladrillos y bloques exclusivos en los dos estilos | ✅ Hecha |
-| 3c | **Fondo con parallax** en 16 bits y **fuente de píxeles** para los textos | Pendiente |
+| 3c | **Fondo con parallax** en 16 bits y **fuente de píxeles** para los textos | ✅ Hecha |
 | 4 | **Glitches de 8 bits:** parpadeo de sprites y atravesar paredes | Pendiente |
 | 5 | **Gimmicks de 16 bits:** parallax jugable y agua transparente | Pendiente |
 | 6 | **Enemigos y objetivos:** murciélagos en ambos modos, fragmentos de mapa y HUD | Pendiente |

@@ -13,6 +13,7 @@ TN.Game = class {
     this.player = new TN.Player(this.level);
     this.sprites = TN.buildSprites();
     this.tiles = TN.buildTiles();
+    this.backgrounds = TN.buildBackgrounds();
     this.camX = 0;
     this.state = 'play';
     this.mode = 'nes';
@@ -113,6 +114,7 @@ TN.Game = class {
       ctx.fillStyle = color;
       ctx.fillRect(0, i * band, TN.WIDTH, band);
     });
+    this.drawBackground(camX);
 
     const T = TN.TILE;
     const firstCol = Math.floor(camX / T);
@@ -130,6 +132,28 @@ TN.Game = class {
     if (this.state === 'win') {
       this.drawBanner('¡NIVEL COMPLETADO!', 'Pulsa saltar para repetir');
     }
+  }
+
+  drawBackground(camX) {
+    const bg = this.backgrounds[this.mode];
+    if (this.mode === 'nes') {
+      // Una sola capa: las nubes van pegadas al nivel.
+      for (const c of TN.CLOUDS) this.ctx.drawImage(bg.cloud, c.x - camX, c.y);
+    } else {
+      for (const c of TN.CLOUDS) this.ctx.drawImage(bg.cloud, Math.round(c.x * 0.5 - camX * 0.15), c.y);
+      this.drawStrip(bg.hills, camX * 0.25);
+      this.drawStrip(bg.jungle, camX * 0.5);
+    }
+  }
+
+  drawStrip(image, offset) {
+    for (let x = -(Math.round(offset) % image.width); x < TN.WIDTH; x += image.width) {
+      this.ctx.drawImage(image, x, 0);
+    }
+  }
+
+  get textShadow() {
+    return this.mode === 'snes' ? '#383850' : null;
   }
 
   drawTile(tx, ty, x, y) {
@@ -206,23 +230,15 @@ TN.Game = class {
       }
     }
 
-    ctx.fillStyle = C.white;
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
-    ctx.font = 'bold 8px monospace';
-    ctx.fillText(TN.MODE_LABEL[this.mode], 22, 12);
+    TN.drawText(ctx, TN.MODE_LABEL[this.mode], 22, 8, C.white, { shadow: this.textShadow });
   }
 
   drawBanner(title, subtitle) {
     const ctx = this.ctx;
     ctx.fillStyle = this.theme.black;
     ctx.fillRect(0, 88, TN.WIDTH, 44);
-    ctx.fillStyle = this.theme.white;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.font = 'bold 12px monospace';
-    ctx.fillText(title, TN.WIDTH / 2, 104);
-    ctx.font = '8px monospace';
-    ctx.fillText(subtitle, TN.WIDTH / 2, 120);
+    const options = { align: 'center', shadow: this.textShadow };
+    TN.drawText(ctx, title, TN.WIDTH / 2, 98, this.theme.white, options);
+    TN.drawText(ctx, subtitle, TN.WIDTH / 2, 114, this.theme.white, options);
   }
 };

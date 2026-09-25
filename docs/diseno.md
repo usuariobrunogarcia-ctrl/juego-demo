@@ -170,4 +170,20 @@ Objetivo: comprobar que cambiar de modo es divertido.
 - Forma exacta del indicador de cambio (silueta o icono en el HUD).
 - Habilidades extra de 16 bits (deslizarse por paredes, agarrarse a bordes).
 - Sistema de vidas, daño y puntos de control.
-- Tecnología y plataforma (motor, navegador/PC/móvil).
+
+## 11. Plan de desarrollo
+
+**Tecnología:** juego para navegador con HTML5 Canvas y JavaScript, sin librerías ni herramientas de compilación. Se juega abriendo `index.html`.
+
+El juego se construye por etapas. Cada una termina con algo jugable que se puede probar antes de seguir.
+
+| Etapa | Contenido | Estado |
+|---|---|---|
+| 1 | **Base:** canvas a 256×224 con escalado entero, bucle a 60 fps, teclado, nivel por tiles, explorador que corre y salta con colisiones, cámara con scroll, fosos y meta | ✅ Hecha |
+| 2 | **Cambio de versión:** dos versiones del nivel, botón de cambio con la regla de posición libre, indicador y aviso de error, físicas distintas en cada modo | Pendiente |
+| 3 | **Gráficos auténticos:** sprites y tiles con paleta NES (3 colores + transparente) y versión SNES con más colores y parallax; fuente de píxeles para textos | Pendiente |
+| 4 | **Glitches de 8 bits:** parpadeo de sprites y atravesar paredes | Pendiente |
+| 5 | **Gimmicks de 16 bits:** parallax jugable y agua transparente | Pendiente |
+| 6 | **Enemigos y objetivos:** murciélagos en ambos modos, fragmentos de mapa y HUD | Pendiente |
+| 7 | **Sonido:** música con dos arreglos sincronizados y efectos (Web Audio) | Pendiente |
+| 8 | **Nivel de la Selva completo:** diseño final del nivel del MVP y pulido | Pendiente |

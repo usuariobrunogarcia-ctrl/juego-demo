@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Terra Nova DX</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #111;
+      color: #bbb;
+      font-family: monospace;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    canvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      background: #000;
+    }
+    p {
+      margin: 0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="screen"></canvas>
+  <p>Mover: ← → o A D &nbsp;·&nbsp; Saltar: Z, Espacio, ↑ o W</p>
+
+  <script src="src/config.js"></script>
+  <script src="src/input.js"></script>
+  <script src="src/level.js"></script>
+  <script src="src/player.js"></script>
+  <script src="src/game.js"></script>
+  <script>
+    const canvas = document.getElementById('screen');
+
+    // Escalado por factores enteros para que los píxeles queden nítidos.
+    function fitCanvas() {
+      const scale = Math.max(1, Math.floor(Math.min(
+        innerWidth / TN.WIDTH,
+        (innerHeight - 60) / TN.HEIGHT
+      )));
+      canvas.style.width = TN.WIDTH * scale + 'px';
+      canvas.style.height = TN.HEIGHT * scale + 'px';
+    }
+    addEventListener('resize', fitCanvas);
+    fitCanvas();
+
+    const game = new TN.Game(canvas);
+    game.start();
+  </script>
+</body>
+</html>

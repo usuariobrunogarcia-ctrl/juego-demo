@@ -141,8 +141,7 @@ TN.buildSprites = function () {
   return images;
 };
 
-TN.renderPixels = function (rows, palette, flip, name) {
-  const size = 16;
+TN.renderPixels = function (rows, palette, flip, name, size = 16) {
   if (rows.length !== size) throw new Error(`Sprite ${name}: ${rows.length} filas`);
   const canvas = document.createElement('canvas');
   canvas.width = size;

@@ -248,6 +248,9 @@ TN.Sound = class {
       case 'checkpoint':
         seq([79, 84], 0.08, 0.12);
         break;
+      case 'blip':
+        for (const out of outs) this.tone(out, { wave: nes ? 'pulse' : 'sine', freq: nes ? 880 : 660, t, dur: 0.03, vol: nes ? 0.08 : 0.12 });
+        break;
       case 'win':
         seq([72, 76, 79, 84, 79, 84], 0.11, 0.25);
         break;

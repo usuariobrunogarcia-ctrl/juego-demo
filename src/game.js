@@ -15,6 +15,7 @@ TN.Game = class {
     this.tiles = TN.buildTiles();
     this.backgrounds = TN.buildBackgrounds();
     this.entitySprites = TN.buildEntitySprites();
+    this.portraits = TN.buildPortraits();
     this.frameCount = 0;
     this.loadLevel(0);
     this.openTitle();
@@ -47,6 +48,10 @@ TN.Game = class {
     if (this.input.wasPressed('mute')) this.sound.toggleMute();
     if (this.state === 'title') {
       this.updateTitle();
+      return;
+    }
+    if (this.state === 'dialog') {
+      this.updateDialog();
       return;
     }
     if (this.state === 'card') {
@@ -88,6 +93,7 @@ TN.Game = class {
 
     this.canSwitch = this.isSafeToSwitch();
     this.updateCamera();
+    if (this.state === 'play') this.checkDialogTriggers();
   }
 
   // Plataformas móviles: ramas de la capa de fondo y murciélagos (solo en 16 bits).
@@ -137,6 +143,7 @@ TN.Game = class {
     this.canSwitch = true;
     this.respawnBlink = 0;
     this.hurtCount = 0;
+    this.dialogsSeen = new Set();
     this.updateCamera();
   }
 
@@ -295,6 +302,7 @@ TN.Game = class {
     this.drawHints(camX);
     this.drawHud();
 
+    if (this.state === 'dialog') this.drawDialog();
     if (this.state === 'win') {
       this.drawBanner('¡NIVEL COMPLETADO!', `Mapa ${this.mapCount} - Pulsa saltar`);
     }

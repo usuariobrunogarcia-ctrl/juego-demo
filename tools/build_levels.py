@@ -16,6 +16,7 @@ class Grid:
     def __init__(self, width):
         self.w = width
         self.g = [['.'] * width for _ in range(H)]
+        self.hints = []
         self.fill(0, width - 1, 12, 13, '#')
 
     def put(self, c, r, ch):
@@ -31,6 +32,10 @@ class Grid:
         for i, h in enumerate(heights):
             if h > 0:
                 self.fill(c0 + i, c0 + i, 12 - h, 11, ch)
+
+    def hint(self, c, r, keys, learn):
+        """Ícono de tecla flotando en (c, r) hasta que el jugador aprenda 'learn'."""
+        self.hints.append({'tx': c, 'ty': r, 'keys': keys, 'learn': learn})
 
     def rows(self):
         return [''.join(r) for r in self.g]
@@ -50,12 +55,12 @@ def build(sections):
 LEVELS = []
 
 
-def level(id, code, name, sections, start_mode='nes', switch=True, theme='jungle', hints=None, dialogs=None):
+def level(id, code, name, sections, start_mode='nes', switch=True, theme='jungle', dialogs=None):
     g = build(sections)
     LEVELS.append({
         'id': id, 'code': code, 'name': name, 'startMode': start_mode,
         'switchUnlocked': switch, 'theme': theme, 'rows': g.rows(),
-        'hints': hints or [], 'dialogs': dialogs or [],
+        'hints': g.hints, 'dialogs': dialogs or [],
     })
 
 
@@ -66,6 +71,7 @@ def level(id, code, name, sections, start_mode='nes', switch=True, theme='jungle
 def s_switch(g, o):
     g.put(o + 2, 11, 'P')
     g.fill(o + 14, o + 14, 8, 11, 'N')
+    g.hint(o + 12, 9, ['X'], 'switch')
     g.fill(o + 22, o + 27, 12, 13, '.'); g.fill(o + 22, o + 27, 12, 12, 'S')
     g.fill(o + 32, o + 32, 8, 11, 'S')
     g.fill(o + 38, o + 46, 12, 13, '.'); g.fill(o + 39, o + 40, 10, 10, 'N'); g.fill(o + 42, o + 43, 10, 10, 'S')

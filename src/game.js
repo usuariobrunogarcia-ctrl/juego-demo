@@ -75,6 +75,7 @@ TN.Game = class {
     const prevBottom = player.y + player.h;
     player.update(this.input, this.level, this.mode);
     if (player.event) this.sound.sfx(player.event);
+    this.trackLearning();
     this.landOnPlatforms(prevBottom);
 
     if (player.y > this.level.pixelHeight + 32) {
@@ -135,6 +136,7 @@ TN.Game = class {
     this.sound.setMode(this.mode);
     this.canSwitch = true;
     this.respawnBlink = 0;
+    this.hurtCount = 0;
     this.updateCamera();
   }
 
@@ -183,6 +185,7 @@ TN.Game = class {
       if (e instanceof TN.Checkpoint && !e.active && p.x > e.x) {
         e.active = true;
         this.checkpoint = { x: e.tx, y: e.ty };
+        this.hurtCount = 0;
         this.sound.sfx('checkpoint');
       }
     }
@@ -214,6 +217,7 @@ TN.Game = class {
 
   hurt() {
     this.sound.sfx('hurt');
+    this.hurtCount++;
     this.player.respawn(this.checkpoint);
     this.respawnBlink = 40;
   }
@@ -234,6 +238,7 @@ TN.Game = class {
     if (!this.level.def.switchUnlocked) return;
     if (this.isSafeToSwitch()) {
       this.mode = this.otherMode;
+      this.learn('switch');
       this.sound.setMode(this.mode);
       this.sound.sfx('switch');
     } else {
@@ -287,6 +292,7 @@ TN.Game = class {
     this.drawEntities(camX);
     this.drawPlayer(camX);
     if (this.mode === 'snes') this.drawWater(camX);
+    this.drawHints(camX);
     this.drawHud();
 
     if (this.state === 'win') {

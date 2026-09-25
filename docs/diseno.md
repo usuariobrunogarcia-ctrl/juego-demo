@@ -273,7 +273,7 @@ Objetivo: que el Mundo 1 encaje con el arco de 6 mundos, que todos los fragmento
 | F3-3 | **Comentarios de Alex que no frenan el juego:** una línea corta en una franja, sin pausar, que reacciona a lo que hace el jugador (morir varias veces en el mismo sitio, encontrar un fragmento difícil, atravesar una pared rota) | ✅ Hecha |
 | F3-4 | **Fragmentos de mapa:** comprobar con `tools/test` que los 15 fragmentos (3 por nivel) se pueden conseguir y que después se puede seguir; moverlos o ajustar el nivel si no. Cada fragmento debe pedir una mecánica concreta | ✅ Hecha |
 | F3-5 | **Anticipo en el prólogo:** un fotograma suelto en 16 bits cerca del final y un tile que no encaja, antes de la ruptura | ✅ Hecha |
-| F3-6 | **Música nueva** (ver abajo) | En curso: motor por patrones y tema de la selva hechos; faltan los demás temas |
+| F3-6 | **Música nueva** (ver abajo) | ✅ Hecha |
 
 #### Guion del Mundo 1, versión 2 (borrador)
 
@@ -315,3 +315,5 @@ Problema: hoy hay una sola canción de 4 compases (unos 7 segundos) que se repit
 - **Seguir con dos arreglos sincronizados** (NES y SNES) de la misma canción. En 16 bits se suman contramelodía, acordes y eco.
 - **Temas por zona:** título de 1989, título DX, prólogo y selva (tema principal), sala de pruebas (mínimo y "roto"), un arreglo por nivel del Mundo 1 (el 1-2 más acuático, el 1-3 más aéreo, el 1-4 más tenso tras el parche), fin de mundo y la ruptura.
 - **Intensidad:** una capa que entra en momentos clave (por ejemplo, tras el parche del 1-4).
+
+**Hecho:** formato por patrones en `src/music.js` y motor en `src/audio.js`. Temas: título (el mismo suena como 1989 en 8 bits y como DX en 16), sala de pruebas (mínimo, con pasos que fallan), selva (prólogo y 1-1, 64 s), río (lento, flauta y burbujas, 73 s), copas (rápido, campanas, en do mayor, 65 s), parche (tenso, bajo en corcheas, 65 s, con capa de intensidad tras el parche), fin del Mundo 1 y ruptura. Se revisan con `tools/test/music.js`.

@@ -23,6 +23,14 @@ TN.Sound = class {
     if (this.song && this.song.name === name) return;
     this.song = name ? TN.MUSIC[name] || TN.MUSIC.selva : null;
     this.step = 0;
+    this.applyReverb();
+  }
+
+  // Cada canción puede tener más o menos eco.
+  applyReverb() {
+    if (!this.ctx) return;
+    const amount = this.song && this.song.inst.reverb !== undefined ? this.song.inst.reverb : 0.35;
+    this.wet.gain.setTargetAtTime(amount, this.ctx.currentTime, 0.05);
   }
 
   // Capa que entra en momentos clave: charles en semicorcheas y arpegios.
@@ -60,10 +68,10 @@ TN.Sound = class {
     // Eco de la SNES.
     this.reverb = ctx.createConvolver();
     this.reverb.buffer = this.makeImpulse(1.6);
-    const wet = ctx.createGain();
-    wet.gain.value = 0.35;
-    this.reverb.connect(wet);
-    wet.connect(this.buses.snes);
+    this.wet = ctx.createGain();
+    this.reverb.connect(this.wet);
+    this.wet.connect(this.buses.snes);
+    this.applyReverb();
 
     this.noise = this.makeNoise();
     this.pulses = { pulse12: this.makePulseWave(0.125), pulse25: this.makePulseWave(0.25), pulse50: this.makePulseWave(0.5) };

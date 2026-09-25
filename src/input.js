@@ -8,6 +8,11 @@ TN.KEYMAP = {
   KeyW: 'jump',
   KeyZ: 'jump',
   Space: 'jump',
+  KeyX: 'switch',
+  KeyK: 'switch',
+  ShiftLeft: 'run',
+  ShiftRight: 'run',
+  KeyC: 'run',
 };
 
 TN.Input = class {

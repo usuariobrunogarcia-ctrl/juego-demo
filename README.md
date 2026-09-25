@@ -10,6 +10,8 @@ Abre `index.html` en el navegador. No hace falta instalar nada.
 |---|---|
 | Moverse | ← → o A D |
 | Saltar | Z, Espacio, ↑ o W |
+| Cambiar entre 8 y 16 bits | X o K |
+| Correr (solo 16 bits) | Shift o C |
 
 ## Documentación
 

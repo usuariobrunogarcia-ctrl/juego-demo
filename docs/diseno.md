@@ -54,7 +54,8 @@ No son monstruos ni criaturas malvadas. Son animales y trampas de ruinas que **r
 - El cambio es **libre, instantáneo e ilimitado**, también en pleno salto.
 - Solo se puede cambiar si la posición del jugador está **libre en la otra versión** del nivel (no hay un sólido en ese lugar).
 - Si el jugador lo intenta donde no es seguro, **no cambia**: suena un pitido de error y el personaje tiembla un instante.
-- Un **indicador siempre visible** muestra si el cambio está disponible: una silueta tenue del personaje en la otra versión o un icono de cartucho en el HUD que se enciende y se apaga (por decidir).
+- Un **icono de cartucho en el HUD** indica siempre si el cambio está disponible: verde si se puede, gris con una cruz si no, y rojo al intentarlo sin poder.
+- Los bloques que solo existen en la otra versión se dibujan como un **contorno punteado**, así el jugador ve dónde puede y dónde no puede cambiar.
 - Al cambiar se **conserva la velocidad**, pero pasan a aplicarse las físicas del nuevo modo.
 - Todo cambia a la vez: gráficos, paleta, colisiones, físicas, comportamiento de los enemigos y **música**.
 
@@ -167,7 +168,6 @@ Objetivo: comprobar que cambiar de modo es divertido.
 ## 10. Pendiente de decidir
 
 - Nombre del explorador y nombre definitivo del juego.
-- Forma exacta del indicador de cambio (silueta o icono en el HUD).
 - Habilidades extra de 16 bits (deslizarse por paredes, agarrarse a bordes).
 - Sistema de vidas, daño y puntos de control.
 
@@ -180,7 +180,7 @@ El juego se construye por etapas. Cada una termina con algo jugable que se puede
 | Etapa | Contenido | Estado |
 |---|---|---|
 | 1 | **Base:** canvas a 256×224 con escalado entero, bucle a 60 fps, teclado, nivel por tiles, explorador que corre y salta con colisiones, cámara con scroll, fosos y meta | ✅ Hecha |
-| 2 | **Cambio de versión:** dos versiones del nivel, botón de cambio con la regla de posición libre, indicador y aviso de error, físicas distintas en cada modo | Pendiente |
+| 2 | **Cambio de versión:** dos versiones del nivel, botón de cambio con la regla de posición libre, indicador y aviso de error, físicas distintas en cada modo | ✅ Hecha |
 | 3 | **Gráficos auténticos:** sprites y tiles con paleta NES (3 colores + transparente) y versión SNES con más colores y parallax; fuente de píxeles para textos | Pendiente |
 | 4 | **Glitches de 8 bits:** parpadeo de sprites y atravesar paredes | Pendiente |
 | 5 | **Gimmicks de 16 bits:** parallax jugable y agua transparente | Pendiente |

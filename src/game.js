@@ -13,6 +13,8 @@ TN.Game = class {
     this.player = new TN.Player(this.level);
     this.camX = 0;
     this.state = 'play';
+    this.mode = 'nes';
+    this.canSwitch = true;
 
     this.accumulator = 0;
     this.lastTime = null;
@@ -45,7 +47,8 @@ TN.Game = class {
     }
 
     const player = this.player;
-    player.update(this.input, this.level);
+    if (this.input.wasPressed('switch')) this.trySwitch();
+    player.update(this.input, this.level, this.mode);
 
     if (player.y > this.level.pixelHeight + 32) {
       player.respawn(this.level);
@@ -56,13 +59,38 @@ TN.Game = class {
       this.state = 'win';
     }
 
+    this.canSwitch = this.isSafeToSwitch();
     this.updateCamera();
+  }
+
+  get otherMode() {
+    return this.mode === 'nes' ? 'snes' : 'nes';
+  }
+
+  // Solo se puede cambiar si el hueco que ocupa el explorador está libre
+  // también en la otra versión del nivel.
+  isSafeToSwitch() {
+    const p = this.player;
+    return !this.level.overlapsSolid(p.x, p.y, p.w, p.h, this.otherMode);
+  }
+
+  trySwitch() {
+    if (this.isSafeToSwitch()) {
+      this.mode = this.otherMode;
+    } else {
+      this.player.shake = TN.SWITCH_ERROR_FRAMES;
+    }
   }
 
   restart() {
     this.player.respawn(this.level);
+    this.mode = 'nes';
     this.state = 'play';
     this.updateCamera();
+  }
+
+  get theme() {
+    return TN.THEMES[this.mode];
   }
 
   updateCamera() {
@@ -75,11 +103,14 @@ TN.Game = class {
 
   render() {
     const ctx = this.ctx;
-    const C = TN.COLORS;
     const camX = Math.round(this.camX);
 
-    ctx.fillStyle = C.sky;
-    ctx.fillRect(0, 0, TN.WIDTH, TN.HEIGHT);
+    const sky = this.theme.sky;
+    const band = Math.ceil(TN.HEIGHT / sky.length);
+    sky.forEach((color, i) => {
+      ctx.fillStyle = color;
+      ctx.fillRect(0, i * band, TN.WIDTH, band);
+    });
 
     const T = TN.TILE;
     const firstCol = Math.floor(camX / T);
@@ -92,6 +123,7 @@ TN.Game = class {
 
     this.drawFlag(camX);
     this.drawPlayer(camX);
+    this.drawHud();
 
     if (this.state === 'win') {
       this.drawBanner('¡NIVEL COMPLETADO!', 'Pulsa saltar para repetir');
@@ -100,8 +132,10 @@ TN.Game = class {
 
   drawTile(tx, ty, x, y) {
     const ctx = this.ctx;
-    const C = TN.COLORS;
+    const C = this.theme;
     const tile = this.level.tileAt(tx, ty);
+    const onlyTile = this.mode === 'nes' ? 'N' : 'S';
+    const ghostTile = this.mode === 'nes' ? 'S' : 'N';
 
     if (tile === '#') {
       ctx.fillStyle = C.ground;
@@ -111,7 +145,7 @@ TN.Game = class {
       ctx.fillRect(x + 11, y + 12, 2, 2);
       ctx.fillStyle = C.groundLight;
       ctx.fillRect(x + 9, y + 5, 2, 1);
-      if (!this.level.isSolid(tx, ty - 1)) {
+      if (!this.level.isSolid(tx, ty - 1, this.mode)) {
         ctx.fillStyle = C.grass;
         ctx.fillRect(x, y, 16, 4);
         ctx.fillStyle = C.grassLight;
@@ -126,12 +160,33 @@ TN.Game = class {
       ctx.fillRect(x + 7, y, 1, 7);
       ctx.fillRect(x + 3, y + 8, 1, 7);
       ctx.fillRect(x + 12, y + 8, 1, 7);
+    } else if (tile === onlyTile) {
+      // Bloque exclusivo de este modo.
+      ctx.fillStyle = C.onlyBlockDark;
+      ctx.fillRect(x, y, 16, 16);
+      ctx.fillStyle = C.onlyBlock;
+      ctx.fillRect(x + 1, y + 1, 14, 14);
+      ctx.fillStyle = C.onlyBlockLight;
+      ctx.fillRect(x + 1, y + 1, 14, 2);
+      ctx.fillRect(x + 1, y + 1, 2, 14);
+      ctx.fillRect(x + 6, y + 6, 4, 4);
+    } else if (tile === ghostTile) {
+      // Bloque de la otra versión: solo un contorno punteado, sin colisión.
+      ctx.globalAlpha = 0.45;
+      ctx.fillStyle = C.ghost;
+      for (let i = 0; i < 16; i += 2) {
+        ctx.fillRect(x + i, y, 1, 1);
+        ctx.fillRect(x + i + 1, y + 15, 1, 1);
+        ctx.fillRect(x, y + i + 1, 1, 1);
+        ctx.fillRect(x + 15, y + i, 1, 1);
+      }
+      ctx.globalAlpha = 1;
     }
   }
 
   drawFlag(camX) {
     const ctx = this.ctx;
-    const C = TN.COLORS;
+    const C = this.theme;
     const x = this.level.flag.x * TN.TILE - camX;
     const baseY = (this.level.flag.y + 1) * TN.TILE;
     ctx.fillStyle = C.pole;
@@ -143,9 +198,10 @@ TN.Game = class {
   // Explorador provisional: el sprite definitivo llega en la etapa 3.
   drawPlayer(camX) {
     const ctx = this.ctx;
-    const C = TN.COLORS;
+    const C = this.theme;
     const p = this.player;
-    const x = Math.round(p.x) - camX;
+    const shakeOffset = p.shake > 0 ? (p.shake % 4 < 2 ? -1 : 1) : 0;
+    const x = Math.round(p.x) - camX + shakeOffset;
     const y = Math.round(p.y);
 
     ctx.fillStyle = C.hat;
@@ -157,16 +213,49 @@ TN.Game = class {
     ctx.fillRect(p.facing > 0 ? x + 7 : x + 4, y + 5, 1, 2);
     ctx.fillStyle = C.khaki;
     ctx.fillRect(x + 1, y + 8, 10, 4);
+    ctx.fillStyle = C.khakiDark;
+    ctx.fillRect(x + 1, y + 11, 10, 1);
     ctx.fillStyle = C.hat;
     ctx.fillRect(x + 2, y + 12, 3, 2);
     ctx.fillRect(x + 7, y + 12, 3, 2);
   }
 
+  // Marcador: modo actual y cartucho que indica si se puede cambiar.
+  drawHud() {
+    const ctx = this.ctx;
+    const C = this.theme;
+    const error = this.player.shake > 0;
+
+    ctx.fillStyle = C.black;
+    ctx.fillRect(4, 4, 62, 16);
+
+    // Cartucho: verde si se puede cambiar, rojo si no.
+    const body = error ? '#F83800' : this.canSwitch ? '#58D854' : '#787878';
+    ctx.fillStyle = body;
+    ctx.fillRect(8, 7, 10, 10);
+    ctx.fillRect(10, 6, 6, 1);
+    ctx.fillStyle = C.black;
+    ctx.fillRect(10, 9, 6, 4);
+    if (!this.canSwitch) {
+      ctx.fillStyle = '#F83800';
+      for (let i = 0; i < 6; i++) {
+        ctx.fillRect(10 + i, 9 + Math.floor(i * 4 / 6), 1, 1);
+        ctx.fillRect(15 - i, 9 + Math.floor(i * 4 / 6), 1, 1);
+      }
+    }
+
+    ctx.fillStyle = C.white;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.font = 'bold 8px monospace';
+    ctx.fillText(TN.MODE_LABEL[this.mode], 22, 12);
+  }
+
   drawBanner(title, subtitle) {
     const ctx = this.ctx;
-    ctx.fillStyle = TN.COLORS.black;
+    ctx.fillStyle = this.theme.black;
     ctx.fillRect(0, 88, TN.WIDTH, 44);
-    ctx.fillStyle = TN.COLORS.white;
+    ctx.fillStyle = this.theme.white;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.font = 'bold 12px monospace';

@@ -34,11 +34,14 @@ TN.THEMES = {
 
 // Físicas de cada modo (en píxeles por fotograma, a 60 fps).
 TN.PHYSICS = {
-  // 8 bits: velocidad constante, salto de altura fija y sin control en el aire.
+  // 8 bits: arranque y frenada rápidos, salto de altura fija y poco control en el aire.
   nes: {
     gravity: 0.25,
     maxFall: 4,
     walkSpeed: 1.5,
+    accel: 0.15,
+    friction: 0.25,
+    airAccel: 0.05,
     jumpSpeed: 5.3,
   },
   // 16 bits: inercia, botón de correr, salto variable y control en el aire.
@@ -64,6 +67,11 @@ TN.WATER = {
   strokeSpeed: 2.2, // impulso de cada brazada (botón de salto)
   exitSpeed: 4.2, // salto para salir cuando la cabeza ya está fuera
 };
+
+// Ayudas invisibles (en fotogramas): se puede saltar poco después de salirse de
+// un borde, y un salto pulsado justo antes de aterrizar se recuerda.
+TN.COYOTE_FRAMES = 6;
+TN.JUMP_BUFFER_FRAMES = 6;
 
 // Fotogramas que tiembla el explorador si intenta cambiar donde no es seguro.
 TN.SWITCH_ERROR_FRAMES = 14;

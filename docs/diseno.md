@@ -33,7 +33,7 @@ El tema de fondo es la **nostalgia frente a la modernización**: lo imperfecto t
 ### Cómo habla Alex
 
 - Con cuadros de diálogo. Se avanza con el botón de salto.
-- En 16 bits aparece su retrato y el texto se ve limpio. En 8 bits no hay retrato y el texto sale con la fuente de la NES y **algunas letras corruptas**.
+- En 16 bits aparece su retrato en una caja translúcida. En 8 bits no hay retrato y, cada pocos segundos, un destello breve corrompe algunas letras (el texto siempre se puede leer).
 - **Alex nunca da tutoriales**: solo habla de la historia. A jugar se aprende sin palabras (ver sección 8b).
 - Diálogos cortos, de 1 a 3 cuadros por aparición.
 
@@ -78,11 +78,13 @@ No son monstruos ni criaturas malvadas. Son animales y trampas de ruinas que **r
 | | 8 bits | 16 bits |
 |---|---|---|
 | Salto | Altura fija; la trayectoria queda decidida al saltar | La altura depende de cuánto se mantiene el botón |
-| Control en el aire | Casi ninguno | Total |
-| Movimiento | Velocidad constante, sin inercia | Aceleración, frenada y botón de correr |
+| Control en el aire | Poco: se puede corregir la trayectoria despacio | Total |
+| Movimiento | Arranque y frenada rápidos, sin correr | Aceleración y frenada suaves, botón de correr |
 | Extras | Ninguno | Deslizarse por paredes, agarrarse a bordes (por confirmar) |
 
-Técnica emergente: coger carrerilla en 16 bits y cambiar a 8 bits en el aire para "fijar" un salto largo.
+Técnica emergente: coger carrerilla en 16 bits y cambiar a 8 bits en el aire; la velocidad extra se conserva y el salto llega más lejos.
+
+En los dos modos hay dos ayudas invisibles: se puede saltar hasta 6 fotogramas después de salirse de un borde, y un salto pulsado hasta 6 fotogramas antes de aterrizar se ejecuta al tocar el suelo.
 
 ### Música
 

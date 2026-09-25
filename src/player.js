@@ -20,6 +20,8 @@ TN.Player = class {
     this.clipping = false;
     this.swimming = false;
     this.animDistance = 0;
+    this.coyote = 0;
+    this.jumpBuffer = 0;
   }
 
   update(input, level, mode) {
@@ -35,10 +37,14 @@ TN.Player = class {
     }
 
     if (mode === 'nes') {
-      // En 8 bits la velocidad es instantánea en el suelo y, una vez en el aire,
-      // la trayectoria queda fijada. Si se entra en el aire con la velocidad de
-      // carrera de 16 bits, se conserva: así nace el "salto largo fijado".
-      if (this.onGround) this.vx = dir * P.walkSpeed;
+      // 8 bits: arranque y frenada rápidos; en el aire se puede corregir un poco.
+      // Si se entra en el aire más rápido de lo normal (corriendo en 16 bits y
+      // cambiando), esa velocidad se conserva: el "salto largo".
+      if (this.onGround) {
+        this.vx = approach(this.vx, dir * P.walkSpeed, dir !== 0 ? P.accel : P.friction);
+      } else if (dir !== 0 && !(Math.sign(this.vx) === dir && Math.abs(this.vx) > P.walkSpeed)) {
+        this.vx = approach(this.vx, dir * P.walkSpeed, P.airAccel);
+      }
     } else {
       const max = input.isDown('run') ? P.runSpeed : P.walkSpeed;
       if (dir !== 0) {
@@ -49,9 +55,13 @@ TN.Player = class {
       }
     }
 
-    if (this.onGround && input.wasPressed('jump')) {
+    this.coyote = this.onGround ? TN.COYOTE_FRAMES : Math.max(0, this.coyote - 1);
+    this.jumpBuffer = input.wasPressed('jump') ? TN.JUMP_BUFFER_FRAMES : Math.max(0, this.jumpBuffer - 1);
+    if (this.jumpBuffer > 0 && this.coyote > 0 && this.vy >= 0) {
       this.vy = -P.jumpSpeed;
       this.event = 'jump';
+      this.jumpBuffer = 0;
+      this.coyote = 0;
     }
     // Salto variable (solo 16 bits): soltar el botón corta la subida.
     if (mode === 'snes' && this.vy < P.jumpCut && !input.isDown('jump')) {

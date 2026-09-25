@@ -148,7 +148,7 @@ def t_safe(g, o):
 def t_air(g, o):
     g.put(o + 1, 11, 'C')
     g.fill(o + 5, o + 13, 12, 13, '.')
-    g.fill(o + 6, o + 7, 10, 10, 'S'); g.fill(o + 9, o + 10, 10, 10, 'N')
+    g.fill(o + 6, o + 7, 10, 10, 'S'); g.fill(o + 9, o + 11, 10, 10, 'N')
     g.label(o + 5, 5, 'TEST: PLATAFORMAS')
 
 

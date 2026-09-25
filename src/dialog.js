@@ -1,5 +1,5 @@
-// Cuadros de diálogo. En 16 bits: retrato y texto limpio. En 8 bits: sin
-// retrato, fuente de la NES y algunas letras corruptas.
+// Cuadros de diálogo. En 16 bits: retrato y caja translúcida. En 8 bits: sin
+// retrato y con destellos breves en los que algunas letras se corrompen.
 
 TN.DIALOG_CHARS = 32; // caracteres por línea con retrato
 TN.DIALOG_LINES = 3;
@@ -121,13 +121,15 @@ Object.assign(TN.Game.prototype, {
     }
 
     const textX = nes ? x + 10 : x + 40;
-    const name = nes ? TN.corruptText(speaker.name, d.page + 3) : speaker.name;
+    // En 8 bits el texto se lee limpio y solo se corrompe en destellos breves.
+    const glitch = nes && this.frameCount % 150 < 5;
+    const name = glitch ? TN.corruptText(speaker.name, d.page + 3) : speaker.name;
     TN.drawText(ctx, name, textX, y + 8, nes ? '#FC9838' : '#F8D848', { shadow: nes ? null : '#000000' });
     let remaining = d.shown;
     page.lines.forEach((line, i) => {
       let text = line.slice(0, Math.max(0, remaining));
       remaining -= line.length;
-      if (nes) text = TN.corruptText(text, d.page * 7 + i);
+      if (glitch) text = TN.corruptText(text, d.page * 7 + i + this.frameCount);
       TN.drawText(ctx, text, textX, y + 22 + i * 11, nes ? '#FCFCFC' : '#F8F8F8', { shadow: nes ? null : '#000000' });
     });
     const total = page.lines.join('').length;

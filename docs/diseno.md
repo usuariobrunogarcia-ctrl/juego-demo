@@ -19,20 +19,39 @@ El cambio no es solo visual: cada versión tiene sus propias reglas. En 8 bits h
 
 **Terra Nova** fue un juego de NES de 1989 sobre un explorador que recorría y cartografiaba tierras desconocidas. Años después, un estudio empezó a rehacerlo para SNES como **Terra Nova DX**, pero el estudio cerró y el remaster quedó **inacabado**. Solo una persona siguió trabajando en él: **Alex** (nombre provisional), la última desarrolladora del proyecto.
 
-### El arco
+### La regla que lo sostiene todo
 
-1. **El engaño.** El juego arranca como *Terra Nova (1989)*: título de NES, primer nivel en 8 bits puros y **sin botón de cambio**. Parece un plataformas retro normal.
-2. **La ruptura.** Al final del primer nivel, la bandera queda detrás de una pared con la colisión rota. Al atravesarla, el explorador sale del nivel por donde no debería poder ir: la pantalla se corrompe y cae dentro de la **build del remaster**, en una sala de pruebas llena de texturas provisionales.
-3. **La intrusión.** Alex descubre al explorador y lo trata como a un **bug**: quiere arreglarlo. Ahí el explorador descubre que puede saltar entre las dos versiones (se desbloquea el botón de cambio).
-4. **La tensión.** Alex va parcheando glitches mientras el explorador avanza, pero el explorador los necesita para progresar. Al final del Mundo 1, un parche le cierra el paso y tiene que encontrar otro camino.
-5. **El giro (mundos siguientes).** Alex se da cuenta de que las imperfecciones del original eran lo que lo hacía especial.
-6. **El final.** El remaster sale con las dos versiones conviviendo, y el botón de cambio es su función estrella.
+**En el cartucho no entran las dos versiones.** El remaster se graba *encima* de los datos de 1989: cada nivel que Alex termina borra el original. Si el remaster se completa, *Terra Nova (1989)* desaparece, y el explorador con ella.
 
-El tema de fondo es la **nostalgia frente a la modernización**: lo imperfecto también tiene valor.
+- **Amenaza visible:** en 8 bits aparecen zonas ya borradas (vacíos negros) que avanzan mundo a mundo.
+- **Espejo temático:** el equipo de 1989 también tuvo que recortar contenido por falta de memoria. Las dos épocas sufren el mismo límite.
+- **Por qué Alex puede tocar las reglas de 8 bits:** la versión de 1989 corre dentro de un emulador que forma parte del remaster. Alex no parchea la NES, sino su emulador.
+
+### Dos voces a través del cartucho
+
+- **Alex (hoy):** diálogos, y carteles de TODO que **solo se ven en 16 bits**.
+- **M. (1989, nombre provisional):** la diseñadora original, autora del mapa que junta el explorador. Dejó notas escondidas en la ROM que **solo se ven en 8 bits**.
+
+### El arco en 6 mundos
+
+| Acto | Mundo | Glitch / gimmick | Qué pasa en la historia |
+|---|---|---|---|
+| — | **Prólogo y tutorial** | — | El juego de 1989 se rompe; Alex descubre al "bug". |
+| 1. El intruso | **1. La selva** | Parpadeo / parallax jugable | Alex es fría, técnica y burlona. Parchea el parpadeo en el 1-4. **Final:** revela la amenaza ("la selva de 1989 ya está sobrescrita al 60 %"). |
+| 1. El intruso | **2. Las cuevas** | Oscuridad o luz total / cono de luz | Aparecen las zonas borradas en 8 bits. El explorador encuentra la primera nota de M. Alex se endurece y borra por delante. **Final:** Alex también encuentra una nota: "¿Quién dejó esto en la ROM?". |
+| 2. La duda | **3. La costa** | Basura en el borde del scroll / transparencias y corrientes | Las notas revelan que muchos "errores" fueron decisiones bajo límites durísimos, y que M. recortó un nivel entero. Alex deja entrever que jugó *Terra Nova* de niña. **Giro:** Alex deja de parchear, pero el borrado sigue: dejó en marcha un proceso automático de "compilación final" que no puede frenar. |
+| 2. La duda | **4. El desierto** | Ralentización / ondulación por calor | El antagonista pasa a ser **el proceso**: cuando está cerca, el juego se ralentiza. Alex se vuelve aliada y **deshace sus parches** (vuelve el parpadeo). **Mitad del juego:** el explorador es lo único que existe en las dos versiones a la vez; es la clave para salvarlas. |
+| 3. La reconciliación | **5. El glaciar** | Salir por arriba de la pantalla / Mode 7 | La memoria se congela. La última nota de M. revela que el nivel recortado de 1989 sigue escondido. Alex entiende que para que entren las dos versiones debe **borrar parte de su propio remaster**. |
+| 3. La reconciliación | **6. La build rota** | Todas | El estudio por dentro. Clímax sin combate: una huida mientras el proceso borra el nivel detrás del explorador y Alex sacrifica sus niveles para frenarlo. **Final:** sale *"Terra Nova DX — incluye Terra Nova (1989)"*, con el botón de cambio como función estrella. |
+| — | **Epílogo secreto: El fin del mapa** | — | Se desbloquea con **todos los fragmentos de mapa**. Es el nivel recortado de 1989, a medio hacer, con el último mensaje de M. Alex lo termina junto al explorador. |
+
+La evolución de Alex queda repartida: fría → dura → con dudas → aliada → sacrificio. El tema de fondo es la **nostalgia frente a la modernización**: lo imperfecto también tiene valor.
 
 ### Cómo habla Alex
 
 - Con cuadros de diálogo. Se avanza con el botón de salto.
+- **Español neutro** (tú, sin regionalismos como "vale" o "vos").
+- Voz propia: jerga de desarrollo, cita sus commits y números de bug, humor seco. Muestra, no explica: su soledad y su historia se descubren poco a poco.
 - En 16 bits aparece su retrato en una caja translúcida. En 8 bits no hay retrato y, cada pocos segundos, un destello breve corrompe algunas letras (el texto siempre se puede leer).
 - **Alex nunca da tutoriales**: solo habla de la historia. A jugar se aprende sin palabras (ver sección 8b).
 - Diálogos cortos, de 1 a 3 cuadros por aparición.
@@ -168,13 +187,7 @@ Cada nivel del Mundo 1 tiene **3 fragmentos de mapa**.
 
 ### Mundos siguientes
 
-| # | Mundo | Glitch principal | Gimmick principal |
-|---|---|---|---|
-| 2 | **Cuevas** | Oscuridad total o luz total | Iluminación (cono de luz) |
-| 3 | **Costa y cascadas** | Basura en el borde del scroll | Transparencias y corrientes |
-| 4 | **Desierto y ruinas** | Ralentización | Ondulación por calor |
-| 5 | **Glaciar y montaña** | Salir por arriba de la pantalla | Mode 7 |
-| 6 | **El estudio / la build rota** | Todos | Todos |
+Ver el arco en la sección 2: 6 mundos de 4 niveles cada uno, más el prólogo, el tutorial y el epílogo secreto.
 
 ## 8b. Enseñar sin palabras
 
@@ -203,10 +216,13 @@ Objetivo: comprobar que cambiar de modo es divertido.
 - [ ] Al menos un tipo de enemigo (murciélagos) con su comportamiento en ambos modos.
 - [ ] Fragmentos de mapa coleccionables.
 
-## 10. Pendiente de decidir
+## 10. Decisiones
 
+**Tomadas:** 6 mundos; amenaza del borrado del cartucho; el antagonista pasa de Alex al proceso de compilación; voz de M. y epílogo secreto; español neutro.
+
+**Pendientes:**
 - Nombre del explorador y nombre definitivo del juego.
-- Nombre definitivo de Alex y del estudio ficticio (provisional: *Brújula Soft*).
+- Nombres definitivos de Alex, M. y el estudio ficticio (provisional: *Brújula Soft*).
 - Habilidades extra de 16 bits (deslizarse por paredes, agarrarse a bordes).
 - Sistema de vidas (por ahora, al recibir daño se reaparece en el último punto de control sin límite).
 
@@ -245,3 +261,49 @@ El juego se construye por etapas. Cada una termina con algo jugable que se puede
 | F2-7 | **Tutorial** en la sala de pruebas | ✅ Hecha |
 | F2-8 | **Niveles 1-1, 1-2 y 1-3** | ✅ Hecha |
 | F2-9 | **Nivel 1-4 "El parche"** y final del Mundo 1 | ✅ Hecha |
+
+### Fase 3: replanteo del Mundo 1 y música
+
+Objetivo: que el Mundo 1 encaje con el arco de 6 mundos, que todos los fragmentos sean alcanzables y que la música deje de ser monótona.
+
+| Paso | Contenido | Estado |
+|---|---|---|
+| F3-1 | **Guion del Mundo 1, versión 2** (ver abajo): reescribir `src/story.js` en español neutro. El tutorial ya no dice que Alex no puede borrarte; el 1-4 termina con la amenaza, no con el giro emocional | Pendiente |
+| F3-2 | **Voces del cartucho:** carteles TODO de Alex en los niveles del Mundo 1 (solo 16 bits) y una primera nota de M. escondida en el 1-4 (solo 8 bits) como anticipo | Pendiente |
+| F3-3 | **Comentarios de Alex que no frenan el juego:** una línea corta en una franja, sin pausar, que reacciona a lo que hace el jugador (morir varias veces en el mismo sitio, encontrar un fragmento difícil, atravesar una pared rota) | Pendiente |
+| F3-4 | **Fragmentos de mapa:** comprobar con `tools/test` que los 15 fragmentos (3 por nivel) se pueden conseguir y que después se puede seguir; moverlos o ajustar el nivel si no. Cada fragmento debe pedir una mecánica concreta | Pendiente |
+| F3-5 | **Anticipo en el prólogo:** un fotograma suelto en 16 bits cerca del final y un tile que no encaja, antes de la ruptura | Pendiente |
+| F3-6 | **Música nueva** (ver abajo) | Pendiente |
+
+#### Guion del Mundo 1, versión 2 (borrador)
+
+Alex en el Mundo 1: fría, técnica, burlona. Nunca da tutoriales.
+
+- **Tutorial, al entrar:** ??? — "¿Un proceso nuevo en la sala de pruebas? Yo no lancé nada." / Alex — "Sprite 01. El protagonista de 1989. Tu versión debería estar sobrescrita. ¿Qué haces en mi build?" / "No te muevas. Abro el depurador."
+- **Tutorial, primer cambio:** "¿Cambiaste de versión en caliente? Eso no está en ninguna especificación." / "Anotado: bug 0412. Prioridad: crítica."
+- **Tutorial, salida:** "La salida lleva al 1-1. Adelante. Así veo cómo te rompes."
+- **1-1, al empezar:** "Nivel 1-1. Lo rehíce píxel a píxel. Esta vez sin parpadeos, sin ralentizaciones, sin errores."
+- **1-1, murciélagos:** "En 1989 los murciélagos te mataban con solo rozarte. En mi versión son decorado sólido. Commit: 'suavizar dificultad'."
+- **1-2, al empezar:** "Encontré por dónde saliste: una pared de 1989 con la colisión rota. Hay decenas como esa."
+- **1-2, pared rota:** "Esa pared estaba en mi lista. Línea 212. Mañana."
+- **1-3, al empezar:** "El parallax no debería tener colisión. Lo dejé activo para una prueba. Nota mental: no dejar nada activo."
+- **1-4, al empezar:** "El 1989 corre dentro de mi emulador. El parpadeo es un límite de la NES: ocho sprites por línea." / "El emulador es mío. Y los límites, también."
+- **1-4, parche:** "Parche aplicado. Adiós, parpadeo."
+- **1-4, final:** "Pasaste igual." / "Da igual. Cada nivel que termino se graba encima del original. La selva de 1989 ya está sobrescrita al 60 %." / "Cuando termine, no quedará versión a la que volver. Tampoco para ti."
+- **Nota de M. en el 1-4 (solo 8 bits):** "Si alguien lee esto: el mapa no termina donde termina el juego. — M., 1989"
+
+#### Fragmentos de mapa: reglas
+
+- 3 por nivel del Mundo 1 (15 en total con el prólogo).
+- Cada uno pide una mecánica concreta: cambiar en el aire, bucear, atravesar una pared, subir por murciélagos, usar el parpadeo, una repisa rota...
+- Nunca pueden dejar al jugador atrapado: después de conseguirlo, siempre hay forma de seguir o de volver a un punto de control.
+- Se comprueban con el jugador automático (`tools/test/bot.js`) y con la búsqueda de saltos (`tools/test/hops.js`).
+
+#### Música nueva: plan
+
+Problema: hoy hay una sola canción de 4 compases (unos 7 segundos) que se repite en todo el juego.
+
+- **Formato de canción por patrones**, como en los trackers de la época: patrones de 1 a 2 compases por canal (melodía, contramelodía, bajo, percusión) y una lista de orden, por ejemplo `A A' B A C`. Canciones de 60 a 90 segundos antes de repetirse, con variaciones, puentes y rellenos de percusión.
+- **Seguir con dos arreglos sincronizados** (NES y SNES) de la misma canción. En 16 bits se suman contramelodía, acordes y eco.
+- **Temas por zona:** título de 1989, título DX, prólogo y selva (tema principal), sala de pruebas (mínimo y "roto"), un arreglo por nivel del Mundo 1 (el 1-2 más acuático, el 1-3 más aéreo, el 1-4 más tenso tras el parche), fin de mundo y la ruptura.
+- **Intensidad:** una capa que entra en momentos clave (por ejemplo, tras el parche del 1-4).

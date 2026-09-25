@@ -12,6 +12,7 @@ TN.Game = class {
     this.level = new TN.Level(TN.LEVEL_1);
     this.player = new TN.Player(this.level);
     this.sprites = TN.buildSprites();
+    this.tiles = TN.buildTiles();
     this.camX = 0;
     this.state = 'play';
     this.mode = 'nes';
@@ -138,39 +139,14 @@ TN.Game = class {
     const onlyTile = this.mode === 'nes' ? 'N' : 'S';
     const ghostTile = this.mode === 'nes' ? 'S' : 'N';
 
+    const images = this.tiles[this.mode];
     if (tile === '#') {
-      ctx.fillStyle = C.ground;
-      ctx.fillRect(x, y, 16, 16);
-      ctx.fillStyle = C.groundDark;
-      ctx.fillRect(x + 3, y + 7, 2, 2);
-      ctx.fillRect(x + 11, y + 12, 2, 2);
-      ctx.fillStyle = C.groundLight;
-      ctx.fillRect(x + 9, y + 5, 2, 1);
-      if (!this.level.isSolid(tx, ty - 1, this.mode)) {
-        ctx.fillStyle = C.grass;
-        ctx.fillRect(x, y, 16, 4);
-        ctx.fillStyle = C.grassLight;
-        ctx.fillRect(x, y, 16, 1);
-      }
+      const top = !this.level.isSolid(tx, ty - 1, this.mode);
+      ctx.drawImage(top ? images.groundTop : images.ground, x, y);
     } else if (tile === 'B') {
-      ctx.fillStyle = C.brick;
-      ctx.fillRect(x, y, 16, 16);
-      ctx.fillStyle = C.mortar;
-      ctx.fillRect(x, y + 7, 16, 1);
-      ctx.fillRect(x, y + 15, 16, 1);
-      ctx.fillRect(x + 7, y, 1, 7);
-      ctx.fillRect(x + 3, y + 8, 1, 7);
-      ctx.fillRect(x + 12, y + 8, 1, 7);
+      ctx.drawImage(images.brick, x, y);
     } else if (tile === onlyTile) {
-      // Bloque exclusivo de este modo.
-      ctx.fillStyle = C.onlyBlockDark;
-      ctx.fillRect(x, y, 16, 16);
-      ctx.fillStyle = C.onlyBlock;
-      ctx.fillRect(x + 1, y + 1, 14, 14);
-      ctx.fillStyle = C.onlyBlockLight;
-      ctx.fillRect(x + 1, y + 1, 14, 2);
-      ctx.fillRect(x + 1, y + 1, 2, 14);
-      ctx.fillRect(x + 6, y + 6, 4, 4);
+      ctx.drawImage(images.block, x, y);
     } else if (tile === ghostTile) {
       // Bloque de la otra versión: solo un contorno punteado, sin colisión.
       ctx.globalAlpha = 0.45;

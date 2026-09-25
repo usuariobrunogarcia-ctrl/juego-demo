@@ -182,7 +182,7 @@ El juego se construye por etapas. Cada una termina con algo jugable que se puede
 | 1 | **Base:** canvas a 256×224 con escalado entero, bucle a 60 fps, teclado, nivel por tiles, explorador que corre y salta con colisiones, cámara con scroll, fosos y meta | ✅ Hecha |
 | 2 | **Cambio de versión:** dos versiones del nivel, botón de cambio con la regla de posición libre, indicador y aviso de error, físicas distintas en cada modo | ✅ Hecha |
 | 3a | **Sprite del explorador** en 8 bits (paleta NES de 3 colores) y 16 bits (contorno y sombreado), con animaciones de quieto, caminar y saltar | ✅ Hecha |
-| 3b | **Tiles** del suelo, ladrillos y bloques exclusivos en los dos estilos | Pendiente |
+| 3b | **Tiles** del suelo, ladrillos y bloques exclusivos en los dos estilos | ✅ Hecha |
 | 3c | **Fondo con parallax** en 16 bits y **fuente de píxeles** para los textos | Pendiente |
 | 4 | **Glitches de 8 bits:** parpadeo de sprites y atravesar paredes | Pendiente |
 | 5 | **Gimmicks de 16 bits:** parallax jugable y agua transparente | Pendiente |

@@ -92,6 +92,28 @@ TN.Checkpoint = class {
   update() {}
 };
 
+// Rama de la capa de fondo cercana (solo existe en 16 bits). Esa capa se desplaza
+// a la mitad de velocidad que el nivel, así que la rama se mueve respecto al suelo
+// cuando se mueve la cámara: al caminar sobre ella, te lleva hacia delante.
+TN.PARALLAX_NEAR = 0.5;
+
+TN.Branch = class {
+  constructor(spec, level) {
+    this.baseX = spec.tx * TN.TILE;
+    this.y = spec.ty * TN.TILE + 4;
+    this.w = spec.length * TN.TILE;
+    this.h = 6;
+    // La rama está en su sitio del mapa cuando el explorador llega justo a su izquierda.
+    const maxCam = level.pixelWidth - TN.WIDTH;
+    this.anchorCam = Math.max(0, Math.min(this.baseX - TN.TILE - TN.WIDTH / 2 + 8, maxCam));
+    this.x = this.baseX;
+  }
+
+  place(camX) {
+    this.x = this.baseX + (camX - this.anchorCam) * (1 - TN.PARALLAX_NEAR);
+  }
+};
+
 TN.createEntity = function (spec) {
   if (spec.type === 'x') return new TN.Thorns(spec.tx, spec.ty);
   if (spec.type === 'C') return new TN.Checkpoint(spec.tx, spec.ty);

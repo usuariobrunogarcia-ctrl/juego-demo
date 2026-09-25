@@ -55,7 +55,10 @@ TN.Game = class {
     this.frameCount++;
     const player = this.player;
     if (this.input.wasPressed('switch')) this.trySwitch();
+    this.carryOnBranch();
+    const prevBottom = player.y + player.h;
     player.update(this.input, this.level, this.mode);
+    this.landOnBranches(prevBottom);
     for (const e of this.entities) e.update(this);
 
     if (player.y > this.level.pixelHeight + 32) {
@@ -72,8 +75,38 @@ TN.Game = class {
     this.updateCamera();
   }
 
+  // Si el explorador estaba sobre una rama, se mueve con ella.
+  carryOnBranch() {
+    const b = this.riding;
+    if (!b) return;
+    const oldX = b.x;
+    b.place(this.camX);
+    const p = this.player;
+    const dx = b.x - oldX;
+    if (dx !== 0 && !this.level.overlapsSolid(p.x + dx, p.y, p.w, p.h, this.mode)) p.x += dx;
+  }
+
+  landOnBranches(prevBottom) {
+    const p = this.player;
+    this.riding = null;
+    if (this.mode !== 'snes' || p.vy < 0) return;
+    for (const b of this.branches) {
+      b.place(this.camX);
+      const bottom = p.y + p.h;
+      if (prevBottom <= b.y + 0.01 && bottom >= b.y && p.x + p.w > b.x && p.x < b.x + b.w) {
+        p.y = b.y - p.h;
+        p.vy = 0;
+        p.onGround = true;
+        this.riding = b;
+        return;
+      }
+    }
+  }
+
   resetEntities() {
     this.entities = this.level.entities.map(TN.createEntity);
+    this.branches = this.level.branches.map((b) => new TN.Branch(b, this.level));
+    this.riding = null;
     this.hazards = this.entities.filter((e) => e.sprite);
     this.checkpoint = this.level.spawn;
     this.flickering = new Set();
@@ -184,7 +217,40 @@ TN.Game = class {
     } else {
       for (const c of TN.CLOUDS) this.ctx.drawImage(bg.cloud, Math.round(c.x * 0.5 - camX * 0.15), c.y);
       this.drawStrip(bg.hills, camX * 0.25);
-      this.drawStrip(bg.jungle, camX * 0.5);
+      this.drawStrip(bg.jungle, camX * TN.PARALLAX_NEAR);
+    }
+    this.drawBranches(camX);
+  }
+
+  drawBranches(camX) {
+    const ctx = this.ctx;
+    for (const b of this.branches) {
+      b.place(camX);
+      const x = Math.round(b.x) - camX;
+      const y = Math.round(b.y);
+      if (x + b.w < 0 || x >= TN.WIDTH) continue;
+      if (this.mode === 'nes') {
+        // En NES no hay segunda capa: solo se ve el contorno de dónde estaría.
+        ctx.globalAlpha = 0.45;
+        ctx.fillStyle = '#FCFCFC';
+        for (let i = 0; i < b.w; i += 2) {
+          ctx.fillRect(x + i, y, 1, 1);
+          ctx.fillRect(x + i + 1, y + b.h - 1, 1, 1);
+        }
+        ctx.globalAlpha = 1;
+        continue;
+      }
+      ctx.fillStyle = '#3C2010';
+      ctx.fillRect(x, y, b.w, b.h);
+      ctx.fillStyle = '#8C6030';
+      ctx.fillRect(x + 1, y, b.w - 2, 2);
+      ctx.fillStyle = '#6C4020';
+      ctx.fillRect(x + 1, y + 2, b.w - 2, 3);
+      ctx.fillStyle = '#48A048';
+      for (let i = 6; i < b.w - 4; i += 13) {
+        ctx.fillRect(x + i, y - 3, 5, 3);
+        ctx.fillRect(x + i + 1, y - 4, 3, 1);
+      }
     }
   }
 

@@ -117,7 +117,7 @@ Inspirados en glitches reales de juegos de NES. Cada uno funciona con reglas fij
 
 | Gimmick | Efecto jugable |
 |---|---|
-| **Parallax jugable** | Las capas de fondo tienen colisión: plataformas que solo existen en 16 bits |
+| **Parallax jugable** | Ramas en la capa de selva, que se desplaza a la mitad de velocidad que el nivel. Solo existen en 16 bits; al caminar sobre ellas la capa avanza con la cámara y te lleva hacia delante (se llega el doble de lejos). En 8 bits se ve su contorno punteado |
 | **Mode 7** | Salas y plataformas que rotan y escalan; una pared puede convertirse en suelo |
 | **Transparencias** | Agua, cristal y niebla translúcidos que revelan pasadizos; se puede bucear |
 | **Más colores** | Distinguir bloques falsos, ver grietas y pistas en el fondo |
@@ -186,7 +186,7 @@ El juego se construye por etapas. Cada una termina con algo jugable que se puede
 | 3c | **Fondo con parallax** en 16 bits y **fuente de píxeles** para los textos | ✅ Hecha |
 | 4a | **Parpadeo de sprites**, espinas y puntos de control | ✅ Hecha |
 | 4b | **Atravesar paredes** | ✅ Hecha |
-| 5a | **Parallax jugable:** ramas en la capa del fondo | Pendiente |
+| 5a | **Parallax jugable:** ramas en la capa del fondo | ✅ Hecha |
 | 5b | **Agua:** sólida en 8 bits, transparente y para bucear en 16 bits | Pendiente |
 | 6a | **Murciélagos** en ambos modos | Pendiente |
 | 6b | **Fragmentos de mapa** y HUD | Pendiente |

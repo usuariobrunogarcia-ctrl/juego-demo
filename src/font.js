@@ -55,21 +55,22 @@ TN.FONT = {
 TN.drawText = function (ctx, text, x, y, color, options = {}) {
   const clean = text.toUpperCase().replace(/Ñ/g, '\u0001')
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\u0001/g, 'Ñ');
-  const width = clean.length * 6 - 1;
+  const scale = options.scale || 1;
+  const width = (clean.length * 6 - 1) * scale;
   let startX = x;
   if (options.align === 'center') startX = Math.round(x - width / 2);
-  if (options.shadow) TN.drawGlyphs(ctx, clean, startX + 1, y + 1, options.shadow);
-  TN.drawGlyphs(ctx, clean, startX, y, color);
+  if (options.shadow) TN.drawGlyphs(ctx, clean, startX + scale, y + scale, options.shadow, scale);
+  TN.drawGlyphs(ctx, clean, startX, y, color, scale);
 };
 
-TN.drawGlyphs = function (ctx, text, x, y, color) {
+TN.drawGlyphs = function (ctx, text, x, y, color, scale = 1) {
   ctx.fillStyle = color;
   for (let i = 0; i < text.length; i++) {
     const glyph = TN.FONT[text[i]] || TN.FONT['?'];
     for (let row = 0; row < 7; row++) {
       const bits = parseInt(glyph[row], 32);
       for (let col = 0; col < 5; col++) {
-        if (bits & (16 >> col)) ctx.fillRect(x + i * 6 + col, y + row, 1, 1);
+        if (bits & (16 >> col)) ctx.fillRect(x + (i * 6 + col) * scale, y + row * scale, scale, scale);
       }
     }
   }

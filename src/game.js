@@ -19,7 +19,8 @@ TN.Game = class {
     this.resetEntities();
     this.frameCount = 0;
     this.camX = 0;
-    this.state = 'play';
+    this.state = 'title';
+    this.respawnBlink = 0;
     this.mode = 'nes';
     this.canSwitch = true;
 
@@ -49,10 +50,17 @@ TN.Game = class {
 
   update() {
     if (this.input.wasPressed('mute')) this.sound.toggleMute();
+    if (this.state === 'title') {
+      this.frameCount++;
+      if (this.input.wasPressed('switch')) this.trySwitch();
+      if (this.input.wasPressed('jump')) this.state = 'play';
+      return;
+    }
     if (this.state === 'win') {
       if (this.input.wasPressed('jump')) this.restart();
       return;
     }
+    if (this.respawnBlink > 0) this.respawnBlink--;
 
     this.frameCount++;
     const player = this.player;
@@ -172,6 +180,7 @@ TN.Game = class {
   hurt() {
     this.sound.sfx('hurt');
     this.player.respawn(this.checkpoint);
+    this.respawnBlink = 40;
   }
 
   get otherMode() {
@@ -240,6 +249,10 @@ TN.Game = class {
 
     this.drawFlag(camX);
     this.drawEntities(camX);
+    if (this.state === 'title') {
+      this.drawTitle();
+      return;
+    }
     this.drawPlayer(camX);
     if (this.mode === 'snes') this.drawWater(camX);
     this.drawHud();
@@ -408,8 +421,30 @@ TN.Game = class {
     }
   }
 
+  drawTitle() {
+    const ctx = this.ctx;
+    const C = this.theme;
+    const shadow = this.mode === 'snes' ? '#283060' : C.black;
+    ctx.fillStyle = C.black;
+    ctx.globalAlpha = this.mode === 'snes' ? 0.55 : 1;
+    ctx.fillRect(16, 36, TN.WIDTH - 32, 124);
+    ctx.globalAlpha = 1;
+    TN.drawText(ctx, 'TERRA NOVA', TN.WIDTH / 2, 48, this.mode === 'snes' ? '#F8D848' : '#FCA044', { align: 'center', scale: 3, shadow });
+    TN.drawText(ctx, this.mode === 'nes' ? '1989' : 'DX', TN.WIDTH / 2, 76, C.white, { align: 'center', scale: 2, shadow: this.textShadow });
+
+    // El explorador, ampliado, en la versión elegida.
+    const frame = this.sprites[this.mode].idle.right;
+    ctx.drawImage(frame, TN.WIDTH / 2 - 16, 96, 32, 32);
+
+    if ((this.frameCount >> 5) % 2 === 0) {
+      TN.drawText(ctx, 'Pulsa saltar para empezar', TN.WIDTH / 2, 136, C.white, { align: 'center', shadow: this.textShadow });
+    }
+    TN.drawText(ctx, 'X: cambiar 8/16 bits', TN.WIDTH / 2, 148, '#A0A0A0', { align: 'center' });
+  }
+
   drawPlayer(camX) {
     const p = this.player;
+    if (this.respawnBlink > 0 && (this.respawnBlink >> 2) % 2 === 0) return;
     let shakeOffset = p.shake > 0 ? (p.shake % 4 < 2 ? -1 : 1) : 0;
     if (p.clipping) shakeOffset = (this.frameCount >> 1) % 3 - 1;
     // El sprite mide 16x16 y la caja de colisión 12x14: se centra y se apoya en los pies.

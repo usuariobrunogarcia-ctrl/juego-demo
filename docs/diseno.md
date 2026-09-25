@@ -133,7 +133,7 @@ Inspirados en glitches reales de juegos de NES. Cada uno funciona con reglas fij
 - **Objetivo principal:** llegar a la salida de cada nivel.
 - **Objetivo secundario:** encontrar los **fragmentos de mapa** escondidos para cartografiar el nivel al 100 %. Muchos solo son accesibles con un glitch o un gimmick concreto.
 - El mapa se dibuja en el estilo de la versión activa: tosco y con pocos colores en 8 bits, detallado en 16 bits.
-- En el nivel actual hay 5 fragmentos, cada uno ligado a una mecánica: cambiar en el aire, el parpadeo, atravesar paredes, bucear y subir por los murciélagos. El contador (MAPA x/5) está en el HUD y en el mensaje final.
+- En el nivel actual hay 6 fragmentos, cada uno ligado a una mecánica: cambiar en el aire, el parpadeo, atravesar paredes, bucear, subir por los murciélagos y saltar desde una rama. El contador (MAPA x/6) está en el HUD y en el mensaje final.
 
 ### Mundos
 
@@ -172,7 +172,7 @@ Objetivo: comprobar que cambiar de modo es divertido.
 
 - Nombre del explorador y nombre definitivo del juego.
 - Habilidades extra de 16 bits (deslizarse por paredes, agarrarse a bordes).
-- Sistema de vidas, daño y puntos de control.
+- Sistema de vidas (por ahora, al recibir daño se reaparece en el último punto de control sin límite).
 
 ## 11. Plan de desarrollo
 
@@ -194,4 +194,4 @@ El juego se construye por etapas. Cada una termina con algo jugable que se puede
 | 6a | **Murciélagos** en ambos modos | ✅ Hecha |
 | 6b | **Fragmentos de mapa** y HUD | ✅ Hecha |
 | 7 | **Sonido:** música con dos arreglos sincronizados y efectos (Web Audio) | ✅ Hecha |
-| 8 | **Nivel de la Selva completo:** diseño final del nivel del MVP y pulido | Pendiente |
+| 8 | **Nivel de la Selva completo:** secciones que enseñan cada mecánica y un repaso final que las combina, pantalla de título y parpadeo al reaparecer | ✅ Hecha |

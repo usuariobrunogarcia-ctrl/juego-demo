@@ -42,48 +42,51 @@ TN.PORTRAITS = {
 };
 
 // Cada diálogo es una lista de páginas [hablante, texto].
+// Mundo 1: Alex es fría, técnica y burlona. Termina con la amenaza del borrado.
 TN.DIALOGS = {
   tuto_intro: [
-    ['unknown', '¿Eh? ¿Hay alguien en la sala de pruebas?'],
-    ['alex', 'Un sprite del juego original... dentro de la build nueva. Eso no debería ser posible.'],
-    ['alex', 'Quédate quieto. Voy a buscar de dónde saliste para arreglarlo.'],
+    ['unknown', '¿Un proceso nuevo en la sala de pruebas? Yo no lancé nada.'],
+    ['alex', 'Sprite 01. El protagonista de 1989. Tu versión debería estar sobrescrita.'],
+    ['alex', '¿Qué haces en mi build?'],
+    ['alex', 'No te muevas. Abro el depurador.'],
   ],
   tuto_cambio: [
-    ['alex', '¿¡Te pasaste a la versión de 1989!? ¿Cómo hiciste eso?'],
-    ['alex', 'Las dos versiones comparten el cartucho... y tú te mueves entre ellas. Genial. Un bug nuevo.'],
+    ['alex', '¿Cambiaste de versión en caliente? Eso no está en ninguna especificación.'],
+    ['alex', 'Anotado: bug 0412. Prioridad: crítica.'],
   ],
   tuto_salida: [
-    ['alex', 'Está bien. No sé qué eres, pero no puedo borrarte sin romper todo el juego.'],
-    ['alex', 'Esa salida lleva al nivel 1-1. Ve. Te voy a estar vigilando.'],
+    ['alex', 'La salida lleva al 1-1. Adelante. Así veo cómo te rompes.'],
   ],
   w1_1: [
-    ['alex', 'Nivel 1-1: la selva. La primera zona que rehicimos, antes de que cerrara el estudio.'],
-    ['alex', 'Desde entonces sigo aquí sola. Si nadie termina este remaster, Terra Nova se pierde.'],
-  ],
-  w1_2: [
-    ['alex', 'Encontré el origen del bug: una pared de 1989 con la colisión rota. Por ahí te escapaste.'],
-    ['alex', 'Y hay más como esa en todo el cartucho. Voy a tener que arreglarlas una por una.'],
-  ],
-  w1_2_walls: [
-    ['alex', '¡Eh! ¡Esa pared la iba a arreglar mañana!'],
-  ],
-  w1_3: [
-    ['alex', 'Las ramas del fondo no deberían tener colisión. Las dejé así para probar el parallax...'],
-    ['alex', '...y tú las usas como si fueran un camino. Esto no está en ningún documento de diseño.'],
-  ],
-  w1_4: [
-    ['alex', 'Nivel 1-4. Revisé el código de 1989: el parpadeo de los sprites es lo que te deja atravesar las espinas.'],
-    ['alex', 'La NES solo podía dibujar ocho sprites por línea. Yo no tengo ese límite. Voy a quitarlo.'],
-  ],
-  w1_4_patch: [
-    ['alex', 'Listo. Parche aplicado: se acabó el parpadeo. A ver cómo pasas ahora.'],
-  ],
-  w1_4_end: [
-    ['alex', '...Pasaste igual. Saltando entre las dos versiones como si fueran una sola.'],
-    ['alex', 'Llevo meses intentando que este remaster sea perfecto. Y lo único vivo que tiene eres tú, con tus bugs.'],
-    ['alex', 'Sigue. Quiero ver qué más escondía el juego original.'],
+    ['alex', 'Nivel 1-1. Lo rehíce píxel a píxel.'],
+    ['alex', 'Esta vez sin parpadeos, sin ralentizaciones, sin errores.'],
   ],
   w1_1_bats: [
-    ['alex', 'Rediseñé a los murciélagos para que no hicieran daño. Ahora son... ¿plataformas? Bueno, vale.'],
+    ['alex', 'En 1989 los murciélagos te mataban con solo rozarte. En mi versión son decorado sólido.'],
+    ['alex', "Commit: 'suavizar dificultad'."],
+  ],
+  w1_2: [
+    ['alex', 'Encontré por dónde saliste: una pared de 1989 con la colisión rota. Hay decenas como esa.'],
+  ],
+  w1_2_walls: [
+    ['alex', 'Esa pared estaba en mi lista. Línea 212. Mañana.'],
+  ],
+  w1_3: [
+    ['alex', 'El parallax no debería tener colisión. Lo dejé activo para una prueba.'],
+    ['alex', 'Nota mental: no dejar nada activo.'],
+  ],
+  w1_4: [
+    ['alex', 'El 1989 corre dentro de mi emulador.'],
+    ['alex', 'El parpadeo es un límite de la NES: ocho sprites por línea.'],
+    ['alex', 'El emulador es mío. Y los límites, también.'],
+  ],
+  w1_4_patch: [
+    ['alex', 'Parche aplicado. Adiós, parpadeo.'],
+  ],
+  w1_4_end: [
+    ['alex', 'Pasaste igual.'],
+    ['alex', 'Da igual. Cada nivel que termino se graba encima del original.'],
+    ['alex', 'La selva de 1989 ya está sobrescrita al 60 %.'],
+    ['alex', 'Cuando termine, no quedará versión a la que volver. Tampoco para ti.'],
   ],
 };
